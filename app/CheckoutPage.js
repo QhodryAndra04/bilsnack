@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCart } from "./contexts/CartContext";
 import { useAuth } from "./contexts/AuthContext";
-import { useNotification } from "./contexts/NotificationContext";
+import { showWarning, showError } from "./utils/swal";
 import { API_BASE_URL } from "./config/api";
 import formatPrice from "./utils/format";
 
@@ -29,7 +29,6 @@ const CheckoutPage = () => {
   const { cartItems, clearCart, clearCartBySeller, getCartItemsBySeller } =
     useCart();
   const { user, token } = useAuth();
-  const { showNotification } = useNotification();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [paymentMethod, setPaymentMethod] = useState("qris");
@@ -149,18 +148,16 @@ const CheckoutPage = () => {
   const handlePlaceOrder = async (e) => {
     e.preventDefault();
     if (shippingLoading) {
-      showNotification(
+      showWarning(
         "Menunggu",
-        "Menunggu perhitungan ongkir selesai",
-        "info"
+        "Menunggu perhitungan ongkir selesai"
       );
       return;
     }
     if (shippingError) {
-      showNotification(
+      showError(
         "Error",
-        "Tidak bisa membuat pesanan: " + shippingError,
-        "error"
+        "Tidak bisa membuat pesanan: " + shippingError
       );
       return;
     }
@@ -268,10 +265,9 @@ const CheckoutPage = () => {
 
       router.push("/order-confirmation");
     } catch (err) {
-      showNotification(
+      showError(
         "Gagal",
-        err.message || "Gagal membuat pesanan",
-        "error"
+        err.message || "Gagal membuat pesanan"
       );
     } finally {
       setSubmitting(false);
@@ -280,14 +276,14 @@ const CheckoutPage = () => {
 
   if (cartItems.length === 0) {
     return (
-      <div className="px-8 sm:px-12 lg:px-16 py-20 text-center">
-        <h1 className="text-3xl font-bold">Keranjang Anda Kosong</h1>
-        <p className="text-gray-600 mt-4">
+      <div className="px-4 sm:px-8 lg:px-16 py-10 sm:py-20 text-center">
+        <h1 className="text-2xl sm:text-3xl font-bold">Keranjang Anda Kosong</h1>
+        <p className="text-gray-600 mt-3 sm:mt-4 text-sm sm:text-base px-4">
           Anda perlu menambahkan item ke keranjang sebelum dapat checkout.
         </p>
         <Link
           href="/shop"
-          className="mt-6 inline-block bg-amber-500 text-white font-semibold py-3 px-8 rounded-full text-lg hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-300 transition duration-300"
+          className="mt-4 sm:mt-6 inline-block bg-amber-500 text-white font-semibold py-2.5 sm:py-3 px-6 sm:px-8 rounded-full text-sm sm:text-lg hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-300 transition duration-300"
         >
           Kembali ke Toko
         </Link>
@@ -297,8 +293,8 @@ const CheckoutPage = () => {
 
   return (
     <div className="bg-surface">
-      <div className="px-8 sm:px-12 lg:px-16 py-12">
-        <nav className="flex items-center text-sm text-[rgb(var(--text-muted))] mb-8">
+      <div className="px-3 sm:px-8 lg:px-16 py-4 sm:py-12">
+        <nav className="flex items-center text-xs sm:text-sm text-[rgb(var(--text-muted))] mb-4 sm:mb-8 flex-wrap gap-0.5">
           <Link href="/" className="hover:text-[rgb(var(--accent))]">
             Beranda
           </Link>{" "}
@@ -309,18 +305,18 @@ const CheckoutPage = () => {
           <ChevronRightIcon />
           <span className="font-medium text-[rgb(var(--text))]">Checkout</span>
         </nav>
-        <h1 className="text-4xl font-bold mb-8 text-gradient">Checkout</h1>
+        <h1 className="text-2xl sm:text-4xl font-bold mb-4 sm:mb-8 text-gradient">Checkout</h1>
         <form
           onSubmit={handlePlaceOrder}
-          className="grid grid-cols-1 lg:grid-cols-3 gap-12"
+          className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-8 lg:gap-12"
         >
-          <div className="lg:col-span-2 bg-surface p-8 rounded-lg shadow space-y-8 border border-base">
+          <div className="lg:col-span-2 bg-surface p-4 sm:p-8 rounded-lg shadow space-y-6 sm:space-y-8 border border-base">
             {/* Shipping Information */}
             <div>
-              <h2 className="text-2xl font-bold mb-4">Informasi Pengiriman</h2>
+              <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">Informasi Pengiriman</h2>
               {user && (
-                <div className="bg-surface-alt border border-base rounded-md p-3 mb-4">
-                  <p className="text-sm text-[rgb(var(--text-muted))]">
+                <div className="bg-surface-alt border border-base rounded-md p-2.5 sm:p-3 mb-3 sm:mb-4">
+                  <p className="text-xs sm:text-sm text-[rgb(var(--text-muted))]">
                     Informasi terisi otomatis dari profil Anda.{" "}
                     <Link
                       href="/profile"
@@ -331,7 +327,7 @@ const CheckoutPage = () => {
                   </p>
                 </div>
               )}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <input
                   type="text"
                   name="username"
@@ -339,7 +335,7 @@ const CheckoutPage = () => {
                   onChange={handleInputChange}
                   placeholder="Username"
                   required
-                  className="p-3 rounded-md w-full sm:col-span-2 bg-surface-alt border border-base placeholder:text-[rgb(var(--text-muted))]"
+                  className="p-2.5 sm:p-3 text-sm sm:text-base rounded-md w-full sm:col-span-2 bg-surface-alt border border-base placeholder:text-[rgb(var(--text-muted))]"
                 />
                 <input
                   type="email"
@@ -348,7 +344,7 @@ const CheckoutPage = () => {
                   onChange={handleInputChange}
                   placeholder="Alamat Email"
                   required
-                  className="p-3 rounded-md w-full sm:col-span-2 bg-surface-alt border border-base placeholder:text-[rgb(var(--text-muted))]"
+                  className="p-2.5 sm:p-3 text-sm sm:text-base rounded-md w-full sm:col-span-2 bg-surface-alt border border-base placeholder:text-[rgb(var(--text-muted))]"
                 />
                 <input
                   type="tel"
@@ -357,7 +353,7 @@ const CheckoutPage = () => {
                   onChange={handleInputChange}
                   placeholder="Nomor Telepon"
                   required
-                  className="p-3 rounded-md w-full sm:col-span-2 bg-surface-alt border border-base placeholder:text-[rgb(var(--text-muted))]"
+                  className="p-2.5 sm:p-3 text-sm sm:text-base rounded-md w-full sm:col-span-2 bg-surface-alt border border-base placeholder:text-[rgb(var(--text-muted))]"
                 />
                 <input
                   type="text"
@@ -366,7 +362,7 @@ const CheckoutPage = () => {
                   onChange={handleInputChange}
                   placeholder="Alamat Lengkap"
                   required
-                  className="p-3 rounded-md w-full sm:col-span-2 bg-surface-alt border border-base placeholder:text-[rgb(var(--text-muted))]"
+                  className="p-2.5 sm:p-3 text-sm sm:text-base rounded-md w-full sm:col-span-2 bg-surface-alt border border-base placeholder:text-[rgb(var(--text-muted))]"
                 />
                 <input
                   type="text"
@@ -375,7 +371,7 @@ const CheckoutPage = () => {
                   onChange={handleInputChange}
                   placeholder="Kota"
                   required
-                  className="p-3 rounded-md w-full bg-surface-alt border border-base placeholder:text-[rgb(var(--text-muted))]"
+                  className="p-2.5 sm:p-3 text-sm sm:text-base rounded-md w-full bg-surface-alt border border-base placeholder:text-[rgb(var(--text-muted))]"
                 />
                 <input
                   type="text"
@@ -384,68 +380,68 @@ const CheckoutPage = () => {
                   onChange={handleInputChange}
                   placeholder="Kode Pos"
                   required
-                  className="p-3 rounded-md w-full bg-surface-alt border border-base placeholder:text-[rgb(var(--text-muted))]"
+                  className="p-2.5 sm:p-3 text-sm sm:text-base rounded-md w-full bg-surface-alt border border-base placeholder:text-[rgb(var(--text-muted))]"
                 />
               </div>
             </div>
 
             {/* Shipping Method */}
             <div>
-              <h2 className="text-2xl font-bold mb-4">Metode Pengiriman</h2>
-              <div className="space-y-3">
-                <label className="flex items-center p-4 border border-base rounded-lg hover:bg-surface-alt cursor-pointer transition">
+              <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">Metode Pengiriman</h2>
+              <div className="space-y-2 sm:space-y-3">
+                <label className="flex items-start sm:items-center p-3 sm:p-4 border border-base rounded-lg hover:bg-surface-alt cursor-pointer transition">
                   <input
                     type="radio"
                     name="shippingMethod"
                     value="gosend"
                     checked={shippingMethod === "gosend"}
                     onChange={(e) => setShippingMethod(e.target.value)}
-                    className="mr-3"
+                    className="mr-2.5 sm:mr-3 mt-0.5 sm:mt-0"
                   />
-                  <div className="flex-1">
-                    <div className="font-semibold">GoSend</div>
-                    <div className="text-sm text-[rgb(var(--text-muted))]">
+                  <div className="flex-1 min-w-0">
+                    <div className="font-semibold text-sm sm:text-base">GoSend</div>
+                    <div className="text-xs sm:text-sm text-[rgb(var(--text-muted))]">
                       Pengiriman instan dalam 1-2 jam
                     </div>
-                    <div className="text-sm font-medium text-green-600">
+                    <div className="text-xs sm:text-sm font-medium text-green-600">
                       Gratis ongkir
                     </div>
                   </div>
                 </label>
-                <label className="flex items-center p-4 border border-base rounded-lg hover:bg-surface-alt cursor-pointer transition">
+                <label className="flex items-start sm:items-center p-3 sm:p-4 border border-base rounded-lg hover:bg-surface-alt cursor-pointer transition">
                   <input
                     type="radio"
                     name="shippingMethod"
                     value="jne"
                     checked={shippingMethod === "jne"}
                     onChange={(e) => setShippingMethod(e.target.value)}
-                    className="mr-3"
+                    className="mr-2.5 sm:mr-3 mt-0.5 sm:mt-0"
                   />
-                  <div className="flex-1">
-                    <div className="font-semibold">JNE</div>
-                    <div className="text-sm text-[rgb(var(--text-muted))]">
+                  <div className="flex-1 min-w-0">
+                    <div className="font-semibold text-sm sm:text-base">JNE</div>
+                    <div className="text-xs sm:text-sm text-[rgb(var(--text-muted))]">
                       Pengiriman reguler 2-3 hari kerja
                     </div>
-                    <div className="text-sm font-medium text-green-600">
+                    <div className="text-xs sm:text-sm font-medium text-green-600">
                       Rp{formatPrice(32000)}
                     </div>
                   </div>
                 </label>
-                <label className="flex items-center p-4 border border-base rounded-lg hover:bg-surface-alt cursor-pointer transition">
+                <label className="flex items-start sm:items-center p-3 sm:p-4 border border-base rounded-lg hover:bg-surface-alt cursor-pointer transition">
                   <input
                     type="radio"
                     name="shippingMethod"
                     value="jnt"
                     checked={shippingMethod === "jnt"}
                     onChange={(e) => setShippingMethod(e.target.value)}
-                    className="mr-3"
+                    className="mr-2.5 sm:mr-3 mt-0.5 sm:mt-0"
                   />
-                  <div className="flex-1">
-                    <div className="font-semibold">JNT</div>
-                    <div className="text-sm text-[rgb(var(--text-muted))]">
+                  <div className="flex-1 min-w-0">
+                    <div className="font-semibold text-sm sm:text-base">JNT</div>
+                    <div className="text-xs sm:text-sm text-[rgb(var(--text-muted))]">
                       Pengiriman express 1-2 hari kerja
                     </div>
-                    <div className="text-sm font-medium text-green-600">
+                    <div className="text-xs sm:text-sm font-medium text-green-600">
                       Rp{formatPrice(30000)}
                     </div>
                   </div>
@@ -455,44 +451,44 @@ const CheckoutPage = () => {
 
             {/* Payment Information */}
             <div>
-              <h2 className="text-2xl font-bold mb-4">Detail Pembayaran</h2>
+              <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">Detail Pembayaran</h2>
 
               {/* Payment Method Selection */}
-              <div className="mb-6">
-                <h3 className="text-lg font-semibold mb-3">
+              <div className="mb-4 sm:mb-6">
+                <h3 className="text-base sm:text-lg font-semibold mb-2 sm:mb-3">
                   Pilih Metode Pembayaran
                 </h3>
-                <div className="space-y-3">
-                  <label className="flex items-center">
+                <div className="space-y-2 sm:space-y-3">
+                  <label className="flex items-center text-sm sm:text-base">
                     <input
                       type="radio"
                       name="paymentMethod"
                       value="qris"
                       checked={paymentMethod === "qris"}
                       onChange={(e) => setPaymentMethod(e.target.value)}
-                      className="mr-3"
+                      className="mr-2.5 sm:mr-3"
                     />
                     <span>QRIS</span>
                   </label>
-                  <label className="flex items-center">
+                  <label className="flex items-center text-sm sm:text-base">
                     <input
                       type="radio"
                       name="paymentMethod"
                       value="bank"
                       checked={paymentMethod === "bank"}
                       onChange={(e) => setPaymentMethod(e.target.value)}
-                      className="mr-3"
+                      className="mr-2.5 sm:mr-3"
                     />
                     <span>Transfer Bank</span>
                   </label>
-                  <label className="flex items-center">
+                  <label className="flex items-center text-sm sm:text-base">
                     <input
                       type="radio"
                       name="paymentMethod"
                       value="cod"
                       checked={paymentMethod === "cod"}
                       onChange={(e) => setPaymentMethod(e.target.value)}
-                      className="mr-3"
+                      className="mr-2.5 sm:mr-3"
                     />
                     <span>Bayar di Tempat (COD)</span>
                   </label>
@@ -501,13 +497,13 @@ const CheckoutPage = () => {
 
               {/* Payment Details Based on Method */}
               {paymentMethod === "qris" && (
-                <div className="text-center p-6 bg-surface-alt rounded-lg border border-base">
-                  <h3 className="text-lg font-semibold mb-4">
+                <div className="text-center p-4 sm:p-6 bg-surface-alt rounded-lg border border-base">
+                  <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">
                     Scan Kode QR untuk Membayar
                   </h3>
-                  <div className="bg-surface p-4 rounded-lg inline-block border border-base">
+                  <div className="bg-surface p-3 sm:p-4 rounded-lg inline-block border border-base">
                     {/* QR Code image for Billsnack (place file `public/qris-billsnack.png`) */}
-                    <div className="w-48 h-48 flex items-center justify-center rounded-lg overflow-hidden bg-surface border border-base">
+                    <div className="w-36 h-36 sm:w-48 sm:h-48 flex items-center justify-center rounded-lg overflow-hidden bg-surface border border-base">
                       <img
                         src="/assets/qrisbillsnack.jpg"
                         alt="QRIS BillSnack"
@@ -524,29 +520,29 @@ const CheckoutPage = () => {
                       />
                     </div>
                   </div>
-                  <p className="text-sm text-[rgb(var(--text-muted))] mt-4">
+                  <p className="text-xs sm:text-sm text-[rgb(var(--text-muted))] mt-3 sm:mt-4 px-2">
                     Scan kode QR ini dengan aplikasi e-wallet Anda untuk
                     menyelesaikan pembayaran
                   </p>
-                  <p className="text-lg font-bold mt-2">
+                  <p className="text-base sm:text-lg font-bold mt-2">
                     Total: Rp{formatPrice(total)}
                   </p>
                 </div>
               )}
 
               {paymentMethod === "bank" && (
-                <div className="p-6 bg-surface-alt rounded-lg border border-base">
-                  <h3 className="text-lg font-semibold mb-4">
+                <div className="p-4 sm:p-6 bg-surface-alt rounded-lg border border-base">
+                  <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">
                     Detail Transfer Bank
                   </h3>
-                  <div className="space-y-3">
+                  <div className="space-y-2 sm:space-y-3 text-sm sm:text-base">
                     <div className="flex justify-between">
                       <span className="font-medium">Bank:</span>
                       <span>Mandiri</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="font-medium">Nomor Rekening:</span>
-                      <span className="font-mono">1110024781714</span>
+                      <span className="font-mono text-xs sm:text-base">1110024781714</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="font-medium">Nama Rekening:</span>
@@ -557,8 +553,8 @@ const CheckoutPage = () => {
                       <span className="font-bold">Rp{formatPrice(total)}</span>
                     </div>
                   </div>
-                  <div className="mt-4 p-3 bg-surface border border-base rounded">
-                    <p className="text-sm text-[rgb(var(--text-muted))]">
+                  <div className="mt-3 sm:mt-4 p-2.5 sm:p-3 bg-surface border border-base rounded">
+                    <p className="text-xs sm:text-sm text-[rgb(var(--text-muted))]">
                       <strong>Penting:</strong> Harap sertakan ID pesanan Anda
                       dalam deskripsi transfer. Pesanan Anda akan diproses
                       setelah pembayaran dikonfirmasi (biasanya dalam 1-2 hari
@@ -569,11 +565,11 @@ const CheckoutPage = () => {
               )}
 
               {paymentMethod === "cod" && (
-                <div className="p-6 bg-surface-alt rounded-lg border border-base">
-                  <h3 className="text-lg font-semibold mb-4">
+                <div className="p-4 sm:p-6 bg-surface-alt rounded-lg border border-base">
+                  <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">
                     Bayar di Tempat
                   </h3>
-                  <div className="space-y-3">
+                  <div className="space-y-2 sm:space-y-3 text-sm sm:text-base">
                     <div className="flex justify-between">
                       <span className="font-medium">Metode Pembayaran:</span>
                       <span>Bayar di Tempat</span>
@@ -583,8 +579,8 @@ const CheckoutPage = () => {
                       <span className="font-bold">Rp{formatPrice(total)}</span>
                     </div>
                   </div>
-                  <div className="mt-4 p-3 bg-surface border border-base rounded">
-                    <p className="text-sm text-[rgb(var(--text-muted))]">
+                  <div className="mt-3 sm:mt-4 p-2.5 sm:p-3 bg-surface border border-base rounded">
+                    <p className="text-xs sm:text-sm text-[rgb(var(--text-muted))]">
                       <strong>Catatan:</strong> Anda akan membayar tunai saat
                       pesanan dikirim ke alamat Anda. Harap siapkan jumlah yang
                       tepat untuk pelayanan yang lebih cepat.
@@ -596,8 +592,8 @@ const CheckoutPage = () => {
           </div>
 
           {/* Order Summary */}
-          <div className="bg-surface-alt p-8 rounded-lg shadow h-fit border border-base">
-            <h2 className="text-2xl font-bold mb-6 border-b pb-4">
+          <div className="bg-surface-alt p-4 sm:p-8 rounded-lg shadow h-fit border border-base order-first lg:order-last">
+            <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 border-b pb-3 sm:pb-4">
               Ringkasan Pesanan
             </h2>
 
@@ -615,12 +611,12 @@ const CheckoutPage = () => {
                 <div
                   key={sellerCart.sellerId}
                   className={`${
-                    index > 0 ? "mt-6 pt-6 border-t border-base" : ""
+                    index > 0 ? "mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-base" : ""
                   }`}
                 >
-                  <div className="mb-3 flex items-center">
+                  <div className="mb-2 sm:mb-3 flex items-center">
                     <svg
-                      className="w-5 h-5 mr-2 text-[rgb(var(--text-muted))]"
+                      className="w-4 h-4 sm:w-5 sm:h-5 mr-1.5 sm:mr-2 text-[rgb(var(--text-muted))] flex-shrink-0"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -629,27 +625,27 @@ const CheckoutPage = () => {
                       <circle cx="20" cy="21" r="1"></circle>
                       <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                     </svg>
-                    <div>
-                      <p className="font-semibold text-[rgb(var(--accent))]">
+                    <div className="min-w-0">
+                      <p className="font-semibold text-sm sm:text-base text-[rgb(var(--accent))] truncate">
                         {sellerCart.sellerName}
                       </p>
                       {sellerCart.resellerEmail && (
-                        <p className="text-xs text-[rgb(var(--text-muted))]">
+                        <p className="text-[10px] sm:text-xs text-[rgb(var(--text-muted))] truncate">
                           {sellerCart.resellerEmail}
                         </p>
                       )}
                     </div>
                   </div>
-                  <div className="space-y-2 ml-2">
+                  <div className="space-y-1.5 sm:space-y-2 ml-1 sm:ml-2">
                     {sellerCart.items.map((item) => (
                       <div
                         key={item.id}
-                        className="flex justify-between items-center text-sm"
+                        className="flex justify-between items-center text-xs sm:text-sm gap-2"
                       >
-                        <span className="text-[rgb(var(--text-muted))]">
+                        <span className="text-[rgb(var(--text-muted))] truncate flex-1">
                           {item.name} x {item.quantity}
                         </span>
-                        <span className="font-semibold">
+                        <span className="font-semibold whitespace-nowrap">
                           Rp
                           {formatPrice(
                             (Number(item.price) || 0) *
@@ -659,7 +655,7 @@ const CheckoutPage = () => {
                       </div>
                     ))}
                   </div>
-                  <div className="mt-2 ml-2 text-sm text-right">
+                  <div className="mt-2 ml-1 sm:ml-2 text-xs sm:text-sm text-right">
                     <p className="text-[rgb(var(--text-muted))]">
                       Subtotal: Rp{formatPrice(sellerSubtotal)}
                     </p>
@@ -671,7 +667,7 @@ const CheckoutPage = () => {
               );
             })}
 
-            <div className="space-y-4 text-lg mt-6 border-t pt-4 border-base">
+            <div className="space-y-3 sm:space-y-4 text-sm sm:text-lg mt-4 sm:mt-6 border-t pt-3 sm:pt-4 border-base">
               <div className="flex justify-between">
                 <span className="text-[rgb(var(--text-muted))]">
                   Total Belanja
@@ -679,7 +675,7 @@ const CheckoutPage = () => {
                 <span className="font-semibold">Rp{formatPrice(subtotal)}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-[rgb(var(--text-muted))]">
+                <span className="text-[rgb(var(--text-muted))] text-xs sm:text-base">
                   Biaya Pengiriman{" "}
                   {checkoutCarts.length > 1 && `(${checkoutCarts.length} toko)`}
                 </span>
@@ -692,13 +688,13 @@ const CheckoutPage = () => {
                 </span>
               </div>
               {shippingError && (
-                <div className="bg-red-50 dark:bg-red-900/20 border border-red-300 dark:border-red-700 text-red-600 dark:text-red-400 p-3 rounded text-sm">
+                <div className="bg-red-50 dark:bg-red-900/20 border border-red-300 dark:border-red-700 text-red-600 dark:text-red-400 p-2.5 sm:p-3 rounded text-xs sm:text-sm">
                   {shippingError}
                 </div>
               )}
               {checkoutCarts.length > 1 && (
-                <div className="bg-surface p-3 rounded-lg border border-base">
-                  <p className="text-xs text-[rgb(var(--text-muted))]">
+                <div className="bg-surface p-2.5 sm:p-3 rounded-lg border border-base">
+                  <p className="text-[10px] sm:text-xs text-[rgb(var(--text-muted))]">
                     <strong>Info:</strong> Anda berbelanja dari{" "}
                     {checkoutCarts.length} toko berbeda. Biaya pengiriman
                     dikenakan per toko.
@@ -706,8 +702,8 @@ const CheckoutPage = () => {
                 </div>
               )}
             </div>
-            <div className="flex justify-between text-2xl font-bold mt-6 border-t pt-4 border-base">
-              <span>Total Keseluruhan</span>
+            <div className="flex justify-between text-lg sm:text-2xl font-bold mt-4 sm:mt-6 border-t pt-3 sm:pt-4 border-base">
+              <span>Total</span>
               <span className="text-[rgb(var(--accent))]">
                 Rp{formatPrice(total)}
               </span>
@@ -717,7 +713,7 @@ const CheckoutPage = () => {
               type="submit"
               onMouseEnter={() => setBtnHover(true)}
               onMouseLeave={() => setBtnHover(false)}
-              className="w-full mt-6 btn-primary rounded-full text-lg disabled:opacity-80"
+              className="w-full mt-4 sm:mt-6 btn-primary rounded-full text-sm sm:text-lg disabled:opacity-80 py-3"
               style={{
                 filter: btnHover ? "brightness(1.08)" : "none",
                 opacity: submitting ? 0.85 : 1,

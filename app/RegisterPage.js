@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "./contexts/AuthContext";
-import { useNotification } from "./contexts/NotificationContext";
+import { showError } from "./utils/swal";
 
 const RegisterPage = () => {
   const [firstName, setFirstName] = useState("");
@@ -17,11 +17,11 @@ const RegisterPage = () => {
     const file = e.target.files && e.target.files[0];
     if (!file) return;
     if (!file.type.startsWith("image/")) {
-      showNotification("Error", "File harus berupa gambar", "error");
+      showError("Error", "File harus berupa gambar");
       return;
     }
     if (file.size > 2 * 1024 * 1024) {
-      showNotification("Error", "Ukuran gambar maksimal 2MB", "error");
+      showError("Error", "Ukuran gambar maksimal 2MB");
       return;
     }
     const reader = new FileReader();
@@ -37,13 +37,12 @@ const RegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
   const { register } = useAuth();
-  const { showNotification } = useNotification();
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!firstName || !lastName || !email || !password) {
-      showNotification("Error", "Harap isi nama depan, nama belakang, email, dan password.", "error");
+      showError("Error", "Harap isi nama depan, nama belakang, email, dan password.");
       return;
     }
 
@@ -63,34 +62,34 @@ const RegisterPage = () => {
       await register(payload);
       router.push("/");
     } catch (err) {
-      showNotification("Pendaftaran Gagal", err.message || "Pendaftaran gagal", "error");
+      showError("Pendaftaran Gagal", err.message || "Pendaftaran gagal");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-bg px-6 py-12">
-      <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+    <div className="min-h-screen flex items-center justify-center bg-bg px-3 sm:px-6 py-6 sm:py-12">
+      <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8 items-center">
         <div className="flex items-center justify-center">
           <form
             onSubmit={handleSubmit}
-            className="w-full max-w-lg bg-surface-alt border border-base p-8 rounded-2xl shadow-xl"
+            className="w-full max-w-lg bg-surface-alt border border-base p-4 sm:p-8 rounded-xl sm:rounded-2xl shadow-xl"
             suppressHydrationWarning={true}
           >
-            <div className="mb-6">
-              <h1 className="text-2xl sm:text-3xl font-bold text-gradient">
+            <div className="mb-4 sm:mb-6">
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gradient">
                 Buat Akun
               </h1>
-              <p className="text-muted mt-1">
+              <p className="text-muted mt-1 text-sm sm:text-base">
                 Gabung sekarang dan nikmati promo spesial!
               </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 mb-4">
+            <div className="grid grid-cols-2 gap-2 sm:gap-4 mb-3 sm:mb-4">
               <div>
                 <label
-                  className="block text-sm font-medium text-muted mb-1"
+                  className="block text-xs sm:text-sm font-medium text-muted mb-1"
                   htmlFor="firstName"
                 >
                   Nama Depan
@@ -102,13 +101,13 @@ const RegisterPage = () => {
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
                   required
-                  className="w-full rounded-lg border border-base bg-surface px-4 py-3 placeholder:text-muted focus:border-accent focus:ring-0 transition-colors"
+                  className="w-full rounded-lg border border-base bg-surface px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base placeholder:text-muted focus:border-accent focus:ring-0 transition-colors"
                   suppressHydrationWarning={true}
                 />
               </div>
               <div>
                 <label
-                  className="block text-sm font-medium text-muted mb-1"
+                  className="block text-xs sm:text-sm font-medium text-muted mb-1"
                   htmlFor="lastName"
                 >
                   Nama Belakang
@@ -120,15 +119,15 @@ const RegisterPage = () => {
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
                   required
-                  className="w-full rounded-lg border border-base bg-surface px-4 py-3 placeholder:text-muted focus:border-accent focus:ring-0 transition-colors"
+                  className="w-full rounded-lg border border-base bg-surface px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base placeholder:text-muted focus:border-accent focus:ring-0 transition-colors"
                   suppressHydrationWarning={true}
                 />
               </div>
             </div>
 
-            <div className="mb-4 flex items-center gap-6">
+            <div className="mb-3 sm:mb-4 flex flex-col sm:flex-row items-center gap-3 sm:gap-6">
               <div className="relative">
-                <div className="w-20 h-20 rounded-full overflow-hidden bg-surface-alt border border-base flex items-center justify-center">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden bg-surface-alt border border-base flex items-center justify-center">
                   {avatarPreview ? (
                     <img
                       src={avatarPreview}
@@ -136,7 +135,7 @@ const RegisterPage = () => {
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <div className="text-muted">No Image</div>
+                    <div className="text-muted text-xs sm:text-sm">No Image</div>
                   )}
                 </div>
                 <input
@@ -155,7 +154,7 @@ const RegisterPage = () => {
                     onClick={() =>
                       fileInputRef.current && fileInputRef.current.click()
                     }
-                    className="px-3 py-2 btn-primary rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-accent/40"
+                    className="px-2 sm:px-3 py-1.5 sm:py-2 text-sm btn-primary rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-accent/40"
                     suppressHydrationWarning={true}
                   >
                     Unggah
@@ -163,21 +162,21 @@ const RegisterPage = () => {
                   <button
                     type="button"
                     onClick={handleRemoveAvatar}
-                    className="px-3 py-2 border border-base rounded-md bg-surface hover:bg-surface-alt transition-colors text-muted"
+                    className="px-2 sm:px-3 py-1.5 sm:py-2 text-sm border border-base rounded-md bg-surface hover:bg-surface-alt transition-colors text-muted"
                     suppressHydrationWarning={true}
                   >
                     Hapus
                   </button>
                 </div>
-                <p className="text-sm text-muted mt-2">
+                <p className="text-xs text-muted mt-1 sm:mt-2">
                   Format: JPG/PNG, max 2MB
                 </p>
               </div>
             </div>
 
-            <div className="mb-4">
+            <div className="mb-3 sm:mb-4">
               <label
-                className="block text-sm font-medium text-muted mb-1"
+                className="block text-xs sm:text-sm font-medium text-muted mb-1"
                 htmlFor="username"
               >
                 Username
@@ -189,14 +188,14 @@ const RegisterPage = () => {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required
-                className="w-full rounded-lg border border-base bg-surface px-4 py-3 placeholder:text-muted focus:border-accent focus:ring-0 transition-colors"
+                className="w-full rounded-lg border border-base bg-surface px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base placeholder:text-muted focus:border-accent focus:ring-0 transition-colors"
                 suppressHydrationWarning={true}
               />
             </div>
 
-            <div className="mb-4">
+            <div className="mb-3 sm:mb-4">
               <label
-                className="block text-sm font-medium text-muted mb-1"
+                className="block text-xs sm:text-sm font-medium text-muted mb-1"
                 htmlFor="email"
               >
                 Alamat Email
@@ -208,14 +207,14 @@ const RegisterPage = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full rounded-lg border border-base bg-surface px-4 py-3 placeholder:text-muted focus:border-accent focus:ring-0 transition-colors"
+                className="w-full rounded-lg border border-base bg-surface px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base placeholder:text-muted focus:border-accent focus:ring-0 transition-colors"
                 suppressHydrationWarning={true}
               />
             </div>
 
-            <div className="mb-4">
+            <div className="mb-3 sm:mb-4">
               <label
-                className="block text-sm font-medium text-muted mb-1"
+                className="block text-xs sm:text-sm font-medium text-muted mb-1"
                 htmlFor="phone"
               >
                 Nomor Telepon
@@ -226,16 +225,16 @@ const RegisterPage = () => {
                 placeholder="08xxxxxxxxxx"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                className="w-full rounded-lg border border-base bg-surface px-4 py-3 placeholder:text-muted focus:border-accent focus:ring-0 transition-colors"
+                className="w-full rounded-lg border border-base bg-surface px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base placeholder:text-muted focus:border-accent focus:ring-0 transition-colors"
                 suppressHydrationWarning={true}
               />
             </div>
 
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-muted mb-1">
+            <div className="mb-3 sm:mb-4">
+              <label className="block text-xs sm:text-sm font-medium text-muted mb-1">
                 Jenis Kelamin
               </label>
-              <div className="flex gap-6">
+              <div className="flex gap-4 sm:gap-6 text-sm sm:text-base">
                 <label className="flex items-center gap-2">
                   <input
                     type="radio"
@@ -265,9 +264,9 @@ const RegisterPage = () => {
               </div>
             </div>
 
-            <div className="mb-6">
+            <div className="mb-4 sm:mb-6">
               <label
-                className="block text-sm font-medium text-muted mb-1"
+                className="block text-xs sm:text-sm font-medium text-muted mb-1"
                 htmlFor="password"
               >
                 Kata Sandi
@@ -280,7 +279,7 @@ const RegisterPage = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="w-full rounded-lg border border-base bg-surface px-4 py-3 pr-12 placeholder:text-muted focus:border-accent focus:ring-0 transition-colors"
+                  className="w-full rounded-lg border border-base bg-surface px-3 sm:px-4 py-2 sm:py-3 pr-20 sm:pr-24 text-sm sm:text-base placeholder:text-muted focus:border-accent focus:ring-0 transition-colors"
                   suppressHydrationWarning={true}
                 />
                 <button
@@ -292,13 +291,13 @@ const RegisterPage = () => {
                       ? "Sembunyikan kata sandi"
                       : "Tampilkan kata sandi"
                   }
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted hover:accent-text"
+                  className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 text-xs sm:text-sm text-muted hover:accent-text px-1"
                   suppressHydrationWarning={true}
                 >
                   {showPassword ? "Sembunyikan" : "Tampilkan"}
                 </button>
               </div>
-              <p className="text-xs text-muted mt-2">
+              <p className="text-[10px] sm:text-xs text-muted mt-1 sm:mt-2">
                 Gunakan kombinasi huruf, angka, dan simbol untuk keamanan lebih
                 baik.
               </p>
@@ -307,17 +306,17 @@ const RegisterPage = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full btn-primary rounded-full py-3 font-semibold disabled:opacity-60"
+              className="w-full btn-primary rounded-full py-2.5 sm:py-3 text-sm sm:text-base font-semibold disabled:opacity-60"
               suppressHydrationWarning={true}
             >
               {loading ? "Mendaftarkan..." : "Daftar"}
             </button>
 
-            <p className="text-center text-muted text-sm mt-6">
+            <p className="text-center text-muted text-xs sm:text-sm mt-4 sm:mt-6">
               Sudah punya akun?
               <Link
                 href="/login"
-                className="ml-2 inline-block accent-text font-semibold px-3 py-1 border border-accent/30 rounded-full hover:bg-accent/10 focus:outline-none focus:ring-2 focus:ring-accent/40"
+                className="ml-1.5 sm:ml-2 inline-block accent-text font-semibold px-2 sm:px-3 py-0.5 sm:py-1 text-xs sm:text-sm border border-accent/30 rounded-full hover:bg-accent/10 focus:outline-none focus:ring-2 focus:ring-accent/40"
               >
                 Masuk
               </Link>

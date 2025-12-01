@@ -3,11 +3,11 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useNotification } from "../contexts/NotificationContext";
+import { showSuccess, showError, showDeleteConfirm } from "../utils/swal";
+import { InlineLoading } from "../components/PageLoading";
 
 const AdminResellersPage = () => {
   const router = useRouter();
-  const { showNotification } = useNotification();
   const [resellers, setResellers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
@@ -107,13 +107,12 @@ const AdminResellersPage = () => {
   }, [searchTerm, filterStatus]);
 
   const handleDelete = async (id, name) => {
-    if (
-      window.confirm(`Apakah Anda yakin ingin menghapus reseller "${name}"?`)
-    ) {
+    const result = await showDeleteConfirm(`Reseller "${name}"`);
+    if (result.isConfirmed) {
       try {
         const token = localStorage.getItem('adminToken');
         if (!token) {
-          alert('Token tidak ditemukan. Silakan login kembali.');
+          showError('Error', 'Token tidak ditemukan. Silakan login kembali.');
           return;
         }
 
@@ -131,9 +130,9 @@ const AdminResellersPage = () => {
 
         // Remove from local state
         setResellers((prev) => prev.filter((r) => r.id !== id));
-        showNotification("Berhasil", "Reseller berhasil dihapus!", "success");
+        showSuccess("Berhasil", "Reseller berhasil dihapus!");
       } catch (error) {
-        alert(`Error: ${error.message}`);
+        showError('Error', error.message);
       }
     }
   };
@@ -142,7 +141,7 @@ const AdminResellersPage = () => {
     try {
       const token = localStorage.getItem('adminToken');
       if (!token) {
-        alert('Token tidak ditemukan. Silakan login kembali.');
+        showError('Error', 'Token tidak ditemukan. Silakan login kembali.');
         return;
       }
 
@@ -174,18 +173,14 @@ const AdminResellersPage = () => {
             : r
         )
       );
-      showNotification("Berhasil", "Status reseller berhasil diubah!", "success");
+      showSuccess("Berhasil", "Status reseller berhasil diubah!");
     } catch (error) {
-      alert(`Error: ${error.message}`);
+      showError('Error', error.message);
     }
   };
 
   if (loading) {
-    return (
-      <div className="text-center py-8 text-gray-600">
-        Memuat data reseller...
-      </div>
-    );
+    return <InlineLoading text="Memuat data reseller..." variant="dots" size="md" />;
   }
 
   if (error) {
@@ -198,15 +193,15 @@ const AdminResellersPage = () => {
 
   return (
     <div>
-      <div className="mb-6">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold text-gray-900">Kelola Reseller</h1>
+      <div className="mb-4 sm:mb-6">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-0 mb-4 sm:mb-6">
+          <h1 className="text-xl sm:text-3xl font-bold text-gray-900">Kelola Reseller</h1>
           <Link
             href="/admin/resellers/new"
-            className="bg-green-500 text-white px-5 py-2 rounded-md font-semibold hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300 transition-colors flex items-center gap-2"
+            className="bg-green-500 text-white px-3 sm:px-5 py-1.5 sm:py-2 rounded-md text-sm sm:text-base font-semibold hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300 transition-colors flex items-center gap-1 sm:gap-2"
           >
             <svg
-              className="w-5 h-5"
+              className="w-4 h-4 sm:w-5 sm:h-5"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -218,33 +213,31 @@ const AdminResellersPage = () => {
                 d="M12 4v16m8-8H4"
               />
             </svg>
-            Tambah Reseller
+            <span className="hidden sm:inline">Tambah Reseller</span>
+            <span className="sm:hidden">Tambah</span>
           </Link>
         </div>
 
         {/* Search and Filter */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4 mb-4 sm:mb-6">
           <input
             type="text"
-            placeholder="Cari nama atau email reseller..."
+            placeholder="Cari reseller..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-700 bg-white"
+            className="px-3 sm:px-4 py-1.5 sm:py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-700 bg-white"
           />
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-700 bg-white"
+            className="px-3 sm:px-4 py-1.5 sm:py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-700 bg-white"
           >
             <option value="all">Semua Status</option>
             <option value="active">Aktif</option>
             <option value="inactive">Nonaktif</option>
           </select>
-          <div className="text-sm text-gray-600 flex items-center justify-end">
-            Total:{" "}
-            <span className="font-bold ml-2 text-gray-900">
-              {filteredResellers.length}
-            </span>
+          <div className="text-xs sm:text-sm text-gray-600 flex items-center sm:justify-end">
+            Total: <span className="font-bold ml-1 text-gray-900">{filteredResellers.length}</span>
           </div>
         </div>
       </div>
@@ -252,71 +245,71 @@ const AdminResellersPage = () => {
       {/* Resellers Table */}
       <div className="bg-white rounded-lg shadow-md overflow-x-auto border border-gray-100">
         {filteredResellers.length === 0 ? (
-          <div className="p-8 text-center">
-            <p className="text-gray-500 text-lg">Tidak ada reseller ditemukan</p>
+          <div className="p-4 sm:p-8 text-center">
+            <p className="text-gray-500 text-sm sm:text-lg">Tidak ada reseller ditemukan</p>
           </div>
         ) : (
-          <table className="w-full text-left table-auto">
+          <table className="w-full text-left table-auto min-w-[600px]">
             <thead>
               <tr className="bg-yellow-500 text-white">
-                <th className="p-4 font-semibold text-white">Nama Toko</th>
-                <th className="p-4 font-semibold text-white">Email</th>
-                <th className="p-4 font-semibold text-white">Telepon</th>
-                <th className="p-4 font-semibold text-white">Produk</th>
-                <th className="p-4 font-semibold text-white">Penjualan</th>
-                <th className="p-4 font-semibold text-white">Status</th>
-                <th className="p-4 font-semibold text-white">Aksi</th>
+                <th className="p-2 sm:p-4 text-xs sm:text-sm font-semibold text-white">Toko</th>
+                <th className="p-2 sm:p-4 text-xs sm:text-sm font-semibold text-white">Email</th>
+                <th className="p-2 sm:p-4 text-xs sm:text-sm font-semibold text-white">Telepon</th>
+                <th className="p-2 sm:p-4 text-xs sm:text-sm font-semibold text-white">Produk</th>
+                <th className="p-2 sm:p-4 text-xs sm:text-sm font-semibold text-white">Sales</th>
+                <th className="p-2 sm:p-4 text-xs sm:text-sm font-semibold text-white">Status</th>
+                <th className="p-2 sm:p-4 text-xs sm:text-sm font-semibold text-white">Aksi</th>
               </tr>
             </thead>
             <tbody>
               {paginatedResellers.map((reseller) => (
                 <tr key={reseller.id} className="hover:bg-gray-50">
-                  <td className="p-4">
+                  <td className="p-2 sm:p-4">
                     <div>
-                      <p className="font-semibold text-gray-900">
+                      <p className="font-semibold text-gray-900 text-xs sm:text-sm">
                         {reseller.storeName || reseller.name}
                       </p>
                     </div>
                   </td>
-                  <td className="p-4">
+                  <td className="p-2 sm:p-4">
                     <a
                       href={`mailto:${reseller.email}`}
-                      className="text-blue-600 hover:underline"
+                      className="text-blue-600 hover:underline text-xs sm:text-sm"
                     >
                       {reseller.email}
                     </a>
                   </td>
-                  <td className="p-4 text-gray-600">{reseller.phone}</td>
-                  <td className="p-4">
-                    <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold">
+                  <td className="p-2 sm:p-4 text-gray-600 text-xs sm:text-sm">{reseller.phone}</td>
+                  <td className="p-2 sm:p-4">
+                    <span className="bg-blue-100 text-blue-800 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-sm font-semibold">
                       {reseller.totalProducts}
                     </span>
                   </td>
-                  <td className="p-4">
-                    <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-semibold">
+                  <td className="p-2 sm:p-4">
+                    <span className="bg-green-100 text-green-800 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-sm font-semibold">
                       {reseller.totalSales}
                     </span>
                   </td>
-                  <td className="p-4">
+                  <td className="p-2 sm:p-4">
                     <button
                       onClick={() => toggleStatus(reseller.id)}
-                      className={`px-3 py-1 rounded-full text-sm font-semibold transition-colors ${
+                      className={`px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-sm font-semibold transition-colors ${
                         reseller.status === "active"
                           ? "bg-green-100 text-green-800 hover:bg-green-200"
                           : "bg-red-100 text-red-800 hover:bg-red-200"
                       }`}
                     >
-                      {reseller.status === "active" ? "Aktif" : "Nonaktif"}
+                      {reseller.status === "active" ? "Aktif" : "Off"}
                     </button>
                   </td>
-                  <td className="p-4">
-                    <div className="flex gap-2">
+                  <td className="p-2 sm:p-4">
+                    <div className="flex gap-1 sm:gap-2 flex-col">
                       <Link
                         href={`/admin/resellers/edit/${reseller.id}`}
-                        className="bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-1 rounded-md text-sm font-semibold transition-colors flex items-center gap-1"
+                        className="bg-blue-100 hover:bg-blue-200 text-blue-700 px-2 sm:px-3 py-0.5 sm:py-1 rounded-md text-[10px] sm:text-sm font-semibold transition-colors flex items-center justify-center gap-1"
                       >
                         <svg
-                          className="w-4 h-4"
+                          className="w-3 h-3 sm:w-4 sm:h-4"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -337,10 +330,10 @@ const AdminResellersPage = () => {
                             reseller.storeName || reseller.name
                           )
                         }
-                        className="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1 rounded-md text-sm font-semibold transition-colors flex items-center gap-1"
+                        className="bg-red-100 hover:bg-red-200 text-red-700 px-2 sm:px-3 py-0.5 sm:py-1 rounded-md text-[10px] sm:text-sm font-semibold transition-colors flex items-center justify-center gap-1"
                       >
                         <svg
-                          className="w-4 h-4"
+                          className="w-3 h-3 sm:w-4 sm:h-4"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -365,25 +358,25 @@ const AdminResellersPage = () => {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-between px-4 py-3 bg-white border-t border-gray-200 mt-4 rounded-lg shadow-md">
-          <div className="text-sm text-gray-700">
-            Menampilkan {startIndex + 1} sampai {Math.min(startIndex + itemsPerPage, totalItems)} dari {totalItems} reseller
+        <div className="flex flex-col sm:flex-row items-center justify-between px-2 sm:px-4 py-2 sm:py-3 bg-white border-t border-gray-200 mt-2 sm:mt-4 rounded-lg shadow-md gap-2">
+          <div className="text-xs sm:text-sm text-gray-700">
+            {startIndex + 1} - {Math.min(startIndex + itemsPerPage, totalItems)} dari {totalItems}
           </div>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-1 sm:space-x-2">
             <button
               onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
               disabled={currentPage === 1}
-              className="px-3 py-1 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-2 sm:px-3 py-1 text-xs sm:text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Previous
+              Prev
             </button>
-            <span className="text-sm text-gray-700">
-              Halaman {currentPage} dari {totalPages}
+            <span className="text-xs sm:text-sm text-gray-700">
+              {currentPage}/{totalPages}
             </span>
             <button
               onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
               disabled={currentPage === totalPages}
-              className="px-3 py-1 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-2 sm:px-3 py-1 text-xs sm:text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Next
             </button>

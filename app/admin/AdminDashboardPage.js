@@ -157,11 +157,11 @@ const AdminDashboardPage = () => {
 
   return (
     <div className="pb-4">
-      <h1 className="text-3xl font-bold mb-2 text-black">Dashboard</h1>
+      <h1 className="text-xl sm:text-3xl font-bold mb-2 text-black">Dashboard</h1>
 
       {/* Header Profil Admin */}
-      <div className="flex items-center gap-4 mb-8">
-        <div className="w-12 h-12 rounded-full bg-white border border-gray-200 flex items-center justify-center text-lg font-semibold text-gray-500 overflow-hidden shadow-sm">
+      <div className="flex items-center gap-2 sm:gap-4 mb-4 sm:mb-8">
+        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white border border-gray-200 flex items-center justify-center text-sm sm:text-lg font-semibold text-gray-500 overflow-hidden shadow-sm">
           {adminUser.avatar ? (
             <img
               src={adminUser.avatar}
@@ -175,7 +175,7 @@ const AdminDashboardPage = () => {
           )}
         </div>
         <div>
-          <p className="text-lg text-gray-600">
+          <p className="text-sm sm:text-lg text-gray-600">
             Selamat datang kembali,{" "}
             <span className="font-medium text-yellow-600">
               {adminUser.name}
@@ -186,34 +186,34 @@ const AdminDashboardPage = () => {
       </div>
 
       {/* Kartu Statistik (Glassmorphism style matching JSX) */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
-          <h2 className="text-xl font-semibold text-gray-800">Total Produk</h2>
-          <p className="text-5xl font-bold mt-2 text-blue-600">
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-6">
+        <div className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl p-3 sm:p-6 shadow-xl border border-white/20 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+          <h2 className="text-xs sm:text-xl font-semibold text-gray-800">Total Produk</h2>
+          <p className="text-2xl sm:text-5xl font-bold mt-1 sm:mt-2 text-blue-600">
             {stats.totalProducts}
           </p>
         </div>
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
-          <h2 className="text-xl font-semibold text-gray-800">
+        <div className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl p-3 sm:p-6 shadow-xl border border-white/20 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+          <h2 className="text-xs sm:text-xl font-semibold text-gray-800">
             Total Kategori
           </h2>
-          <p className="text-5xl font-bold mt-2 text-green-600">
+          <p className="text-2xl sm:text-5xl font-bold mt-1 sm:mt-2 text-green-600">
             {stats.totalCategories}
           </p>
         </div>
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
-          <h2 className="text-xl font-semibold text-gray-800">
+        <div className="col-span-2 lg:col-span-1 bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl p-3 sm:p-6 shadow-xl border border-white/20 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+          <h2 className="text-xs sm:text-xl font-semibold text-gray-800">
             Total Transaksi
           </h2>
-          <p className="text-5xl font-bold mt-2 text-purple-600">
+          <p className="text-2xl sm:text-5xl font-bold mt-1 sm:mt-2 text-purple-600">
             {stats.totalTransactions}
           </p>
         </div>
       </div>
 
       {/* Tabel Transaksi */}
-      <div className="mt-12">
-        <h2 className="text-2xl font-bold mb-4 text-yellow-600">
+      <div className="mt-6 sm:mt-12">
+        <h2 className="text-lg sm:text-2xl font-bold mb-2 sm:mb-4 text-yellow-600">
           Transaksi Terbaru
         </h2>
         {(() => {
@@ -226,18 +226,18 @@ const AdminDashboardPage = () => {
           return (
             <>
               <div className="bg-white rounded-lg shadow-md overflow-x-auto">
-                <table className="w-full text-left table-auto">
+                <table className="w-full text-left table-auto min-w-[600px]">
                   <thead>
                     <tr className="bg-yellow-500 text-white">
-                      <th className="p-4 font-semibold text-white">ID Transaksi</th>
-                      <th className="p-4 font-semibold text-white">ID Pesanan</th>
-                      <th className="p-4 font-semibold text-white">Pelanggan</th>
-                      <th className="p-4 font-semibold text-white">Jumlah</th>
-                      <th className="p-4 font-semibold text-white">
+                      <th className="p-2 sm:p-4 text-xs sm:text-sm font-semibold text-white">ID Transaksi</th>
+                      <th className="p-2 sm:p-4 text-xs sm:text-sm font-semibold text-white">ID Pesanan</th>
+                      <th className="p-2 sm:p-4 text-xs sm:text-sm font-semibold text-white">Pelanggan</th>
+                      <th className="p-2 sm:p-4 text-xs sm:text-sm font-semibold text-white">Jumlah</th>
+                      <th className="p-2 sm:p-4 text-xs sm:text-sm font-semibold text-white">
                         Metode Pembayaran
                       </th>
-                      <th className="p-4 font-semibold text-white">Status</th>
-                      <th className="p-4 font-semibold text-white">Tanggal</th>
+                      <th className="p-2 sm:p-4 text-xs sm:text-sm font-semibold text-white">Status</th>
+                      <th className="p-2 sm:p-4 text-xs sm:text-sm font-semibold text-white">Tanggal</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -246,25 +246,25 @@ const AdminDashboardPage = () => {
                         key={transaction.id}
                         className="hover:bg-gray-50 text-gray-700"
                       >
-                        <td className="p-4">{transaction.id}</td>
-                        <td className="p-4">{transaction.orderId}</td>
-                        <td className="p-4">{transaction.customer}</td>
-                        <td className="p-4">
-                          <span className="font-semibold text-yellow-600">
+                        <td className="p-2 sm:p-4 text-xs sm:text-sm">{transaction.id}</td>
+                        <td className="p-2 sm:p-4 text-xs sm:text-sm">{transaction.orderId}</td>
+                        <td className="p-2 sm:p-4 text-xs sm:text-sm">{transaction.customer}</td>
+                        <td className="p-2 sm:p-4">
+                          <span className="font-semibold text-yellow-600 text-xs sm:text-sm">
                             {formatPrice(transaction.amount)}
                           </span>
                         </td>
-                        <td className="p-4">{transaction.paymentMethod}</td>
-                        <td className="p-4">
+                        <td className="p-2 sm:p-4 text-xs sm:text-sm">{transaction.paymentMethod}</td>
+                        <td className="p-2 sm:p-4">
                           <span
-                            className={`inline-flex px-3 py-1 text-xs font-semibold rounded-full ${getStatusColor(
+                            className={`inline-flex px-2 sm:px-3 py-0.5 sm:py-1 text-[10px] sm:text-xs font-semibold rounded-full ${getStatusColor(
                               transaction.status
                             )}`}
                           >
                             {transaction.status}
                           </span>
                         </td>
-                        <td className="p-4">{transaction.date}</td>
+                        <td className="p-2 sm:p-4 text-xs sm:text-sm">{transaction.date}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -272,25 +272,25 @@ const AdminDashboardPage = () => {
 
                 {/* Pagination for Dashboard */}
                 {totalPages > 1 && (
-                  <div className="flex items-center justify-between px-4 py-3 bg-white border-t border-gray-200">
-                    <div className="text-sm text-gray-700">
-                      Menampilkan {startIndex + 1} sampai {Math.min(startIndex + itemsPerPage, totalItems)} dari {totalItems} transaksi
+                  <div className="flex flex-col sm:flex-row items-center justify-between px-2 sm:px-4 py-2 sm:py-3 bg-white border-t border-gray-200 gap-2">
+                    <div className="text-xs sm:text-sm text-gray-700">
+                      Menampilkan {startIndex + 1} - {Math.min(startIndex + itemsPerPage, totalItems)} dari {totalItems}
                     </div>
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-1 sm:space-x-2">
                       <button
                         onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                         disabled={currentPage === 1}
-                        className="px-3 py-1 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="px-2 sm:px-3 py-1 text-xs sm:text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        Previous
+                        Prev
                       </button>
-                      <span className="text-sm text-gray-700">
-                        Halaman {currentPage} dari {totalPages}
+                      <span className="text-xs sm:text-sm text-gray-700">
+                        {currentPage}/{totalPages}
                       </span>
                       <button
                         onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
                         disabled={currentPage === totalPages}
-                        className="px-3 py-1 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="px-2 sm:px-3 py-1 text-xs sm:text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         Next
                       </button>

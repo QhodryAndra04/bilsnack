@@ -87,9 +87,9 @@ const ShopPage = () => {
 
   return (
     <div className="min-h-screen bg-surface dark:bg-[rgb(var(--bg))]">
-      <div className="px-4 sm:px-6 lg:px-8 py-8 max-w-7xl mx-auto">
+      <div className="px-3 sm:px-6 lg:px-8 py-4 sm:py-8 max-w-7xl mx-auto">
         {/* Breadcrumb */}
-        <nav className="flex items-center text-sm text-[rgb(var(--text-muted))] mb-6">
+        <nav className="flex items-center text-xs sm:text-sm text-[rgb(var(--text-muted))] mb-4 sm:mb-6">
           <Link
             href="/"
             className="hover:text-amber-600 dark:hover:text-amber-400"
@@ -101,29 +101,49 @@ const ShopPage = () => {
         </nav>
 
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[rgb(var(--text))]">
+        <div className="text-center mb-5 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-[rgb(var(--text))]">
             Koleksi Snack
           </h1>
-          <p className="mt-3 text-[rgb(var(--text-muted))] max-w-2xl mx-auto">
+          <p className="mt-2 sm:mt-3 text-sm sm:text-base text-[rgb(var(--text-muted))] max-w-2xl mx-auto px-2">
             Jelajahi ribuan pilihan snack favorit dengan filter kategori dan
             urutkan sesuai kebutuhanmu.
           </p>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-8">
+        <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8">
+          {/* Mobile Filter Overlay */}
+          {showFilters && (
+            <div 
+              className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+              onClick={() => setShowFilters(false)}
+            />
+          )}
+          
           {/* Sidebar Filters */}
           <div
-            className={`lg:w-64 ${showFilters ? "block" : "hidden lg:block"}`}
+            className={`fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] transform transition-transform duration-300 ease-in-out lg:relative lg:z-10 lg:w-64 lg:transform-none lg:transition-none ${showFilters ? "translate-x-0" : "-translate-x-full lg:translate-x-0"} ${showFilters ? "" : "hidden lg:block"}`}
           >
-            <div className="bg-surface-alt border-base rounded-2xl shadow-sm p-6">
-              <h3 className="text-lg font-semibold text-[rgb(var(--text))] mb-4">
+            <div className="bg-surface-alt border-base rounded-none lg:rounded-2xl shadow-lg lg:shadow-sm p-4 sm:p-6 h-full lg:h-auto lg:sticky lg:top-24 overflow-y-auto lg:max-h-[calc(100vh-120px)]">
+              {/* Close button for mobile */}
+              <div className="flex items-center justify-between mb-4 lg:hidden">
+                <h3 className="text-lg font-semibold text-[rgb(var(--text))]">Filter</h3>
+                <button
+                  onClick={() => setShowFilters(false)}
+                  className="p-2 rounded-lg hover:bg-surface"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <h3 className="text-lg font-semibold text-[rgb(var(--text))] mb-4 hidden lg:block">
                 Filter
               </h3>
 
               {/* Categories */}
-              <div className="mb-6">
-                <h4 className="font-medium text-[rgb(var(--text))] mb-3">
+              <div className="mb-4 sm:mb-6">
+                <h4 className="font-medium text-sm sm:text-base text-[rgb(var(--text))] mb-2 sm:mb-3">
                   Kategori
                 </h4>
                 <div className="space-y-2">
@@ -154,8 +174,8 @@ const ShopPage = () => {
               </div>
 
               {/* Price Range */}
-              <div className="mb-6">
-                <h4 className="font-medium text-[rgb(var(--text))] mb-3">
+              <div className="mb-4 sm:mb-6">
+                <h4 className="font-medium text-sm sm:text-base text-[rgb(var(--text))] mb-2 sm:mb-3">
                   Rentang Harga
                 </h4>
                 <div className="space-y-2">
@@ -178,8 +198,8 @@ const ShopPage = () => {
               </div>
 
               {/* Rating Filter */}
-              <div className="mb-6">
-                <h4 className="font-medium text-[rgb(var(--text))] mb-3">
+              <div className="mb-4 sm:mb-6">
+                <h4 className="font-medium text-sm sm:text-base text-[rgb(var(--text))] mb-2 sm:mb-3">
                   Rating Minimal
                 </h4>
                 <div className="space-y-2">
@@ -219,16 +239,16 @@ const ShopPage = () => {
           </div>
 
           {/* Main Content */}
-          <div className="flex-1">
+          <div className="flex-1 relative z-0">
             {/* Top Bar */}
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-              <div className="flex items-center gap-4">
+            <div className="flex flex-row items-center justify-between gap-2 sm:gap-4 mb-4 sm:mb-6">
+              <div className="flex items-center gap-2 sm:gap-4">
                 <button
                   onClick={() => setShowFilters(!showFilters)}
-                  className="lg:hidden flex items-center gap-2 bg-surface-alt px-4 py-2 rounded-lg shadow-sm border-base"
+                  className="lg:hidden flex items-center gap-1.5 sm:gap-2 bg-surface-alt px-2.5 sm:px-4 py-2 rounded-lg shadow-sm border-base text-sm"
                 >
                   <svg
-                    className="w-5 h-5"
+                    className="w-4 h-4 sm:w-5 sm:h-5"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -240,17 +260,17 @@ const ShopPage = () => {
                       d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
                     />
                   </svg>
-                  Filter
+                  <span className="hidden xs:inline">Filter</span>
                 </button>
-                <div className="text-sm text-[rgb(var(--text-muted))]">
-                  {filtered.length} produk ditemukan
+                <div className="text-xs sm:text-sm text-[rgb(var(--text-muted))]">
+                  {filtered.length} <span className="hidden xs:inline">produk ditemukan</span><span className="xs:hidden">produk</span>
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5 sm:gap-2">
                 <label
                   htmlFor="sort"
-                  className="text-sm text-[rgb(var(--text-muted))]"
+                  className="text-xs sm:text-sm text-[rgb(var(--text-muted))] hidden sm:block"
                 >
                   Urutkan:
                 </label>
@@ -258,12 +278,12 @@ const ShopPage = () => {
                   id="sort"
                   value={sort}
                   onChange={(e) => setSort(e.target.value)}
-                  className="text-sm border-base rounded-lg px-3 py-2 bg-surface-alt text-[rgb(var(--text))] focus:outline-none focus:ring-2 focus:ring-amber-500"
+                  className="text-xs sm:text-sm border-base rounded-lg px-2 sm:px-3 py-1.5 sm:py-2 bg-surface-alt text-[rgb(var(--text))] focus:outline-none focus:ring-2 focus:ring-amber-500"
                 >
                   <option value="">Default</option>
-                  <option value="price-asc">Harga Terendah</option>
-                  <option value="price-desc">Harga Tertinggi</option>
-                  <option value="rating-desc">Rating Tertinggi</option>
+                  <option value="price-asc">Harga ↑</option>
+                  <option value="price-desc">Harga ↓</option>
+                  <option value="rating-desc">Rating</option>
                 </select>
               </div>
             </div>
@@ -294,28 +314,28 @@ const ShopPage = () => {
 
             {/* Products Grid */}
             {loading ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              <div className="grid grid-cols-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-1.5 sm:gap-4 lg:gap-6">
                 {Array.from({ length: 12 }).map((_, i) => (
                   <SkeletonCard key={i} />
                 ))}
               </div>
             ) : filtered.length > 0 ? (
-              <Suspense fallback={<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              <Suspense fallback={<div className="grid grid-cols-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-1.5 sm:gap-4 lg:gap-6">
                 {Array.from({ length: 8 }).map((_, i) => (
                   <SkeletonCard key={i} />
                 ))}
               </div>}>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <div className="grid grid-cols-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-1.5 sm:gap-4 lg:gap-6">
                   {filtered.map((product) => (
                     <ProductCard key={product.id} product={product} />
                   ))}
                 </div>
               </Suspense>
             ) : (
-              <div className="text-center py-20">
-                <div className="w-24 h-24 mx-auto mb-4 bg-gray-100 dark:bg-neutral-800 rounded-full flex items-center justify-center">
+              <div className="text-center py-10 sm:py-20">
+                <div className="w-16 h-16 sm:w-24 sm:h-24 mx-auto mb-3 sm:mb-4 bg-gray-100 dark:bg-neutral-800 rounded-full flex items-center justify-center">
                   <svg
-                    className="w-12 h-12 text-gray-400"
+                    className="w-8 h-8 sm:w-12 sm:h-12 text-gray-400"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -328,15 +348,15 @@ const ShopPage = () => {
                     />
                   </svg>
                 </div>
-                <h3 className="text-xl font-semibold text-[rgb(var(--text))] mb-2">
+                <h3 className="text-lg sm:text-xl font-semibold text-[rgb(var(--text))] mb-2">
                   Tidak ada produk ditemukan
                 </h3>
-                <p className="text-[rgb(var(--text-muted))] mb-6">
+                <p className="text-sm sm:text-base text-[rgb(var(--text-muted))] mb-4 sm:mb-6 px-4">
                   Coba ubah filter atau kata kunci pencarian Anda.
                 </p>
                 <Link
                   href="/shop"
-                  className="inline-flex items-center px-6 py-3 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors"
+                  className="inline-flex items-center px-4 sm:px-6 py-2.5 sm:py-3 text-sm sm:text-base bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors"
                 >
                   Lihat Semua Produk
                 </Link>

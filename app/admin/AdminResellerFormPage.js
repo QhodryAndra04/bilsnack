@@ -2,12 +2,11 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { useNotification } from "../contexts/NotificationContext";
+import { showSuccess, showError } from "../utils/swal";
 
 const AdminResellerFormPage = () => {
   const router = useRouter();
   const params = useParams();
-  const { showNotification } = useNotification();
   const id = params?.id; // Ambil ID dari params URL
   const isEditing = !!id;
 
@@ -51,11 +50,11 @@ const AdminResellerFormPage = () => {
             }));
             return;
           } else if (resp.status === 404) {
-            showNotification("Error", "Reseller tidak ditemukan.", "error");
+            showError("Error", "Reseller tidak ditemukan.");
             router.push('/admin/resellers');
             return;
           } else {
-            showNotification("Error", "Gagal memuat reseller. Silakan coba lagi.", "error");
+            showError("Error", "Gagal memuat reseller. Silakan coba lagi.");
             return;
           }
         }
@@ -91,7 +90,7 @@ const AdminResellerFormPage = () => {
           });
         }
       } catch (err) {
-        showNotification("Error", "Terjadi kesalahan saat memuat reseller.", "error");
+        showError("Error", "Terjadi kesalahan saat memuat reseller.");
       }
     };
 
@@ -148,7 +147,7 @@ const AdminResellerFormPage = () => {
             throw new Error(`Update failed: ${resp.status} - ${errorText}`);
           }
 
-          showNotification("Berhasil", "Reseller berhasil diupdate!", "success");
+          showSuccess("Berhasil", "Reseller berhasil diupdate!");
         } else {
           payload.role = "reseller";
 
@@ -166,22 +165,21 @@ const AdminResellerFormPage = () => {
             throw new Error(err && err.error ? err.error : "Create failed");
           }
 
-          showNotification("Berhasil", "Reseller berhasil ditambahkan!", "success");
+          showSuccess("Berhasil", "Reseller berhasil ditambahkan!");
         }
       } else {
         // No token mode - simulate success
-        showNotification(
+        showSuccess(
           "Berhasil",
           isEditing
             ? "Reseller berhasil diupdate!"
-            : "Reseller berhasil ditambahkan!",
-          "success"
+            : "Reseller berhasil ditambahkan!"
         );
       }
 
       router.push("/admin/resellers");
     } catch (err) {
-      showNotification("Error", err.message || "Gagal menyimpan reseller", "error");
+      showError("Error", err.message || "Gagal menyimpan reseller");
     } finally {
       setSubmitting(false);
     }
@@ -189,17 +187,17 @@ const AdminResellerFormPage = () => {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-6 text-gray-900">
+      <h1 className="text-xl sm:text-3xl font-bold mb-4 sm:mb-6 text-gray-900">
         {isEditing ? "Edit Reseller" : "Tambah Reseller Baru"}
       </h1>
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-8 rounded-lg shadow-md space-y-6 border border-gray-100"
+        className="bg-white p-4 sm:p-8 rounded-lg shadow-md space-y-4 sm:space-y-6 border border-gray-100"
       >
-        <div className="mb-6">
+        <div className="mb-4 sm:mb-6">
           <label
             htmlFor="name"
-            className="block text-sm font-medium text-gray-700 mb-2"
+            className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2"
           >
             Nama Toko <span className="text-red-600">*</span>
           </label>
@@ -210,20 +208,20 @@ const AdminResellerFormPage = () => {
             value={formData.name}
             onChange={handleChange}
             placeholder="Contoh: Toko Cemilan Jaya"
-            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-300 focus:border-transparent ${
+            className={`w-full px-3 sm:px-4 py-1.5 sm:py-2 border rounded-lg text-sm sm:text-base focus:ring-2 focus:ring-green-300 focus:border-transparent ${
               errors.name ? "border-red-500" : "border-gray-200"
             }`}
           />
           {errors.name && (
-            <p className="text-red-600 text-sm mt-1">{errors.name}</p>
+            <p className="text-red-600 text-xs sm:text-sm mt-1">{errors.name}</p>
           )}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-4 sm:mb-6">
           <div>
             <label
               htmlFor="email"
-              className="block text-sm font-medium text-gray-700 mb-2"
+              className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2"
             >
               Email <span className="text-red-600">*</span>
             </label>
@@ -234,19 +232,19 @@ const AdminResellerFormPage = () => {
               value={formData.email}
               onChange={handleChange}
               placeholder="contoh@email.com"
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-300 focus:border-transparent ${
+              className={`w-full px-3 sm:px-4 py-1.5 sm:py-2 border rounded-lg text-sm sm:text-base focus:ring-2 focus:ring-green-300 focus:border-transparent ${
                 errors.email ? "border-red-500" : "border-gray-200"
               }`}
             />
             {errors.email && (
-              <p className="text-red-600 text-sm mt-1">{errors.email}</p>
+              <p className="text-red-600 text-xs sm:text-sm mt-1">{errors.email}</p>
             )}
           </div>
 
           <div>
             <label
               htmlFor="phone"
-              className="block text-sm font-medium text-gray-700 mb-2"
+              className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2"
             >
               Nomor Telepon <span className="text-red-600">*</span>
             </label>
@@ -257,20 +255,20 @@ const AdminResellerFormPage = () => {
               value={formData.phone}
               onChange={handleChange}
               placeholder="081234567890"
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-300 focus:border-transparent ${
+              className={`w-full px-3 sm:px-4 py-1.5 sm:py-2 border rounded-lg text-sm sm:text-base focus:ring-2 focus:ring-green-300 focus:border-transparent ${
                 errors.phone ? "border-red-500" : "border-gray-200"
               }`}
             />
             {errors.phone && (
-              <p className="text-red-600 text-sm mt-1">{errors.phone}</p>
+              <p className="text-red-600 text-xs sm:text-sm mt-1">{errors.phone}</p>
             )}
           </div>
         </div>
 
-        <div className="mb-6">
+        <div className="mb-4 sm:mb-6">
           <label
             htmlFor="address"
-            className="block text-sm font-medium text-gray-700 mb-2"
+            className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2"
           >
             Alamat <span className="text-red-600">*</span>
           </label>
@@ -281,19 +279,19 @@ const AdminResellerFormPage = () => {
             onChange={handleChange}
             placeholder="Jl. Contoh No. 123, Kota, Provinsi"
             rows={4}
-            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-300 focus:border-transparent resize-vertical ${
+            className={`w-full px-3 sm:px-4 py-1.5 sm:py-2 border rounded-lg text-sm sm:text-base focus:ring-2 focus:ring-green-300 focus:border-transparent resize-vertical ${
               errors.address ? "border-red-500" : "border-gray-200"
             }`}
           />
           {errors.address && (
-            <p className="text-red-600 text-sm mt-1">{errors.address}</p>
+            <p className="text-red-600 text-xs sm:text-sm mt-1">{errors.address}</p>
           )}
         </div>
 
-        <div className="mb-6">
+        <div className="mb-4 sm:mb-6">
           <label
             htmlFor="status"
-            className="block text-sm font-medium text-gray-700 mb-2"
+            className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2"
           >
             Status <span className="text-red-600">*</span>
           </label>
@@ -302,17 +300,17 @@ const AdminResellerFormPage = () => {
             name="status"
             value={formData.status}
             onChange={handleChange}
-            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-300 focus:border-transparent"
+            className="w-full px-3 sm:px-4 py-1.5 sm:py-2 border border-gray-200 rounded-lg text-sm sm:text-base focus:ring-2 focus:ring-green-300 focus:border-transparent"
           >
             <option value="active">Aktif</option>
             <option value="inactive">Nonaktif</option>
           </select>
         </div>
 
-        <div className="mb-6">
+        <div className="mb-4 sm:mb-6">
           <label
             htmlFor="password"
-            className="block text-sm font-medium text-gray-700 mb-2"
+            className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2"
           >
             Password
           </label>
@@ -327,15 +325,15 @@ const AdminResellerFormPage = () => {
                 ? "Kosongkan jika tidak ingin mengubah password"
                 : "Password untuk reseller"
             }
-            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-300 focus:border-transparent"
+            className="w-full px-3 sm:px-4 py-1.5 sm:py-2 border border-gray-200 rounded-lg text-sm sm:text-base focus:ring-2 focus:ring-green-300 focus:border-transparent"
           />
         </div>
 
-        <div className="flex gap-4">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
           <button
             type="submit"
             disabled={submitting}
-            className="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors disabled:opacity-60 disabled:cursor-not-allowed shadow-sm"
+            className="flex-1 bg-green-600 hover:bg-green-700 text-white text-sm sm:text-base font-semibold py-2 sm:py-3 px-4 sm:px-6 rounded-lg transition-colors disabled:opacity-60 disabled:cursor-not-allowed shadow-sm"
           >
             {submitting
               ? isEditing
@@ -348,7 +346,7 @@ const AdminResellerFormPage = () => {
           <button
             type="button"
             onClick={() => router.push("/admin/resellers")}
-            className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-3 px-6 rounded-lg transition-colors"
+            className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 text-sm sm:text-base font-semibold py-2 sm:py-3 px-4 sm:px-6 rounded-lg transition-colors"
           >
             Batal
           </button>

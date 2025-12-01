@@ -4,7 +4,9 @@
 // Fix: Populating ProductContext to manage and provide product data, as the file was empty.   
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { PRODUCTS } from "../constants";
-import { API_ENDPOINTS, apiGet, apiPost, apiPut, apiDelete } from '../config/api';const ProductContext = createContext(undefined);
+import { API_ENDPOINTS, apiGet, apiPost, apiPut, apiDelete } from '../config/api';
+import { showSuccess, showError, showWarning } from "../utils/swal";
+const ProductContext = createContext(undefined);
 
 import { API_BASE_URL } from '../config/api';
 
@@ -180,19 +182,19 @@ export const ProductProvider = ({ children }) => {
       
       // Handle discontinued vs deleted
       if (data.discontinued) {
-        alert('Produk tidak dapat dihapus karena memiliki riwayat pesanan. Produk telah ditandai sebagai "discontinued".');
+        showWarning('Produk Discontinued', 'Produk tidak dapat dihapus karena memiliki riwayat pesanan. Produk telah ditandai sebagai "discontinued".');
         // Refresh products to show updated status
         await fetchProducts();
       } else {
         // Remove from local state
         setProducts((prev) => prev.filter((p) => Number(p.id) !== Number(id)));
-        alert('Produk berhasil dihapus!');
+        showSuccess('Berhasil', 'Produk berhasil dihapus!');
       }
       
       return true;
     } catch (err) {
       console.error('Delete product error:', err);
-      alert(`Gagal menghapus produk: ${err.message}`);
+      showError('Gagal', `Gagal menghapus produk: ${err.message}`);
       throw err;
     }
   };

@@ -6,7 +6,8 @@ import { useParams } from "next/navigation";
 import { useProducts } from "./contexts/ProductContext";
 import { useCart } from "./contexts/CartContext";
 import { useAuth } from "./contexts/AuthContext";
-import { useNotification } from "./contexts/NotificationContext";
+import { showSuccess, showError, showWarning } from "./utils/swal";
+import { InlineLoading } from "./components/PageLoading";
 import StarRating from "./components/StarRating";
 import { formatPrice } from "./utils/format";
 import ProductCard from "./components/ProductCard";
@@ -39,7 +40,6 @@ const ProductDetailPage = () => {
   const { getProductById, products } = useProducts();
   const { addToCart } = useCart();
   const { user, token } = useAuth();
-  const { showNotification } = useNotification();
 
   const product = getProductById(Number(id));
 
@@ -71,11 +71,17 @@ const ProductDetailPage = () => {
 
   const handleAddToCart = () => {
     if (quantity > product.stock) {
-      showNotification("Stok Tidak Cukup", `Maaf, stok hanya tersedia ${product.stock} unit. Tidak bisa menambahkan lebih dari itu.`, "error");
+      showError(
+        "Stok Tidak Cukup",
+        `Maaf, stok hanya tersedia ${product.stock} unit. Tidak bisa menambahkan lebih dari itu.`
+      );
       return;
     }
     addToCart(product, quantity);
-    showNotification("Berhasil", `${quantity} x ${product.name} ditambahkan ke keranjang!`, "success");
+    showSuccess(
+      "Berhasil",
+      `${quantity} x ${product.name} ditambahkan ke keranjang!`
+    );
   };
 
   const [reviews, setReviews] = useState([]);
@@ -109,10 +115,12 @@ const ProductDetailPage = () => {
           throw new Error(`HTTP ${res.status}: ${res.statusText}`);
         }
       } catch (e) {
-        if (e.name === 'AbortError') {
+        if (e.name === "AbortError") {
           setReviewsError("Request timeout - server mungkin tidak merespons");
         } else {
-          setReviewsError("Gagal memuat ulasan - server mungkin tidak tersedia");
+          setReviewsError(
+            "Gagal memuat ulasan - server mungkin tidak tersedia"
+          );
         }
         setReviews([]);
       } finally {
@@ -132,7 +140,7 @@ const ProductDetailPage = () => {
             `${API_BASE}/api/reviews/can-review?productId=${product.id}`,
             {
               headers: { Authorization: `Bearer ${token}` },
-              signal: controller.signal
+              signal: controller.signal,
             }
           );
           clearTimeout(timeoutId);
@@ -155,7 +163,10 @@ const ProductDetailPage = () => {
   const handleSubmitReview = async (e) => {
     e.preventDefault();
     if (!user || !token) {
-      showNotification("Login Diperlukan", "Silakan login terlebih dahulu untuk mengirim ulasan.", "warning");
+      showWarning(
+        "Login Diperlukan",
+        "Silakan login terlebih dahulu untuk mengirim ulasan."
+      );
       return;
     }
     setSubmittingReview(true);
@@ -174,7 +185,7 @@ const ProductDetailPage = () => {
           rating: Number(newRating),
           comment: newComment,
         }),
-        signal: controller.signal
+        signal: controller.signal,
       });
       clearTimeout(timeoutId);
 
@@ -190,8 +201,7 @@ const ProductDetailPage = () => {
           `${API_BASE}/api/reviews/product/${product.id}`
         );
         if (revRes.ok) setReviews(await revRes.json());
-      } catch (refreshError) {
-      }
+      } catch (refreshError) {}
 
       if (data && typeof data.rating !== "undefined") {
         product.rating = data.rating;
@@ -200,12 +210,19 @@ const ProductDetailPage = () => {
       setNewComment("");
       setNewRating(5);
       setCanReview(false);
-      showNotification("Berhasil", "Ulasan berhasil dikirim!", "success");
+      showSuccess("Berhasil", "Ulasan berhasil dikirim!");
     } catch (err) {
-      if (err.name === 'AbortError') {
-        showNotification("Timeout", "Pengiriman ulasan timeout - coba lagi nanti", "warning");
+      if (err.name === "AbortError") {
+        showWarning(
+          "Timeout",
+          "Pengiriman ulasan timeout - coba lagi nanti"
+        );
       } else {
-        showNotification("Gagal", err.message || "Gagal mengirim ulasan - server mungkin tidak tersedia", "error");
+        showError(
+          "Gagal",
+          err.message ||
+            "Gagal mengirim ulasan - server mungkin tidak tersedia"
+        );
       }
     } finally {
       setSubmittingReview(false);
@@ -254,15 +271,15 @@ const ProductDetailPage = () => {
         <div className="absolute bottom-20 right-10 w-16 h-16 bg-yellow-400 rounded-full blur-lg"></div>
       </div>
 
-      <div className="px-8 sm:px-12 lg:px-16 py-12 max-w-7xl mx-auto relative">
-        <nav className="flex items-center text-sm text-[rgb(var(--text-muted))] mb-8 font-medium">
+      <div className="px-3 sm:px-8 lg:px-16 py-4 sm:py-12 max-w-7xl mx-auto relative">
+        <nav className="flex items-center text-xs sm:text-sm text-[rgb(var(--text-muted))] mb-4 sm:mb-8 font-medium flex-wrap gap-0.5">
           <Link
             href="/"
             className="hover:text-[rgb(var(--accent))] transition-colors"
           >
             Beranda
           </Link>{" "}
-          <span className="mx-2">
+          <span className="mx-1 sm:mx-2">
             <ChevronRightIcon />
           </span>
           <Link
@@ -271,20 +288,20 @@ const ProductDetailPage = () => {
           >
             Toko
           </Link>{" "}
-          <span className="mx-2">
+          <span className="mx-1 sm:mx-2">
             <ChevronRightIcon />
           </span>
-          <span className="text-[rgb(var(--text))] font-bold">
+          <span className="text-[rgb(var(--text))] font-bold truncate max-w-[150px] sm:max-w-none">
             {product.name}
           </span>
         </nav>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8 lg:gap-12">
           {/* Product Images */}
           <div>
-            <div className="bg-surface-alt dark:bg-[rgb(var(--surface-alt))] rounded-xl shadow-lg overflow-hidden mb-4 flex items-center justify-center border border-base hover:shadow-xl transition-shadow duration-300">
+            <div className="bg-surface-alt dark:bg-[rgb(var(--surface-alt))] rounded-lg sm:rounded-xl shadow-lg overflow-hidden mb-3 sm:mb-4 flex items-center justify-center border border-base hover:shadow-xl transition-shadow duration-300">
               <div className="w-full max-w-[829px] aspect-[1.08/1] bg-surface-alt dark:bg-[rgb(var(--surface))] flex items-center justify-center overflow-hidden">
-                <div className="w-full h-full flex items-center justify-center p-8">
+                <div className="w-full h-full flex items-center justify-center p-4 sm:p-8">
                   <img
                     src={selectedImage || null}
                     alt={product.name}
@@ -295,10 +312,10 @@ const ProductDetailPage = () => {
             </div>
 
             {/* Trust Badges */}
-            <div className="flex flex-wrap gap-2 mb-4">
-              <div className="flex items-center gap-1 bg-[rgb(var(--accent))]/10 text-[rgb(var(--accent))] px-3 py-1 rounded-full text-xs font-medium border border-[rgb(var(--accent))]/30">
+            <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-3 sm:mb-4">
+              <div className="flex items-center gap-1 bg-[rgb(var(--accent))]/10 text-[rgb(var(--accent))] px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-medium border border-[rgb(var(--accent))]/30">
                 <svg
-                  className="w-3 h-3"
+                  className="w-2.5 h-2.5 sm:w-3 sm:h-3"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                 >
@@ -310,9 +327,9 @@ const ProductDetailPage = () => {
                 </svg>
                 Gratis Ongkir
               </div>
-              <div className="flex items-center gap-1 bg-[rgb(var(--accent))]/10 text-[rgb(var(--accent))] px-3 py-1 rounded-full text-xs font-medium border border-[rgb(var(--accent))]/30">
+              <div className="flex items-center gap-1 bg-[rgb(var(--accent))]/10 text-[rgb(var(--accent))] px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-medium border border-[rgb(var(--accent))]/30">
                 <svg
-                  className="w-3 h-3"
+                  className="w-2.5 h-2.5 sm:w-3 sm:h-3"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                 >
@@ -324,9 +341,9 @@ const ProductDetailPage = () => {
                 </svg>
                 Garansi Uang Kembali
               </div>
-              <div className="flex items-center gap-1 bg-[rgb(var(--accent))]/10 text-[rgb(var(--accent))] px-3 py-1 rounded-full text-xs font-medium border border-[rgb(var(--accent))]/30">
+              <div className="flex items-center gap-1 bg-[rgb(var(--accent))]/10 text-[rgb(var(--accent))] px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-medium border border-[rgb(var(--accent))]/30">
                 <svg
-                  className="w-3 h-3"
+                  className="w-2.5 h-2.5 sm:w-3 sm:h-3"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                 >
@@ -340,14 +357,14 @@ const ProductDetailPage = () => {
               </div>
             </div>
 
-            <div className="flex space-x-4 overflow-x-auto pb-2 px-2 mt-4">
+            <div className="flex space-x-2 sm:space-x-4 overflow-x-auto pb-2 px-1 sm:px-2 mt-3 sm:mt-4">
               {product.images &&
                 product.images.map((img, index) => {
                   const url = normalizeImg(img);
                   return (
                     <div
                       key={index}
-                      className={`w-16 h-16 rounded-lg overflow-hidden cursor-pointer border-2 transition-all duration-300 hover:shadow-md shrink-0 ${
+                      className={`w-12 h-12 sm:w-16 sm:h-16 rounded-lg overflow-hidden cursor-pointer border-2 transition-all duration-300 hover:shadow-md shrink-0 ${
                         selectedImage === url
                           ? "border-[rgb(var(--accent))] shadow-lg scale-110"
                           : "border-base hover:border-gray-300"
@@ -368,27 +385,30 @@ const ProductDetailPage = () => {
           </div>
 
           {/* Product Details Card */}
-          <div className="bg-linear-to-br from-surface via-surface-alt to-surface dark:from-[rgb(var(--surface))] dark:via-[rgb(var(--surface-alt))] dark:to-[rgb(var(--surface))] rounded-xl border border-base p-6 lg:p-8 shadow-lg hover:shadow-xl transition-shadow duration-300">
+          <div className="bg-linear-to-br from-surface via-surface-alt to-surface dark:from-[rgb(var(--surface))] dark:via-[rgb(var(--surface-alt))] dark:to-[rgb(var(--surface))] rounded-lg sm:rounded-xl border border-base p-4 sm:p-6 lg:p-8 shadow-lg hover:shadow-xl transition-shadow duration-300">
             {/* Title - Menggunakan text-[rgb(var(--text))] agar warna teks selalu kontras dengan background */}
-            <h1 className="text-4xl font-bold text-[rgb(var(--text))] mb-2">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[rgb(var(--text))] mb-2">
               {product.name}
             </h1>
 
-            <div className="flex items-center gap-4 mb-4">
-              <div className="flex items-center text-sm text-[rgb(var(--text-muted))]">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-4 mb-3 sm:mb-4">
+              <div className="flex items-center text-xs sm:text-sm text-[rgb(var(--text-muted))]">
                 <StarRating rating={product.rating} />
-                <span className="ml-2 font-medium">{product.rating}/5</span>
+                <span className="ml-1 sm:ml-2 font-medium">
+                  {product.rating}/5
+                </span>
                 <span className="ml-1">({product.reviewCount} ulasan)</span>
               </div>
-              <div className="text-sm text-[rgb(var(--text-muted))]">
-                • {product.soldCount || Math.floor((product.id * 37) % 100) + 50}{" "}
+              <div className="text-xs sm:text-sm text-[rgb(var(--text-muted))]">
+                •{" "}
+                {product.soldCount || Math.floor((product.id * 37) % 100) + 50}{" "}
                 terjual
               </div>
             </div>
 
-            <div className="flex items-center text-sm text-[rgb(var(--text-muted))] mt-3 mb-4">
+            <div className="flex items-center text-xs sm:text-sm text-[rgb(var(--text-muted))] mt-2 sm:mt-3 mb-3 sm:mb-4">
               <svg
-                className="w-5 h-5 mr-2 text-[rgb(var(--accent))]"
+                className="w-4 h-4 sm:w-5 sm:h-5 mr-1.5 sm:mr-2 text-[rgb(var(--accent))]"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -398,31 +418,31 @@ const ProductDetailPage = () => {
                 <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
               </svg>
               <span className="font-medium">Penjual:</span>
-              <span className="ml-1 text-[rgb(var(--accent))] font-bold">
+              <span className="ml-1 text-[rgb(var(--accent))] font-bold truncate">
                 {shopName}
               </span>
             </div>
 
-            <div className="flex items-baseline space-x-3 mb-6">
+            <div className="flex flex-wrap items-baseline gap-2 sm:gap-3 mb-4 sm:mb-6">
               {/* Price - Menggunakan text-[rgb(var(--text))] agar warna teks selalu kontras dengan background */}
-              <p className="text-3xl font-bold text-[rgb(var(--text))]">
+              <p className="text-2xl sm:text-3xl font-bold text-[rgb(var(--text))]">
                 Rp{formatPrice(product.price)}
               </p>
               {product.originalPrice && (
-                <p className="text-xl line-through text-gray-500">
+                <p className="text-base sm:text-xl line-through text-gray-500">
                   Rp{formatPrice(product.originalPrice)}
                 </p>
               )}
               {discountPct && (
-                <span className="ml-1 inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-linear-to-r from-red-500 to-orange-500 text-white shadow-md animate-pulse">
+                <span className="inline-flex items-center px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs sm:text-sm font-semibold bg-linear-to-r from-red-500 to-orange-500 text-white shadow-md animate-pulse">
                   -{discountPct}%
                 </span>
               )}
             </div>
 
             {/* Spec Box */}
-            <div className="bg-[rgb(var(--accent))]/5 rounded-lg p-4 mb-6 border border-[rgb(var(--accent))]/20">
-              <div className="grid grid-cols-2 gap-4 text-sm">
+            <div className="bg-[rgb(var(--accent))]/5 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6 border border-[rgb(var(--accent))]/20">
+              <div className="grid grid-cols-2 gap-2 sm:gap-4 text-xs sm:text-sm">
                 <div>
                   <p className="text-[rgb(var(--text-muted))] mb-1">
                     <span className="font-semibold text-[rgb(var(--accent))]">
@@ -465,25 +485,25 @@ const ProductDetailPage = () => {
               </div>
             </div>
 
-            <hr className="my-8 border-base" />
+            <hr className="my-4 sm:my-8 border-base" />
 
-            <div className="flex items-center space-x-4 mb-8">
-              <div className="flex items-center border border-[rgb(var(--accent))]/30 rounded-full px-4 py-3 bg-[rgb(var(--accent))]/5 shadow-sm">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 mb-4 sm:mb-8">
+              <div className="flex items-center justify-center border border-[rgb(var(--accent))]/30 rounded-full px-3 sm:px-4 py-2 sm:py-3 bg-[rgb(var(--accent))]/5 shadow-sm">
                 <button
                   onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                  className="text-[rgb(var(--accent))] text-xl font-bold w-6 h-6 flex items-center justify-center hover:text-[rgb(var(--accent))]/80 transition-colors"
+                  className="text-[rgb(var(--accent))] text-lg sm:text-xl font-bold w-6 h-6 flex items-center justify-center hover:text-[rgb(var(--accent))]/80 transition-colors"
                   suppressHydrationWarning={true}
                 >
                   -
                 </button>
-                <span className="w-8 text-center font-semibold text-lg text-[rgb(var(--text))]">
+                <span className="w-8 text-center font-semibold text-base sm:text-lg text-[rgb(var(--text))]">
                   {quantity}
                 </span>
                 <button
                   onClick={() =>
                     setQuantity((q) => Math.min(product.stock, q + 1))
                   }
-                  className="text-[rgb(var(--accent))] text-xl font-bold w-6 h-6 flex items-center justify-center hover:text-[rgb(var(--accent))]/80 transition-colors"
+                  className="text-[rgb(var(--accent))] text-lg sm:text-xl font-bold w-6 h-6 flex items-center justify-center hover:text-[rgb(var(--accent))]/80 transition-colors"
                   disabled={quantity >= product.stock}
                   suppressHydrationWarning={true}
                 >
@@ -495,7 +515,7 @@ const ProductDetailPage = () => {
                 onMouseEnter={() => setBtnHover(true)}
                 onMouseLeave={() => setBtnHover(false)}
                 disabled={outOfStock}
-                className={`grow bg-linear-to-r from-[rgb(var(--accent))] to-[rgb(var(--accent-hover))] hover:from-[rgb(var(--accent-hover))] hover:to-[rgb(var(--accent))] text-white py-4 px-8 rounded-full text-lg font-semibold focus:outline-none transition-all duration-300 transform hover:scale-105 hover:shadow-lg shadow-md ${
+                className={`flex-1 sm:grow bg-linear-to-r from-[rgb(var(--accent))] to-[rgb(var(--accent-hover))] hover:from-[rgb(var(--accent-hover))] hover:to-[rgb(var(--accent))] text-white py-3 sm:py-4 px-4 sm:px-8 rounded-full text-base sm:text-lg font-semibold focus:outline-none transition-all duration-300 transform hover:scale-105 hover:shadow-lg shadow-md ${
                   outOfStock ? "opacity-50 cursor-not-allowed bg-gray-400" : ""
                 }`}
                 aria-label="Tambah ke Keranjang"
@@ -505,18 +525,21 @@ const ProductDetailPage = () => {
               </button>
             </div>
 
-            <button className="w-full border-2 border-[rgb(var(--accent))] text-[rgb(var(--accent))] font-semibold py-3 px-8 rounded-full text-lg hover:bg-[rgb(var(--accent))] hover:text-white transition-all duration-300 transform hover:scale-105 hover:shadow-lg" suppressHydrationWarning={true}>
+            <button
+              className="w-full border-2 border-[rgb(var(--accent))] text-[rgb(var(--accent))] font-semibold py-2.5 sm:py-3 px-4 sm:px-8 rounded-full text-base sm:text-lg hover:bg-[rgb(var(--accent))] hover:text-white transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+              suppressHydrationWarning={true}
+            >
               Tambah ke Wishlist ♡
             </button>
           </div>
 
           {/* Reviews Section */}
-          <div className="mt-12 lg:col-span-2">
-            <div className="border-b border-base pb-4">
-              <nav className="flex space-x-8">
+          <div className="mt-6 sm:mt-12 lg:col-span-2">
+            <div className="border-b border-base pb-2 sm:pb-4 overflow-x-auto">
+              <nav className="flex space-x-4 sm:space-x-8 min-w-max">
                 <button
                   onClick={() => setActiveTab("description")}
-                  className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-300 ${
+                  className={`py-2 sm:py-4 px-1 border-b-2 font-medium text-xs sm:text-sm transition-colors duration-300 whitespace-nowrap ${
                     activeTab === "description"
                       ? "border-[rgb(var(--accent))] text-[rgb(var(--accent))] bg-[rgb(var(--accent))]/10 rounded-t-md"
                       : "border-transparent text-[rgb(var(--text-muted))] hover:text-[rgb(var(--accent))] hover:border-[rgb(var(--accent))]"
@@ -527,7 +550,7 @@ const ProductDetailPage = () => {
                 </button>
                 <button
                   onClick={() => setActiveTab("specifications")}
-                  className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-300 ${
+                  className={`py-2 sm:py-4 px-1 border-b-2 font-medium text-xs sm:text-sm transition-colors duration-300 whitespace-nowrap ${
                     activeTab === "specifications"
                       ? "border-[rgb(var(--accent))] text-[rgb(var(--accent))] bg-[rgb(var(--accent))]/10 rounded-t-md"
                       : "border-transparent text-[rgb(var(--text-muted))] hover:text-[rgb(var(--accent))] hover:border-[rgb(var(--accent))]"
@@ -538,33 +561,35 @@ const ProductDetailPage = () => {
                 </button>
                 <button
                   onClick={() => setActiveTab("reviews")}
-                  className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-300 ${
+                  className={`py-2 sm:py-4 px-1 border-b-2 font-medium text-xs sm:text-sm transition-colors duration-300 whitespace-nowrap ${
                     activeTab === "reviews"
                       ? "border-[rgb(var(--accent))] text-[rgb(var(--accent))] bg-[rgb(var(--accent))]/10 rounded-t-md"
                       : "border-transparent text-[rgb(var(--text-muted))] hover:text-[rgb(var(--accent))] hover:border-[rgb(var(--accent))]"
                   }`}
                   suppressHydrationWarning={true}
                 >
-                  Ulasan ({loadingReviews ? "..." : reviewsError ? "!" : reviews.length})
+                  Ulasan (
+                  {loadingReviews ? "..." : reviewsError ? "!" : reviews.length}
+                  )
                 </button>
               </nav>
             </div>
-            <div className="mt-6">
+            <div className="mt-4 sm:mt-6">
               {activeTab === "description" && (
-                <div className="prose prose-gray dark:prose-invert max-w-none bg-surface-alt dark:bg-[rgb(var(--surface-alt))] p-6 rounded-lg border border-base shadow-sm">
-                  <p className="text-[rgb(var(--text-muted))] leading-relaxed">
+                <div className="prose prose-gray dark:prose-invert max-w-none bg-surface-alt dark:bg-[rgb(var(--surface-alt))] p-4 sm:p-6 rounded-lg border border-base shadow-sm">
+                  <p className="text-sm sm:text-base text-[rgb(var(--text-muted))] leading-relaxed">
                     {product.description}
                   </p>
                 </div>
               )}
               {activeTab === "specifications" && (
-                <div className="bg-surface-alt dark:bg-[rgb(var(--surface-alt))] p-6 rounded-lg border border-base shadow-sm">
-                  <h3 className="text-lg font-semibold mb-4 text-[rgb(var(--text))]">
+                <div className="bg-surface-alt dark:bg-[rgb(var(--surface-alt))] p-4 sm:p-6 rounded-lg border border-base shadow-sm">
+                  <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 text-[rgb(var(--text))]">
                     Spesifikasi Produk
                   </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-3">
-                      <div className="flex justify-between py-2">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+                    <div className="space-y-2 sm:space-y-3">
+                      <div className="flex justify-between py-1.5 sm:py-2 text-sm">
                         <span className="text-[rgb(var(--text-muted))]">
                           Nama Produk
                         </span>
@@ -638,10 +663,7 @@ const ProductDetailPage = () => {
                 <>
                   {loadingReviews ? (
                     <div className="text-center py-12 bg-surface-alt dark:bg-[rgb(var(--surface-alt))] rounded-lg border border-base">
-                      <div className="animate-spin w-8 h-8 border-4 border-[rgb(var(--accent))] border-t-transparent rounded-full mx-auto mb-4"></div>
-                      <p className="text-[rgb(var(--text-muted))] text-lg">
-                        Memuat ulasan...
-                      </p>
+                      <InlineLoading text="Memuat ulasan..." variant="dots" size="md" />
                     </div>
                   ) : reviewsError ? (
                     <div className="text-center py-12 bg-surface-alt dark:bg-[rgb(var(--surface-alt))] rounded-lg border border-base">
@@ -711,12 +733,12 @@ const ProductDetailPage = () => {
                           <div className="flex items-center justify-between mb-3">
                             <div className="flex items-center space-x-3">
                               <div className="w-10 h-10 bg-linear-to-br from-[rgb(var(--accent))] to-[rgb(var(--accent-hover))] rounded-full flex items-center justify-center text-white font-bold">
-                                {(r.user_name || r.userId || "P")
+                                {(r.users?.first_name || r.user_name || r.userId || "P")
                                   .charAt(0)
                                   .toUpperCase()}
                               </div>
                               <strong className="text-[rgb(var(--text))]">
-                                {r.user_name || r.userId || "Pelanggan"}
+                                {r.users ? `${r.users.first_name || ''} ${r.users.last_name || ''}`.trim() || r.users.username : r.user_name || r.userId || "Pelanggan"}
                               </strong>
                             </div>
                             <StarRating rating={r.rating} />
@@ -795,12 +817,12 @@ const ProductDetailPage = () => {
 
         {/* Related Products */}
         {relatedProducts.length > 0 && (
-          <div className="bg-linear-to-br from-surface-alt via-surface to-surface-alt dark:from-[rgb(var(--surface-alt))] dark:via-[rgb(var(--surface))] dark:to-[rgb(var(--surface-alt))] py-16 mt-12 rounded-xl border border-base shadow-lg">
-            <div className="px-8 sm:px-12 lg:px-16">
-              <h2 className="text-4xl font-bold text-center mb-10 text-[rgb(var(--text))]">
+          <div className="bg-linear-to-br from-surface-alt via-surface to-surface-alt dark:from-[rgb(var(--surface-alt))] dark:via-[rgb(var(--surface))] dark:to-[rgb(var(--surface-alt))] py-8 sm:py-16 mt-6 sm:mt-12 rounded-lg sm:rounded-xl border border-base shadow-lg">
+            <div className="px-3 sm:px-8 lg:px-16">
+              <h2 className="text-2xl sm:text-4xl font-bold text-center mb-6 sm:mb-10 text-[rgb(var(--text))]">
                 Anda Mungkin Juga Suka
               </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4 lg:gap-8">
                 {relatedProducts.map((p, index) => (
                   <div
                     key={p.id}

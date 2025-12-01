@@ -2,11 +2,10 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { useAuth } from "./contexts/AuthContext";
-import { useNotification } from "./contexts/NotificationContext";
+import { showSuccess, showError } from "./utils/swal";
 
 const ProfilePage = () => {
   const { user, updateProfile } = useAuth();
-  const { showNotification } = useNotification();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -59,14 +58,14 @@ const ProfilePage = () => {
   const handleAvatarChange = (e) => {
     const file = e.target.files && e.target.files[0];
     if (!file) return;
-    
+
     if (!file.type.startsWith("image/")) {
-      showNotification("Error", "File harus berupa gambar.", "error");
+      showError("Error", "File harus berupa gambar.");
       return;
     }
-    
+
     if (file.size > 2 * 1024 * 1024) {
-      showNotification("Error", "Ukuran gambar maksimal 2MB.", "error");
+      showError("Error", "Ukuran gambar maksimal 2MB.");
       return;
     }
 
@@ -80,7 +79,7 @@ const ProfilePage = () => {
   const handleRemoveAvatar = () => {
     setAvatarPreview(null);
     if (fileInputRef.current) {
-        fileInputRef.current.value = "";
+      fileInputRef.current.value = "";
     }
   };
 
@@ -89,9 +88,9 @@ const ProfilePage = () => {
     const payload = { ...formData };
     if (avatarPreview) payload.profileImage = avatarPreview;
     else payload.profileImage = null;
-    
+
     updateProfile(payload);
-    showNotification("Berhasil", "Profil berhasil diperbarui!", "success");
+    showSuccess("Berhasil", "Profil berhasil diperbarui!");
   };
 
   if (!user) {
@@ -117,7 +116,8 @@ const ProfilePage = () => {
             Akses Dibatasi
           </h1>
           <p className="text-muted text-lg mb-6 max-w-md mx-auto">
-            Silakan masuk ke akun Anda untuk melihat dan mengelola profil pribadi.
+            Silakan masuk ke akun Anda untuk melihat dan mengelola profil
+            pribadi.
           </p>
           <a
             href="/login"
@@ -174,7 +174,8 @@ const ProfilePage = () => {
                 <div
                   className="w-32 h-32 rounded-full overflow-hidden border-4 border-white dark:border-gray-800 flex items-center justify-center shadow-lg mx-auto"
                   style={{
-                    background: 'linear-gradient(to bottom right, rgb(var(--avatar-yellow-from)), rgb(var(--avatar-yellow-to)))'
+                    background:
+                      "linear-gradient(to bottom right, rgb(var(--avatar-yellow-from)), rgb(var(--avatar-yellow-to)))",
                   }}
                 >
                   {avatarPreview ? (
@@ -736,7 +737,7 @@ const ProfilePage = () => {
                   </div>
                 </div>
               </div>
-              
+
               <div className="flex items-center justify-between pt-6 border-t border-base">
                 <div className="text-sm text-muted">
                   Pastikan semua data sudah benar sebelum menyimpan perubahan

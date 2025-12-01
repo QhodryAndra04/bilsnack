@@ -2,6 +2,7 @@ import React from "react";
 
 const StarIcon = ({ filled, size = "md", className }) => {
   const sizeClasses = {
+    xs: "w-2 h-2",
     sm: "w-3 h-3",
     md: "w-4 h-4",
     lg: "w-5 h-5"

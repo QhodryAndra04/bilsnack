@@ -45,43 +45,56 @@ const CartItemRow = ({ item }) => {
   const cartItemId = `${item.id}`;
 
   return (
-    <div className="flex items-center py-6 border-b border-base">
-      <img
-        src={item.image}
-        alt={item.name}
-        className="w-28 h-28 object-cover rounded-lg"
-      />
-      <div className="ml-6 grow">
-        <h3 className="text-lg font-semibold">{item.name}</h3>
-        <p className="text-lg font-bold mt-2">Rp {formatPrice(item.price)}</p>
-      </div>
-      <div className="flex items-center border border-base rounded-full px-3 py-1 bg-surface-alt">
+    <div className="flex flex-col sm:flex-row sm:items-center py-4 sm:py-6 border-b border-base gap-3 sm:gap-4">
+      <div className="flex items-start sm:items-center gap-3 sm:gap-0">
+        <img
+          src={item.image}
+          alt={item.name}
+          className="w-20 h-20 sm:w-28 sm:h-28 object-cover rounded-lg flex-shrink-0"
+        />
+        <div className="sm:ml-6 flex-1 min-w-0">
+          <h3 className="text-sm sm:text-lg font-semibold line-clamp-2">{item.name}</h3>
+          <p className="text-sm sm:text-lg font-bold mt-1 sm:mt-2">Rp {formatPrice(item.price)}</p>
+        </div>
+        {/* Mobile delete button */}
         <button
-          onClick={() => updateQuantity(cartItemId, item.quantity - 1)}
-          className="text-[rgb(var(--text-muted))] text-xl hover:text-[rgb(var(--accent))]"
-          aria-label="Kurangi jumlah"
+          onClick={() => removeFromCart(cartItemId)}
+          className="sm:hidden text-red-500 hover:text-red-700 p-1.5"
+          aria-label={`Hapus ${item.name} dari keranjang`}
         >
-          -
-        </button>
-        <span className="w-8 text-center font-semibold">{item.quantity}</span>
-        <button
-          onClick={() => updateQuantity(cartItemId, item.quantity + 1)}
-          className="text-[rgb(var(--text-muted))] text-xl hover:text-[rgb(var(--accent))]"
-          aria-label="Tambah jumlah"
-        >
-          +
+          <TrashIcon />
         </button>
       </div>
-      <p className="w-24 text-center text-lg font-bold">
-        Rp {formatPrice(item.price * item.quantity)}
-      </p>
-      <button
-        onClick={() => removeFromCart(cartItemId)}
-        className="text-red-500 hover:text-red-700 ml-4"
-        aria-label={`Hapus ${item.name} dari keranjang`}
-      >
-        <TrashIcon />
-      </button>
+      
+      <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-6">
+        <div className="flex items-center border border-base rounded-full px-2 sm:px-3 py-1 bg-surface-alt">
+          <button
+            onClick={() => updateQuantity(cartItemId, item.quantity - 1)}
+            className="text-[rgb(var(--text-muted))] text-lg sm:text-xl hover:text-[rgb(var(--accent))] px-1 sm:px-0"
+            aria-label="Kurangi jumlah"
+          >
+            -
+          </button>
+          <span className="w-6 sm:w-8 text-center text-sm sm:text-base font-semibold">{item.quantity}</span>
+          <button
+            onClick={() => updateQuantity(cartItemId, item.quantity + 1)}
+            className="text-[rgb(var(--text-muted))] text-lg sm:text-xl hover:text-[rgb(var(--accent))] px-1 sm:px-0"
+            aria-label="Tambah jumlah"
+          >
+            +
+          </button>
+        </div>
+        <p className="text-sm sm:text-lg font-bold sm:w-24 sm:text-center">
+          Rp {formatPrice(item.price * item.quantity)}
+        </p>
+        <button
+          onClick={() => removeFromCart(cartItemId)}
+          className="hidden sm:block text-red-500 hover:text-red-700 ml-2 sm:ml-4"
+          aria-label={`Hapus ${item.name} dari keranjang`}
+        >
+          <TrashIcon />
+        </button>
+      </div>
     </div>
   );
 };
@@ -110,8 +123,8 @@ const CartPage = () => {
 
   return (
     <div className="bg-surface">
-      <div className="px-8 sm:px-12 lg:px-16 py-12">
-        <nav className="flex items-center text-sm text-[rgb(var(--text-muted))] mb-8">
+      <div className="px-3 sm:px-8 lg:px-16 py-6 sm:py-12">
+        <nav className="flex items-center text-xs sm:text-sm text-[rgb(var(--text-muted))] mb-4 sm:mb-8">
           <Link href="/" className="hover:text-[rgb(var(--accent))]">
             Beranda
           </Link>{" "}
@@ -121,15 +134,15 @@ const CartPage = () => {
           </span>
         </nav>
 
-        <h1 className="text-4xl font-bold mb-8">KERANJANG ANDA</h1>
+        <h1 className="text-2xl sm:text-4xl font-bold mb-4 sm:mb-8">KERANJANG ANDA</h1>
 
         {cartItems.length === 0 ? (
           <div className="max-w-4xl mx-auto">
             {/* Empty Cart Illustration */}
-            <div className="bg-surface-alt p-12 rounded-2xl shadow-lg text-center border border-base mb-8">
-              <div className="mb-6">
+            <div className="bg-surface-alt p-6 sm:p-12 rounded-xl sm:rounded-2xl shadow-lg text-center border border-base mb-6 sm:mb-8">
+              <div className="mb-4 sm:mb-6">
                 <svg
-                  className="w-24 h-24 mx-auto text-[rgb(var(--text-muted))] opacity-50"
+                  className="w-16 h-16 sm:w-24 sm:h-24 mx-auto text-[rgb(var(--text-muted))] opacity-50"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -142,19 +155,19 @@ const CartPage = () => {
                   />
                 </svg>
               </div>
-              <h2 className="text-3xl font-bold mb-4 text-gradient">
+              <h2 className="text-xl sm:text-3xl font-bold mb-3 sm:mb-4 text-gradient">
                 Keranjang Belanja Kosong
               </h2>
-              <p className="text-[rgb(var(--text-muted))] text-lg mb-8 max-w-md mx-auto">
+              <p className="text-sm sm:text-lg text-[rgb(var(--text-muted))] mb-6 sm:mb-8 max-w-md mx-auto px-2">
                 Yuk mulai berbelanja! Temukan berbagai camilan favorit Anda
                 dengan harga terbaik.
               </p>
               <Link
                 href="/shop"
-                className="inline-flex items-center btn-primary font-semibold py-4 px-8 rounded-full text-lg focus:outline-none focus:ring-2 focus:ring-amber-300 transition duration-300 hover:scale-105 transform"
+                className="inline-flex items-center btn-primary font-semibold py-3 px-6 sm:py-4 sm:px-8 rounded-full text-sm sm:text-lg focus:outline-none focus:ring-2 focus:ring-amber-300 transition duration-300 hover:scale-105 transform"
               >
                 <svg
-                  className="w-5 h-5 mr-2"
+                  className="w-4 h-4 sm:w-5 sm:h-5 mr-2"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -163,12 +176,12 @@ const CartPage = () => {
                   <circle cx="20" cy="21" r="1"></circle>
                   <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                 </svg>
-                Mulai Belanja Sekarang
+                Mulai Belanja
               </Link>
             </div>
           </div>
         ) : (
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             {/* Group items by seller */}
             {cartsBySeller.map((sellerCart) => {
               const { subtotal, discount, total } = calculateTotalBySeller(
@@ -177,14 +190,14 @@ const CartPage = () => {
               return (
                 <div
                   key={sellerCart.sellerId}
-                  className="bg-surface rounded-lg p-6 shadow-lg border border-base"
+                  className="bg-surface rounded-lg p-4 sm:p-6 shadow-lg border border-base"
                 >
                   {/* Seller Header */}
-                  <div className="flex items-center justify-between border-b border-base pb-4 mb-4">
-                    <div>
-                      <h2 className="text-xl font-bold flex items-center text-gradient">
+                  <div className="flex items-center justify-between border-b border-base pb-3 sm:pb-4 mb-3 sm:mb-4">
+                    <div className="min-w-0 flex-1">
+                      <h2 className="text-base sm:text-xl font-bold flex items-center text-gradient truncate">
                         <svg
-                          className="w-5 h-5 mr-2 text-[rgb(var(--text-muted))]"
+                          className="w-4 h-4 sm:w-5 sm:h-5 mr-1.5 sm:mr-2 text-[rgb(var(--text-muted))] flex-shrink-0"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -193,10 +206,10 @@ const CartPage = () => {
                           <circle cx="20" cy="21" r="1"></circle>
                           <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                         </svg>
-                        {sellerCart.sellerName}
+                        <span className="truncate">{sellerCart.sellerName}</span>
                       </h2>
                       {sellerCart.resellerEmail && (
-                        <p className="text-sm text-[rgb(var(--text-muted))] mt-1">
+                        <p className="text-xs sm:text-sm text-[rgb(var(--text-muted))] mt-0.5 sm:mt-1 truncate">
                           {sellerCart.resellerEmail}
                         </p>
                       )}
@@ -214,15 +227,15 @@ const CartPage = () => {
                   </div>
 
                   {/* Seller Summary & Checkout Button */}
-                  <div className="mt-6 pt-4 border-t border-base bg-surface-alt rounded-lg p-4">
-                    <div className="space-y-2 mb-4">
-                      <div className="flex justify-between text-sm text-[rgb(var(--text-muted))]">
+                  <div className="mt-4 sm:mt-6 pt-3 sm:pt-4 border-t border-base bg-surface-alt rounded-lg p-3 sm:p-4">
+                    <div className="space-y-1.5 sm:space-y-2 mb-3 sm:mb-4">
+                      <div className="flex justify-between text-xs sm:text-sm text-[rgb(var(--text-muted))]">
                         <span>Subtotal</span>
                         <span className="font-medium text-[rgb(var(--text))]">
                           Rp {formatPrice(subtotal)}
                         </span>
                       </div>
-                      <div className="flex justify-between font-semibold text-base border-t border-base pt-2">
+                      <div className="flex justify-between font-semibold text-sm sm:text-base border-t border-base pt-2">
                         <span className="text-[rgb(var(--text-muted))]">
                           Total Toko
                         </span>
@@ -235,7 +248,7 @@ const CartPage = () => {
                     {/* Checkout Button for this seller */}
                     <button
                       onClick={() => handleCheckoutSeller(sellerCart.sellerId)}
-                      className="w-full btn-primary rounded-full text-base flex items-center justify-center gap-2 py-3"
+                      className="w-full btn-primary rounded-full text-sm sm:text-base flex items-center justify-center gap-2 py-2.5 sm:py-3"
                     >
                       Checkout Toko Ini <ChevronRightIcon />
                     </button>
@@ -246,11 +259,11 @@ const CartPage = () => {
 
             {/* Total Summary Card */}
             {cartsBySeller.length > 1 && (
-              <div className="bg-surface-alt border border-base rounded-lg p-6 mt-8">
-                <h3 className="text-lg font-semibold mb-4 text-gradient">
+              <div className="bg-surface-alt border border-base rounded-lg p-4 sm:p-6 mt-4 sm:mt-8">
+                <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 text-gradient">
                   Ringkasan Total Belanja
                 </h3>
-                <div className="space-y-2 text-sm">
+                <div className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm">
                   <div className="flex justify-between">
                     <span className="text-[rgb(var(--text-muted))]">
                       Total dari {cartsBySeller.length} toko

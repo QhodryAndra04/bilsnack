@@ -76,42 +76,42 @@ const Footer = () => {
         <div className="absolute bottom-0 right-1/3 w-16 h-16 bg-[rgb(var(--accent))] rounded-full translate-y-8 blur-sm"></div>
       </div>
 
-      <div className="px-6 py-8 max-w-6xl mx-auto relative">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div className="px-4 sm:px-6 py-6 sm:py-8 max-w-6xl mx-auto relative">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
           {/* Brand Section */}
-          <div className="col-span-1 lg:col-span-1">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 bg-linear-to-br from-yellow-400 to-yellow-500 rounded-lg flex items-center justify-center shadow-lg">
-                <span className="text-white font-bold text-xl">B</span>
+          <div className="col-span-2 sm:col-span-2 lg:col-span-1">
+            <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-linear-to-br from-yellow-400 to-yellow-500 rounded-lg flex items-center justify-center shadow-lg">
+                <span className="text-white font-bold text-lg sm:text-xl">B</span>
               </div>
               <div>
                 {/* Menggunakan text-[rgb(var(--text))] agar warna teks selalu kontras dengan background */}
-                <h3 className="text-xl font-bold text-[rgb(var(--text))]">
+                <h3 className="text-lg sm:text-xl font-bold text-[rgb(var(--text))]">
                   Bilsnack.id
                 </h3>
                 {/* Menggunakan text-[rgb(var(--text-muted))] untuk teks sekunder */}
-                <p className="text-[rgb(var(--text-muted))] text-sm">
+                <p className="text-[rgb(var(--text-muted))] text-xs sm:text-sm">
                   Camilan enak untuk semua
                 </p>
               </div>
             </div>
 
-            <div className="flex gap-3">
+            <div className="flex gap-2 sm:gap-3">
               <a
                 href="#"
-                className="w-8 h-8 bg-yellow-500/30 rounded-full flex items-center justify-center hover:bg-yellow-500/50 transition-colors backdrop-blur-sm"
+                className="w-8 h-8 sm:w-9 sm:h-9 bg-yellow-500/30 rounded-full flex items-center justify-center hover:bg-yellow-500/50 transition-colors backdrop-blur-sm"
               >
                 <FacebookIcon />
               </a>
               <a
                 href="#"
-                className="w-8 h-8 bg-yellow-500/30 rounded-full flex items-center justify-center hover:bg-yellow-500/50 transition-colors backdrop-blur-sm"
+                className="w-8 h-8 sm:w-9 sm:h-9 bg-yellow-500/30 rounded-full flex items-center justify-center hover:bg-yellow-500/50 transition-colors backdrop-blur-sm"
               >
                 <TwitterIcon />
               </a>
               <a
                 href="#"
-                className="w-8 h-8 bg-yellow-500/30 rounded-full flex items-center justify-center hover:bg-yellow-500/50 transition-colors backdrop-blur-sm"
+                className="w-8 h-8 sm:w-9 sm:h-9 bg-yellow-500/30 rounded-full flex items-center justify-center hover:bg-yellow-500/50 transition-colors backdrop-blur-sm"
               >
                 <InstagramIcon />
               </a>
@@ -121,14 +121,14 @@ const Footer = () => {
           {/* Quick Links */}
           <div>
             {/* Menggunakan text-[rgb(var(--text))] agar warna teks selalu kontras dengan background */}
-            <h4 className="font-semibold text-lg mb-4 text-[rgb(var(--text))]">
+            <h4 className="font-semibold text-base sm:text-lg mb-3 sm:mb-4 text-[rgb(var(--text))]">
               Menu Cepat
             </h4>
-            <ul className="space-y-2">
+            <ul className="space-y-1.5 sm:space-y-2">
               <li>
                 <Link
                   href="/"
-                  className="text-[rgb(var(--text-muted))] hover:text-[rgb(var(--accent))] transition-colors text-sm"
+                  className="text-[rgb(var(--text-muted))] hover:text-[rgb(var(--accent))] transition-colors text-sm block py-0.5"
                 >
                   Beranda
                 </Link>
@@ -136,7 +136,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/shop"
-                  className="text-[rgb(var(--text-muted))] hover:text-[rgb(var(--accent))] transition-colors text-sm"
+                  className="text-[rgb(var(--text-muted))] hover:text-[rgb(var(--accent))] transition-colors text-sm block py-0.5"
                 >
                   Belanja
                 </Link>
@@ -144,7 +144,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/profile"
-                  className="text-[rgb(var(--text-muted))] hover:text-[rgb(var(--accent))] transition-colors text-sm"
+                  className="text-[rgb(var(--text-muted))] hover:text-[rgb(var(--accent))] transition-colors text-sm block py-0.5"
                 >
                   Akun Saya
                 </Link>
@@ -152,7 +152,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/contact"
-                  className="text-[rgb(var(--text-muted))] hover:text-[rgb(var(--accent))] transition-colors text-sm"
+                  className="text-[rgb(var(--text-muted))] hover:text-[rgb(var(--accent))] transition-colors text-sm block py-0.5"
                 >
                   Kontak
                 </Link>
@@ -163,14 +163,14 @@ const Footer = () => {
           {/* Support */}
           <div>
             {/* Menggunakan text-[rgb(var(--text))] agar warna teks selalu kontras dengan background */}
-            <h4 className="font-semibold text-lg mb-4 text-[rgb(var(--text))]">
+            <h4 className="font-semibold text-base sm:text-lg mb-3 sm:mb-4 text-[rgb(var(--text))]">
               Bantuan
             </h4>
-            <ul className="space-y-2">
+            <ul className="space-y-1.5 sm:space-y-2">
               <li>
                 <a
                   href="#"
-                  className="text-[rgb(var(--text-muted))] hover:text-[rgb(var(--accent))] transition-colors text-sm"
+                  className="text-[rgb(var(--text-muted))] hover:text-[rgb(var(--accent))] transition-colors text-sm block py-0.5"
                 >
                   FAQ
                 </a>
@@ -178,7 +178,7 @@ const Footer = () => {
               <li>
                 <a
                   href="#"
-                  className="text-[rgb(var(--text-muted))] hover:text-[rgb(var(--accent))] transition-colors text-sm"
+                  className="text-[rgb(var(--text-muted))] hover:text-[rgb(var(--accent))] transition-colors text-sm block py-0.5"
                 >
                   Pengiriman
                 </a>
@@ -186,7 +186,7 @@ const Footer = () => {
               <li>
                 <a
                   href="#"
-                  className="text-[rgb(var(--text-muted))] hover:text-[rgb(var(--accent))] transition-colors text-sm"
+                  className="text-[rgb(var(--text-muted))] hover:text-[rgb(var(--accent))] transition-colors text-sm block py-0.5"
                 >
                   Pengembalian
                 </a>
@@ -194,7 +194,7 @@ const Footer = () => {
               <li>
                 <a
                   href="#"
-                  className="text-[rgb(var(--text-muted))] hover:text-[rgb(var(--accent))] transition-colors text-sm"
+                  className="text-[rgb(var(--text-muted))] hover:text-[rgb(var(--accent))] transition-colors text-sm block py-0.5"
                 >
                   Kontak Kami
                 </a>
@@ -203,13 +203,13 @@ const Footer = () => {
           </div>
 
           {/* Newsletter */}
-          <div>
+          <div className="col-span-2 sm:col-span-2 lg:col-span-1">
             {/* Menggunakan text-[rgb(var(--text))] agar warna teks selalu kontras dengan background */}
-            <h4 className="font-semibold text-lg mb-4 text-[rgb(var(--text))]">
+            <h4 className="font-semibold text-base sm:text-lg mb-3 sm:mb-4 text-[rgb(var(--text))]">
               Newsletter
             </h4>
             {/* Menggunakan text-[rgb(var(--text-muted))] untuk teks sekunder */}
-            <p className="text-[rgb(var(--text-muted))] text-sm mb-3">
+            <p className="text-[rgb(var(--text-muted))] text-sm mb-2 sm:mb-3">
               Dapatkan update promo terbaru
             </p>
             <div className="flex gap-2">
@@ -217,9 +217,9 @@ const Footer = () => {
                 type="email"
                 placeholder="Email Anda"
                 // Menggunakan variabel CSS untuk input agar sesuai dengan mode
-                className="flex-1 px-3 py-2 bg-[rgb(var(--surface))] border border-[rgb(var(--border))] rounded-md text-[rgb(var(--text))] placeholder-[rgb(var(--text-muted))] text-sm focus:outline-none focus:ring-2 focus:ring-[rgb(var(--accent))]/50 backdrop-blur-sm"
+                className="flex-1 min-w-0 px-3 py-2.5 bg-[rgb(var(--surface))] border border-[rgb(var(--border))] rounded-md text-[rgb(var(--text))] placeholder-[rgb(var(--text-muted))] text-sm focus:outline-none focus:ring-2 focus:ring-[rgb(var(--accent))]/50 backdrop-blur-sm"
               />
-              <button className="px-4 py-2 bg-linear-to-r from-[rgb(var(--accent))] to-[rgb(var(--accent-hover))] text-[rgb(var(--accent-fg))] rounded-md font-semibold hover:from-[rgb(var(--accent-hover))] hover:to-[rgb(var(--accent))] transition-all duration-300 text-sm shadow-lg hover:shadow-xl">
+              <button className="px-3 sm:px-4 py-2.5 bg-linear-to-r from-[rgb(var(--accent))] to-[rgb(var(--accent-hover))] text-[rgb(var(--accent-fg))] rounded-md font-semibold hover:from-[rgb(var(--accent-hover))] hover:to-[rgb(var(--accent))] transition-all duration-300 text-sm shadow-lg hover:shadow-xl whitespace-nowrap">
                 Ikuti
               </button>
             </div>
@@ -228,16 +228,16 @@ const Footer = () => {
 
         {/* Bottom Section */}
         {/* Menggunakan border-[rgb(var(--border))] untuk border yang sesuai mode */}
-        <div className="mt-8 pt-6 border-t border-[rgb(var(--border))]">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-[rgb(var(--border))]">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
             {/* Menggunakan text-[rgb(var(--text-muted))] untuk teks sekunder */}
-            <p className="text-[rgb(var(--text-muted))] text-sm text-center md:text-left">
+            <p className="text-[rgb(var(--text-muted))] text-xs sm:text-sm text-center sm:text-left">
               &copy; {new Date().getFullYear()} Bilsnack.id. Dibuat dengan ❤️
               untuk pecinta camilan.
             </p>
             <a
               href="#top"
-              className="flex items-center gap-2 text-[rgb(var(--text-muted))] hover:text-[rgb(var(--accent))] transition-colors text-sm"
+              className="flex items-center gap-2 text-[rgb(var(--text-muted))] hover:text-[rgb(var(--accent))] transition-colors text-xs sm:text-sm"
             >
               <span>Kembali ke atas</span>
               <svg

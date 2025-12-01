@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import PageLoading from "../PageLoading";
 import { useAuth } from "../../contexts/AuthContext";
 import ResellerDashboardPage from "../../reseller/ResellerDashboardPage";
 import ResellerProductsPage from "../../reseller/ResellerProductsPage";
@@ -126,9 +127,12 @@ const ResellerLayout = ({ children }) => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <p className="text-lg text-gray-600">Loading...</p>
-      </div>
+      <PageLoading
+        text="Memuat Reseller Panel..."
+        subText="Memeriksa autentikasi"
+        variant="snack"
+        size="lg"
+      />
     );
   }
 
@@ -154,23 +158,23 @@ const ResellerLayout = ({ children }) => {
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-yellow-50 to-amber-50">
       {/* Top Header Bar */}
-      <div className="fixed top-0 left-0 right-0 h-16 bg-gradient-to-r from-yellow-500 to-amber-600 border-b border-yellow-400 z-50 flex items-center justify-between px-4 shadow-lg">
-        <div className="flex items-center space-x-3">
+      <div className="fixed top-0 left-0 right-0 h-12 sm:h-16 bg-gradient-to-r from-yellow-500 to-amber-600 border-b border-yellow-400 z-50 flex items-center justify-between px-2 sm:px-4 shadow-lg">
+        <div className="flex items-center space-x-2 sm:space-x-3">
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="text-gray-800 hover:bg-yellow-600 p-2 rounded-lg transition-colors"
+            className="text-gray-800 hover:bg-yellow-600 p-1.5 sm:p-2 rounded-lg transition-colors"
           >
             {sidebarOpen ? <CloseIcon /> : <MenuIcon />}
           </button>
-          <h1 className="text-xl font-bold text-gray-800">Reseller Panel</h1>
+          <h1 className="text-sm sm:text-xl font-bold text-gray-800">Reseller Panel</h1>
         </div>
-        <div className="flex items-center space-x-4">
-          <div className="text-sm text-gray-700 truncate max-w-[150px] sm:max-w-xs">
+        <div className="flex items-center space-x-2 sm:space-x-4">
+          <div className="text-xs sm:text-sm text-gray-700 truncate max-w-[100px] sm:max-w-xs">
             {resellerEmail}
           </div>
           <button
             onClick={handleLogout}
-            className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-300"
+            className="bg-red-600 hover:bg-red-700 text-white font-semibold py-1.5 px-2.5 sm:py-2 sm:px-4 text-xs sm:text-sm rounded-lg transition duration-300"
           >
             Logout
           </button>
@@ -180,7 +184,7 @@ const ResellerLayout = ({ children }) => {
       {/* Overlay for Mobile */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden mt-16"
+          className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden mt-12 sm:mt-16"
           onClick={() => setSidebarOpen(false)}
         />
       )}
@@ -189,11 +193,11 @@ const ResellerLayout = ({ children }) => {
       <aside
         className={`${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } fixed lg:fixed left-0 top-16 z-40 w-64 h-screen-minus-16 bg-gradient-to-b from-yellow-500 to-amber-600 text-gray-800 p-4 flex flex-col transition-transform duration-300 ease-in-out overflow-y-auto shadow-xl`}
-        style={{ height: "calc(100vh - 4rem)" }}
+        } fixed lg:fixed left-0 top-12 sm:top-16 z-40 w-56 sm:w-64 bg-gradient-to-b from-yellow-500 to-amber-600 text-gray-800 p-3 sm:p-4 flex flex-col transition-transform duration-300 ease-in-out overflow-y-auto shadow-xl`}
+        style={{ height: "calc(100vh - 3rem)" }}
       >
-        <div className="mb-8">
-          <p className="text-sm text-gray-700 font-semibold">Menu Navigation</p>
+        <div className="mb-4 sm:mb-8">
+          <p className="text-xs sm:text-sm text-gray-700 font-semibold">Menu Navigation</p>
         </div>
         <nav className="grow">
           <ul>
@@ -204,7 +208,7 @@ const ResellerLayout = ({ children }) => {
                 onClick={() => setSidebarOpen(false)}
               >
                 <DashboardIcon />
-                <span>Dashboard</span>
+                <span className="text-sm sm:text-base">Dashboard</span>
               </Link>
             </li>
             <li className="mt-2">
@@ -214,7 +218,7 @@ const ResellerLayout = ({ children }) => {
                 onClick={() => setSidebarOpen(false)}
               >
                 <ProductIcon />
-                <span>Produk Saya</span>
+                <span className="text-sm sm:text-base">Produk Saya</span>
               </Link>
             </li>
           </ul>
@@ -223,8 +227,8 @@ const ResellerLayout = ({ children }) => {
 
       {/* Main Content */}
       <main
-        className={`flex-1 p-4 lg:p-8 transition-all duration-300 mt-16 ${
-          sidebarOpen ? "ml-64" : "ml-0"
+        className={`flex-1 p-2 sm:p-4 lg:p-8 transition-all duration-300 mt-12 sm:mt-16 ${
+          sidebarOpen ? "ml-56 sm:ml-64" : "ml-0"
         }`}
       >
         {children ? (

@@ -3,6 +3,8 @@
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "./contexts/AuthContext";
+import { showInfo, showError } from "./utils/swal";
+import { InlineLoading } from "./components/PageLoading";
 import formatPrice from "./utils/format";
 
 const formatDate = (d) => {
@@ -92,23 +94,23 @@ const OrderHistoryPage = () => {
     }
   }, [fetchOrders, token, user]);
 
-  if (authChecking) return <div className="p-6 text-muted">Memeriksa autentikasi...</div>;
+  if (authChecking) return <InlineLoading text="Memeriksa autentikasi..." variant="dots" size="md" />;
   if (loading)
-    return <div className="p-6 text-muted">Memuat riwayat pesanan...</div>;
+    return <InlineLoading text="Memuat riwayat pesanan..." variant="dots" size="md" />;
   if (error) return <div className="p-6 text-red-600">Error: {error}</div>;
   if (!orders || orders.length === 0)
     return <div className="p-6 text-muted">Belum ada pesanan.</div>;
 
   return (
     <div className="bg-surface dark:bg-[rgb(var(--bg))] min-h-screen">
-      <div className="px-8 sm:px-12 lg:px-16 py-12 max-w-7xl mx-auto">
+      <div className="px-4 sm:px-8 lg:px-16 py-6 sm:py-12 max-w-7xl mx-auto">
         {/* Breadcrumb */}
-        <nav className="flex items-center text-sm text-[rgb(var(--text-muted))] mb-8">
+        <nav className="flex items-center text-xs sm:text-sm text-[rgb(var(--text-muted))] mb-4 sm:mb-8">
           <a href="/" className="hover:text-[rgb(var(--accent))]">
             Beranda
           </a>{" "}
           <svg
-            className="w-4 h-4 mx-2"
+            className="w-3 h-3 sm:w-4 sm:h-4 mx-1 sm:mx-2"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -125,41 +127,41 @@ const OrderHistoryPage = () => {
           </span>
         </nav>
 
-        <h1 className="text-4xl font-bold mb-8 text-[rgb(var(--text))]">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 sm:mb-8 text-[rgb(var(--text))]">
           Riwayat Pesanan
         </h1>
 
-        <div className="flex justify-between items-center mb-8">
-          <p className="text-[rgb(var(--text-muted))]">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0 mb-6 sm:mb-8">
+          <p className="text-sm sm:text-base text-[rgb(var(--text-muted))]">
             Lihat semua pesanan Anda di sini.
           </p>
           <button
             onClick={fetchOrders}
-            className="btn-secondary px-4 py-2 rounded-full"
+            className="btn-secondary px-4 py-2 rounded-full text-sm sm:text-base"
             aria-label="Segarkan riwayat pesanan"
           >
             Segarkan
           </button>
         </div>
 
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
           {orders.map((order) => (
             <div
               key={order.id}
-              className="border border-base rounded-lg p-4 bg-surface-alt shadow-sm"
+              className="border border-base rounded-lg p-3 sm:p-4 bg-surface-alt shadow-sm"
             >
-              <div className="flex justify-between items-start">
+              <div className="flex flex-col sm:flex-row justify-between items-start gap-3 sm:gap-0">
                 <div>
                   <div className="text-xs text-muted tracking-wide">
                     Order #{order.id}
                   </div>
-                  <div className="text-lg font-medium">
+                  <div className="text-base sm:text-lg font-medium">
                     {formatDate(order.created_at)}
                   </div>
-                  <div className="text-sm text-muted flex items-center mt-1">
+                  <div className="text-xs sm:text-sm text-muted flex flex-wrap items-center mt-1 gap-1">
                     Status:
                     <span
-                      className={`ml-2 px-2 py-1 rounded-full text-xs font-medium ${
+                      className={`ml-1 sm:ml-2 px-2 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-medium ${
                         order.status === "completed" || order.status === "Selesai"
                           ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400"
                           : order.status === "processing" || order.status === "Diproses" || order.status === "Menunggu" || order.status === "Dalam Pengiriman"
@@ -187,7 +189,7 @@ const OrderHistoryPage = () => {
                       try {
                         const metadata = typeof order.metadata === 'string' ? JSON.parse(order.metadata) : order.metadata;
                         return metadata.seller_name ? (
-                          <span className="ml-4 text-xs">
+                          <span className="ml-2 sm:ml-4 text-[10px] sm:text-xs">
                             Penjual: <span className="font-medium">{metadata.seller_name}</span>
                           </span>
                         ) : null;
@@ -197,9 +199,9 @@ const OrderHistoryPage = () => {
                     })()}
                   </div>
                 </div>
-                <div className="text-right">
+                <div className="text-left sm:text-right w-full sm:w-auto">
                   <div className="text-xs text-muted">Total</div>
-                  <div className="text-xl font-semibold accent-text">
+                  <div className="text-lg sm:text-xl font-semibold accent-text">
                     Rp {formatPrice(order.total)}
                   </div>
                   {/* Action Buttons */}
@@ -207,9 +209,9 @@ const OrderHistoryPage = () => {
                     <button
                       onClick={() => {
                         // Navigate to order detail (if exists) or show modal
-                        alert(`Detail pesanan #${order.id}`);
+                        showInfo("Detail Pesanan", `Detail pesanan #${order.id}`);
                       }}
-                      className="text-xs bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded transition-colors"
+                      className="text-xs bg-blue-500 hover:bg-blue-600 text-white px-2 sm:px-3 py-1 rounded transition-colors"
                     >
                       Detail
                     </button>
@@ -217,9 +219,9 @@ const OrderHistoryPage = () => {
                       <button
                         onClick={() => {
                           // Reorder functionality
-                          alert("Fitur reorder akan segera hadir!");
+                          showInfo("Info", "Fitur reorder akan segera hadir!");
                         }}
-                        className="text-xs bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded transition-colors"
+                        className="text-xs bg-green-500 hover:bg-green-600 text-white px-2 sm:px-3 py-1 rounded transition-colors"
                       >
                         Pesan Lagi
                       </button>
@@ -229,21 +231,21 @@ const OrderHistoryPage = () => {
               </div>
 
               <div className="mt-3">
-                <div className="text-sm font-medium mb-2 text-muted">Items</div>
+                <div className="text-xs sm:text-sm font-medium mb-2 text-muted">Items</div>
                 <div className="space-y-2">
                   {order.order_items.map((it) => (
                     <div
                       key={it.id}
-                      className="flex items-center gap-3 border border-base p-2 rounded bg-surface"
+                      className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 border border-base p-2 rounded bg-surface"
                     >
-                      <div className="flex-1">
-                        <div className="font-medium">{it.name}</div>
-                        <div className="text-xs text-muted">
+                      <div className="flex-1 w-full">
+                        <div className="font-medium text-sm sm:text-base">{it.name}</div>
+                        <div className="text-[10px] sm:text-xs text-muted">
                           Qty: {it.quantity} — Rp {formatPrice(it.unit_price)}
                         </div>
                       </div>
-                      <div className="text-right">
-                        <div className="font-semibold accent-text">
+                      <div className="text-left sm:text-right w-full sm:w-auto">
+                        <div className="font-semibold accent-text text-sm sm:text-base">
                           Rp {formatPrice(it.total_price)}
                         </div>
                       </div>
@@ -256,8 +258,8 @@ const OrderHistoryPage = () => {
                 try {
                   const metadata = typeof order.metadata === 'string' ? JSON.parse(order.metadata) : order.metadata;
                   return metadata.tracking ? (
-                    <div className="mt-3 text-sm text-muted">
-                      <div className="flex items-center justify-between mb-2">
+                    <div className="mt-3 text-xs sm:text-sm text-muted">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2 gap-2">
                         <div>
                           <div>
                             Tracking:{" "}
@@ -267,7 +269,7 @@ const OrderHistoryPage = () => {
                           </div>
                           <div>
                             No. Resi:{" "}
-                            <span className="font-medium accent-text">
+                            <span className="font-medium accent-text break-all">
                               {metadata.tracking.tracking_number || "—"}
                             </span>
                           </div>
@@ -310,7 +312,8 @@ const OrderHistoryPage = () => {
                                 );
                               } catch (e) {
                                 // non-fatal: show alert
-                                alert(
+                                showError(
+                                  "Gagal",
                                   (e && e.message) || "Gagal memperbarui tracking"
                                 );
                               } finally {
@@ -342,15 +345,15 @@ const OrderHistoryPage = () => {
         </div>
 
         {/* Pagination */}
-        <div className="mt-12 flex items-center justify-between">
-          <div className="text-sm text-[rgb(var(--text-muted))]">
-            Menampilkan halaman {page} — total {total} pesanan
+        <div className="mt-8 sm:mt-12 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="text-xs sm:text-sm text-[rgb(var(--text-muted))]">
+            Halaman {page} — total {total} pesanan
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
             <div className="flex items-center gap-2">
               <label
                 htmlFor="pageSize"
-                className="text-sm text-[rgb(var(--text-muted))]"
+                className="text-xs sm:text-sm text-[rgb(var(--text-muted))]"
               >
                 Per halaman:
               </label>
@@ -361,18 +364,18 @@ const OrderHistoryPage = () => {
                   setPageSize(Number(e.target.value));
                   setPage(1);
                 }}
-                className="border border-base bg-surface rounded px-3 py-2 text-sm focus:border-accent focus:outline-none"
+                className="border border-base bg-surface rounded px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm focus:border-accent focus:outline-none"
               >
                 <option value={10}>10</option>
                 <option value={20}>20</option>
                 <option value={50}>50</option>
               </select>
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 w-full sm:w-auto">
               <button
                 disabled={page <= 1}
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
-                className="px-4 py-2 btn-secondary rounded-full disabled:opacity-50"
+                className="flex-1 sm:flex-none px-3 sm:px-4 py-2 btn-secondary rounded-full disabled:opacity-50 text-xs sm:text-sm"
                 aria-label="Halaman sebelumnya"
               >
                 Sebelumnya
@@ -380,7 +383,7 @@ const OrderHistoryPage = () => {
               <button
                 disabled={page * pageSize >= total}
                 onClick={() => setPage((p) => p + 1)}
-                className="px-4 py-2 btn-secondary rounded-full disabled:opacity-50"
+                className="flex-1 sm:flex-none px-3 sm:px-4 py-2 btn-secondary rounded-full disabled:opacity-50 text-xs sm:text-sm"
                 aria-label="Halaman berikutnya"
               >
                 Selanjutnya

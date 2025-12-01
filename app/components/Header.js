@@ -227,21 +227,21 @@ const Header = () => {
           "linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(251, 191, 36, 0.1) 50%, rgba(245, 158, 11, 0.15) 100%)",
       }}
     >
-      <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="flex items-center justify-between h-20 gap-4">
+      <div className="px-3 sm:px-4 md:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="flex items-center justify-between h-16 sm:h-20 gap-2 sm:gap-4">
           {/* Logo Section */}
           <div className="shrink-0 flex items-center">
-            <Link href="/" className="flex items-center gap-2.5 group">
-              <div className="relative w-10 h-10 overflow-hidden rounded-xl shadow-sm group-hover:shadow-md transition-shadow">
+            <Link href="/" className="flex items-center gap-1.5 sm:gap-2.5 group">
+              <div className="relative w-8 h-8 sm:w-10 sm:h-10 overflow-hidden rounded-lg sm:rounded-xl shadow-sm group-hover:shadow-md transition-shadow">
                 <img
                   src={logo}
                   alt="Bilsnack logo"
                   className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
-              <span className="text-xl md:text-2xl font-bold tracking-tight text-gradient group-hover:from-accent-hover group-hover:to-accent transition-all">
+              <span className="text-lg sm:text-xl md:text-2xl font-bold tracking-tight text-gradient group-hover:from-accent-hover group-hover:to-accent transition-all">
                 Bilsnack
-                <span className="text-muted">.id</span>
+                <span className="text-muted hidden sm:inline">.id</span>
               </span>
             </Link>
           </div>
@@ -277,13 +277,13 @@ const Header = () => {
           </div>
 
           {/* Right Actions */}
-          <div className="flex items-center gap-1 sm:gap-3">
+          <div className="flex items-center gap-1 sm:gap-2 md:gap-3">
             {/* Theme Toggle */}
             {!pathname.startsWith("/admin") &&
               !pathname.startsWith("/reseller") && (
                 <button
                   onClick={toggleTheme}
-                  className={iconBtnClass}
+                  className={`${iconBtnClass} w-9 h-9 sm:w-10 sm:h-10`}
                   aria-label="Toggle Theme"
                   suppressHydrationWarning
                 >
@@ -294,12 +294,12 @@ const Header = () => {
             {/* Cart Button */}
             <Link
               href="/cart"
-              className={`${iconBtnClass} relative mr-1`}
+              className={`${iconBtnClass} relative w-9 h-9 sm:w-10 sm:h-10 mr-0.5 sm:mr-1`}
               aria-label="Keranjang"
             >
               <CartIcon filled={itemCount > 0} />
               {itemCount > 0 && (
-                <span className="absolute top-0.5 right-0.5 h-5 w-5 flex items-center justify-center text-[10px] font-bold text-white bg-red-500 rounded-full shadow-sm ring-2 ring-white dark:ring-neutral-900 animate-in zoom-in duration-300">
+                <span className="absolute -top-0.5 -right-0.5 sm:top-0.5 sm:right-0.5 h-4 w-4 sm:h-5 sm:w-5 flex items-center justify-center text-[9px] sm:text-[10px] font-bold text-white bg-red-500 rounded-full shadow-sm ring-1 sm:ring-2 ring-white dark:ring-neutral-900 animate-in zoom-in duration-300">
                   {itemCount}
                 </span>
               )}
@@ -375,7 +375,7 @@ const Header = () => {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden icon-btn"
+              className="md:hidden icon-btn w-9 h-9 sm:w-10 sm:h-10"
               suppressHydrationWarning
             >
               <svg
@@ -418,7 +418,7 @@ const Header = () => {
             : "max-h-0 opacity-0"
         }`}
       >
-        <div className="px-4 pt-4 pb-6 space-y-4">
+        <div className="px-3 sm:px-4 pt-3 pb-4 sm:pt-4 sm:pb-6 space-y-3 sm:space-y-4 safe-bottom">
           {/* Mobile Search */}
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -435,7 +435,7 @@ const Header = () => {
                   setIsMobileMenuOpen: () => setIsMobileMenuOpen(false),
                 }
               }
-              className="block w-full pl-10 pr-3 py-2.5 border border-base rounded-lg bg-surface placeholder:text-muted focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all duration-200"
+              className="block w-full pl-10 pr-3 py-3 border border-base rounded-lg bg-surface placeholder:text-muted focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all duration-200 text-base"
               suppressHydrationWarning
             />
           </div>
@@ -444,22 +444,22 @@ const Header = () => {
             <Link
               href="/"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="block px-3 py-2 rounded-md text-base font-medium text-muted hover:accent-text hover:bg-surface-alt"
+              className="block px-3 py-3 rounded-lg text-base font-medium text-muted hover:accent-text hover:bg-surface-alt active:bg-surface-alt/80 touch-target"
             >
               Beranda
             </Link>
             <Link
               href="/shop"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="block px-3 py-2 rounded-md text-base font-medium text-muted hover:accent-text hover:bg-surface-alt"
+              className="block px-3 py-3 rounded-lg text-base font-medium text-muted hover:accent-text hover:bg-surface-alt active:bg-surface-alt/80 touch-target"
             >
               Semua Produk
             </Link>
           </div>
 
-          <div className="border-t border-base pt-4">
+          <div className="border-t border-base pt-3 sm:pt-4">
             {user ? (
-              <div className="flex items-center px-3">
+              <div className="flex items-center px-3 py-2">
                 <div className="shrink-0">
                   <UserAvatar
                     name={user.name}
@@ -467,11 +467,11 @@ const Header = () => {
                     size={10}
                   />
                 </div>
-                <div className="ml-3">
-                  <div className="text-base font-medium leading-none">
+                <div className="ml-3 min-w-0 flex-1">
+                  <div className="text-base font-medium leading-none truncate">
                     {user.name}
                   </div>
-                  <div className="text-sm font-medium leading-none text-muted mt-1">
+                  <div className="text-sm font-medium leading-none text-muted mt-1 truncate">
                     {user.email}
                   </div>
                 </div>
@@ -481,7 +481,7 @@ const Header = () => {
                 <Link
                   href="/login"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="block w-full text-center btn-primary py-3 rounded-lg font-bold shadow-md"
+                  className="block w-full text-center btn-primary py-3 rounded-lg font-bold shadow-md touch-target"
                 >
                   Masuk Sekarang
                 </Link>
@@ -489,18 +489,18 @@ const Header = () => {
             )}
 
             {user && (
-              <div className="mt-3 px-2 space-y-1">
+              <div className="mt-2 sm:mt-3 px-2 space-y-1">
                 <Link
                   href="/profile"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="block px-3 py-2 rounded-md text-base font-medium text-muted hover:accent-text hover:bg-surface-alt"
+                  className="block px-3 py-3 rounded-lg text-base font-medium text-muted hover:accent-text hover:bg-surface-alt active:bg-surface-alt/80 touch-target"
                 >
                   Profil Saya
                 </Link>
                 <Link
                   href="/orders"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="block px-3 py-2 rounded-md text-base font-medium text-muted hover:accent-text hover:bg-surface-alt"
+                  className="block px-3 py-3 rounded-lg text-base font-medium text-muted hover:accent-text hover:bg-surface-alt active:bg-surface-alt/80 touch-target"
                 >
                   Riwayat Pesanan
                 </Link>
@@ -509,7 +509,7 @@ const Header = () => {
                     handleLogout();
                     setIsMobileMenuOpen(false);
                   }}
-                  className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-red-600 hover:text-red-800 hover:bg-red-50 dark:hover:bg-red-900/20"
+                  className="block w-full text-left px-3 py-3 rounded-lg text-base font-medium text-red-600 hover:text-red-800 hover:bg-red-50 dark:hover:bg-red-900/20 active:bg-red-100 dark:active:bg-red-900/30 touch-target"
                   suppressHydrationWarning
                 >
                   Keluar

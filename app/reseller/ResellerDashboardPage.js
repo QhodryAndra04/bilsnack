@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useAuth } from "../contexts/AuthContext";
 import { API_BASE_URL, API_ENDPOINTS } from "../config/api";
-import { useNotification } from "../contexts/NotificationContext";
+import { showError } from "../utils/swal";
 
 const ResellerDashboardPage = () => {
   const [stats, setStats] = useState({
@@ -29,7 +29,6 @@ const ResellerDashboardPage = () => {
   }, []);
 
   const { token, user } = useAuth();
-  const { showNotification } = useNotification();
   const [resellers, setResellers] = useState([]);
   const [connections, setConnections] = useState(new Set());
   const [pendingCount, setPendingCount] = useState(0);
@@ -174,10 +173,9 @@ const ResellerDashboardPage = () => {
         return next;
       });
     } catch (e) {
-      showNotification(
+      showError(
         "Error",
-        "Gagal menghubungkan reseller. Coba lagi.",
-        "error"
+        "Gagal menghubungkan reseller. Coba lagi."
       );
     }
   };
@@ -206,52 +204,52 @@ const ResellerDashboardPage = () => {
 
   return (
     <div>
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Dashboard Reseller</h1>
-        <p className="text-gray-600 mt-2">
+      <div className="mb-4 sm:mb-8">
+        <h1 className="text-xl sm:text-3xl font-bold text-gray-900">Dashboard Reseller</h1>
+        <p className="text-sm sm:text-base text-gray-600 mt-1 sm:mt-2">
           Selamat datang di panel reseller Bilsnack
         </p>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-6 mb-4 sm:mb-8">
         {/* Total Products */}
-        <div className="bg-white rounded-2xl p-6 shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+        <div className="bg-white rounded-xl sm:rounded-2xl p-3 sm:p-6 shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
           <div>
-            <p className="text-gray-600 text-sm font-medium">Total Produk</p>
-            <p className="text-3xl font-bold text-blue-600 mt-2">
+            <p className="text-gray-600 text-[10px] sm:text-sm font-medium">Total Produk</p>
+            <p className="text-xl sm:text-3xl font-bold text-blue-600 mt-1 sm:mt-2">
               {stats.totalProducts}
             </p>
           </div>
         </div>
 
         {/* Active Products */}
-        <div className="bg-white rounded-2xl p-6 shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+        <div className="bg-white rounded-xl sm:rounded-2xl p-3 sm:p-6 shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
           <div>
-            <p className="text-gray-600 text-sm font-medium">Produk Aktif</p>
-            <p className="text-3xl font-bold text-green-600 mt-2">
+            <p className="text-gray-600 text-[10px] sm:text-sm font-medium">Produk Aktif</p>
+            <p className="text-xl sm:text-3xl font-bold text-green-600 mt-1 sm:mt-2">
               {stats.activeProducts}
             </p>
           </div>
         </div>
 
         {/* Total Sold */}
-        <div className="bg-white rounded-2xl p-6 shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+        <div className="bg-white rounded-xl sm:rounded-2xl p-3 sm:p-6 shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
           <div>
-            <p className="text-gray-600 text-sm font-medium">Terjual</p>
-            <p className="text-3xl font-bold text-orange-600 mt-2">
+            <p className="text-gray-600 text-[10px] sm:text-sm font-medium">Terjual</p>
+            <p className="text-xl sm:text-3xl font-bold text-orange-600 mt-1 sm:mt-2">
               {stats.totalSold}
             </p>
           </div>
         </div>
 
         {/* Total Earnings */}
-        <div className="bg-white rounded-2xl p-6 shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+        <div className="bg-white rounded-xl sm:rounded-2xl p-3 sm:p-6 shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
           <div>
-            <p className="text-gray-600 text-sm font-medium">
-              Total Penghasilan
+            <p className="text-gray-600 text-[10px] sm:text-sm font-medium">
+              Penghasilan
             </p>
-            <p className="text-2xl font-bold text-purple-600 mt-2">
+            <p className="text-sm sm:text-2xl font-bold text-purple-600 mt-1 sm:mt-2 break-all">
               {formatPrice(stats.totalEarnings)}
             </p>
           </div>
@@ -259,8 +257,8 @@ const ResellerDashboardPage = () => {
       </div>
 
       {/* Transaksi Terbaru */}
-      <div className="mt-12">
-        <h2 className="text-2xl font-bold mb-4 text-yellow-600">
+      <div className="mt-6 sm:mt-12">
+        <h2 className="text-lg sm:text-2xl font-bold mb-2 sm:mb-4 text-yellow-600">
           Transaksi Terbaru
         </h2>
         {(() => {
@@ -276,24 +274,24 @@ const ResellerDashboardPage = () => {
           return (
             <>
               <div className="bg-white rounded-lg shadow-md overflow-x-auto">
-                <table className="w-full text-left table-auto">
+                <table className="w-full text-left table-auto min-w-[600px]">
                   <thead>
                     <tr className="bg-yellow-500 text-white">
-                      <th className="p-4 font-semibold text-white">
-                        ID Transaksi
+                      <th className="p-2 sm:p-4 text-xs sm:text-sm font-semibold text-white">
+                        ID
                       </th>
-                      <th className="p-4 font-semibold text-white">
-                        ID Pesanan
+                      <th className="p-2 sm:p-4 text-xs sm:text-sm font-semibold text-white">
+                        Pesanan
                       </th>
-                      <th className="p-4 font-semibold text-white">
+                      <th className="p-2 sm:p-4 text-xs sm:text-sm font-semibold text-white">
                         Pelanggan
                       </th>
-                      <th className="p-4 font-semibold text-white">Jumlah</th>
-                      <th className="p-4 font-semibold text-white">
-                        Metode Pembayaran
+                      <th className="p-2 sm:p-4 text-xs sm:text-sm font-semibold text-white">Jumlah</th>
+                      <th className="p-2 sm:p-4 text-xs sm:text-sm font-semibold text-white">
+                        Metode
                       </th>
-                      <th className="p-4 font-semibold text-white">Status</th>
-                      <th className="p-4 font-semibold text-white">Tanggal</th>
+                      <th className="p-2 sm:p-4 text-xs sm:text-sm font-semibold text-white">Status</th>
+                      <th className="p-2 sm:p-4 text-xs sm:text-sm font-semibold text-white">Tanggal</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -302,25 +300,25 @@ const ResellerDashboardPage = () => {
                         key={transaction.id}
                         className="hover:bg-gray-50 text-gray-700"
                       >
-                        <td className="p-4">{transaction.id}</td>
-                        <td className="p-4">{transaction.orderId}</td>
-                        <td className="p-4">{transaction.customer}</td>
-                        <td className="p-4">
-                          <span className="font-semibold text-yellow-600">
+                        <td className="p-2 sm:p-4 text-xs sm:text-sm">{transaction.id}</td>
+                        <td className="p-2 sm:p-4 text-xs sm:text-sm">{transaction.orderId}</td>
+                        <td className="p-2 sm:p-4 text-xs sm:text-sm">{transaction.customer}</td>
+                        <td className="p-2 sm:p-4">
+                          <span className="font-semibold text-yellow-600 text-xs sm:text-sm">
                             {formatPrice(transaction.amount)}
                           </span>
                         </td>
-                        <td className="p-4">{transaction.paymentMethod}</td>
-                        <td className="p-4">
+                        <td className="p-2 sm:p-4 text-xs sm:text-sm">{transaction.paymentMethod}</td>
+                        <td className="p-2 sm:p-4">
                           <span
-                            className={`inline-flex px-3 py-1 text-xs font-semibold rounded-full ${getStatusColor(
+                            className={`inline-flex px-2 sm:px-3 py-0.5 sm:py-1 text-[10px] sm:text-xs font-semibold rounded-full ${getStatusColor(
                               transaction.status
                             )}`}
                           >
                             {transaction.status}
                           </span>
                         </td>
-                        <td className="p-4">{transaction.date}</td>
+                        <td className="p-2 sm:p-4 text-xs sm:text-sm">{transaction.date}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -328,31 +326,29 @@ const ResellerDashboardPage = () => {
 
                 {/* Pagination for Dashboard */}
                 {totalPages > 1 && (
-                  <div className="flex items-center justify-between px-4 py-3 bg-white border-t border-gray-200">
-                    <div className="text-sm text-gray-700">
-                      Menampilkan {startIndex + 1} sampai{" "}
-                      {Math.min(startIndex + itemsPerPage, totalItems)} dari{" "}
-                      {totalItems} transaksi
+                  <div className="flex flex-col sm:flex-row items-center justify-between px-2 sm:px-4 py-2 sm:py-3 bg-white border-t border-gray-200 gap-2">
+                    <div className="text-xs sm:text-sm text-gray-700">
+                      {startIndex + 1} - {Math.min(startIndex + itemsPerPage, totalItems)} dari {totalItems}
                     </div>
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-1 sm:space-x-2">
                       <button
                         onClick={() =>
                           setCurrentPage(Math.max(1, currentPage - 1))
                         }
                         disabled={currentPage === 1}
-                        className="px-3 py-1 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="px-2 sm:px-3 py-1 text-xs sm:text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        Previous
+                        Prev
                       </button>
-                      <span className="text-sm text-gray-700">
-                        Halaman {currentPage} dari {totalPages}
+                      <span className="text-xs sm:text-sm text-gray-700">
+                        {currentPage}/{totalPages}
                       </span>
                       <button
                         onClick={() =>
                           setCurrentPage(Math.min(totalPages, currentPage + 1))
                         }
                         disabled={currentPage === totalPages}
-                        className="px-3 py-1 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="px-2 sm:px-3 py-1 text-xs sm:text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         Next
                       </button>
@@ -367,36 +363,35 @@ const ResellerDashboardPage = () => {
 
       {/* Connect with other resellers (only visible to reseller role) */}
       {user && user.role === "reseller" ? (
-        <div className="bg-white rounded-lg shadow-md p-6 mt-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">
-            Terhubung dengan Reseller Lain
+        <div className="bg-white rounded-lg shadow-md p-3 sm:p-6 mt-4 sm:mt-8">
+          <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-4">
+            Terhubung dengan Reseller
           </h2>
-          <p className="text-sm text-gray-600 mb-4">
-            Temukan reseller lain dan bangun jaringan. Klik "Hubungkan" untuk
-            saling terhubung.
+          <p className="text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4">
+            Temukan reseller lain dan bangun jaringan.
           </p>
           {resellers.length === 0 ? (
-            <p className="text-gray-500">Tidak ada reseller lain ditemukan.</p>
+            <p className="text-gray-500 text-sm">Tidak ada reseller lain ditemukan.</p>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-2 sm:gap-4">
               {resellers.map((r) => (
                 <div
                   key={r.id}
-                  className="border rounded-lg p-4 flex items-center justify-between"
+                  className="border rounded-lg p-2 sm:p-4 flex items-center justify-between"
                 >
-                  <div>
-                    <p className="font-semibold text-gray-900">
+                  <div className="min-w-0 flex-1">
+                    <p className="font-semibold text-gray-900 text-xs sm:text-base truncate">
                       {r.store_name ||
                         `${r.first_name || ""} ${r.last_name || ""}`.trim() ||
                         r.username ||
                         r.email}
                     </p>
-                    <p className="text-sm text-gray-500">{r.email}</p>
+                    <p className="text-[10px] sm:text-sm text-gray-500 truncate">{r.email}</p>
                   </div>
-                  <div>
+                  <div className="ml-2 flex-shrink-0">
                     <button
                       onClick={() => toggleConnect(r.id)}
-                      className={`py-2 px-4 rounded-lg font-semibold ${
+                      className={`py-1.5 px-2 sm:py-2 sm:px-4 rounded-lg font-semibold text-xs sm:text-sm ${
                         connections.has(r.id)
                           ? "bg-green-600 text-white"
                           : "bg-blue-600 text-white"
@@ -411,14 +406,13 @@ const ResellerDashboardPage = () => {
           )}
         </div>
       ) : (
-        <div className="bg-white rounded-lg shadow-md p-6 mt-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-2">
+        <div className="bg-white rounded-lg shadow-md p-3 sm:p-6 mt-4 sm:mt-8">
+          <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-1 sm:mb-2">
             Koneksi Reseller
           </h2>
-          <p className="text-sm text-gray-600">
+          <p className="text-xs sm:text-sm text-gray-600">
             Fitur koneksi hanya tersedia untuk akun dengan peran{" "}
-            <strong>reseller</strong>. Jika Anda ingin menjadi reseller, minta
-            admin untuk menandai akun Anda sebagai reseller.
+            <strong>reseller</strong>.
           </p>
         </div>
       )}

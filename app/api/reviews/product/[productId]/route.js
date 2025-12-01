@@ -2,7 +2,7 @@ import supabase from '../../../../lib/supabase';
 
 export async function GET(request, { params }) {
   try {
-    const { productId } = params;
+    const { productId } = await params;
 
     const { data: reviews, error } = await supabase
       .from('reviews')

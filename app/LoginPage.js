@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "./contexts/AuthContext";
-import { useNotification } from "./contexts/NotificationContext";
+import { showError } from "./utils/swal";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -13,13 +13,12 @@ const LoginPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { login } = useAuth();
-  const { showNotification } = useNotification();
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email || !password) {
-      showNotification("Error", "Harap masukkan email dan kata sandi.", "error");
+      showError("Error", "Harap masukkan email dan kata sandi.");
       return;
     }
     setSubmitting(true);
@@ -28,19 +27,18 @@ const LoginPage = () => {
       const redirectTo = searchParams.get('redirect') || "/";
       router.push(redirectTo);
     } catch (err) {
-      showNotification(
+      showError(
         "Login Gagal",
         err && err.message
           ? err.message
-          : "Gagal masuk. Periksa kredensial Anda.",
-        "error"
+          : "Gagal masuk. Periksa kredensial Anda."
       );
       setSubmitting(false);
     }
   };
 
   return (
-    <div className="h-screen flex items-center justify-center bg-surface dark:bg-[rgb(var(--bg))] px-6 py-12 relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center bg-surface dark:bg-[rgb(var(--bg))] px-3 sm:px-6 py-6 sm:py-12 relative overflow-hidden">
       {/* Decorative Background Elements seperti di homepage */}
       <div className="absolute inset-0 pointer-events-none opacity-5">
         <div className="absolute top-20 left-10 w-32 h-32 bg-[rgb(var(--accent))] rounded-full blur-3xl"></div>
@@ -48,7 +46,7 @@ const LoginPage = () => {
         <div className="absolute bottom-40 left-1/3 w-20 h-20 bg-[rgb(var(--accent))] rounded-full blur-xl"></div>
         <div className="absolute bottom-20 right-10 w-16 h-16 bg-[rgb(var(--accent))] rounded-full blur-lg"></div>
       </div>
-      <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-8 items-center relative">
+      <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8 items-center relative">
         {/* Left illustration / promo */}
         <div className="hidden md:flex flex-col items-start justify-center space-y-6 px-6">
           <div className="p-6 rounded-3xl bg-card-yellow border-card-yellow shadow-lg hover:shadow-xl transition-all duration-300">
@@ -75,22 +73,22 @@ const LoginPage = () => {
         <div className="flex items-center justify-center">
           <form
             onSubmit={handleSubmit}
-            className="w-full max-w-md bg-card-yellow border-card-yellow p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300"
+            className="w-full max-w-md bg-card-yellow border-card-yellow p-5 sm:p-8 rounded-xl sm:rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300"
             suppressHydrationWarning={true}
           >
-            <div className="flex items-center justify-between mb-6">
-              <h1 className="text-2xl sm:text-3xl font-bold text-card-yellow">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-2 mb-4 sm:mb-6">
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-card-yellow">
                 Masuk
               </h1>
-              <span className="text-sm text-card-yellow-secondary">
+              <span className="text-xs sm:text-sm text-card-yellow-secondary">
                 Selamat datang kembali 👋
               </span>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               <div>
                 <label
-                  className="block text-sm font-medium text-card-yellow-secondary mb-1"
+                  className="block text-xs sm:text-sm font-medium text-card-yellow-secondary mb-1"
                   htmlFor="email"
                 >
                   Alamat Email
@@ -102,14 +100,14 @@ const LoginPage = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full rounded-lg border border-base bg-surface px-4 py-3 placeholder:text-muted focus:border-accent focus:ring-0 transition-colors"
+                  className="w-full rounded-lg border border-base bg-surface px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base placeholder:text-muted focus:border-accent focus:ring-0 transition-colors"
                   suppressHydrationWarning={true}
                 />
               </div>
 
               <div>
                 <label
-                  className="block text-sm font-medium text-card-yellow-secondary mb-1"
+                  className="block text-xs sm:text-sm font-medium text-card-yellow-secondary mb-1"
                   htmlFor="password"
                 >
                   Kata Sandi
@@ -122,7 +120,7 @@ const LoginPage = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="w-full rounded-lg border border-base bg-surface px-4 py-3 pr-12 placeholder:text-muted focus:border-accent focus:ring-0 transition-colors"
+                    className="w-full rounded-lg border border-base bg-surface px-3 sm:px-4 py-2.5 sm:py-3 pr-20 sm:pr-24 text-sm sm:text-base placeholder:text-muted focus:border-accent focus:ring-0 transition-colors"
                     suppressHydrationWarning={true}
                   />
                   <button
@@ -134,7 +132,7 @@ const LoginPage = () => {
                         ? "Sembunyikan kata sandi"
                         : "Tampilkan kata sandi"
                     }
-                    className="absolute right-2 top-1/2 -translate-y-1/2 text-muted hover:accent-text"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 text-xs sm:text-sm text-muted hover:accent-text px-2 py-1"
                     suppressHydrationWarning={true}
                   >
                     {showPassword ? "Sembunyikan" : "Tampilkan"}
@@ -144,32 +142,32 @@ const LoginPage = () => {
 
               <button
                 type="submit"
-                className="w-full btn-primary rounded-full py-3 font-semibold disabled:opacity-60"
+                className="w-full btn-primary rounded-full py-2.5 sm:py-3 text-sm sm:text-base font-semibold disabled:opacity-60"
                 disabled={submitting}
                 suppressHydrationWarning={true}
               >
                 {submitting ? "Memproses..." : "Masuk"}
               </button>
 
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 sm:gap-3">
                 <div className="h-px flex-1 bg-yellow-200 dark:bg-yellow-700/30" />
-                <div className="text-sm text-card-yellow-secondary">
+                <div className="text-xs sm:text-sm text-card-yellow-secondary whitespace-nowrap">
                   atau masuk dengan
                 </div>
                 <div className="h-px flex-1 bg-yellow-200 dark:bg-yellow-700/30" />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-2 sm:gap-3">
                 <button
                   type="button"
                   aria-label="Masuk dengan Google"
-                  className="flex items-center justify-center gap-2 border border-base py-2 rounded-lg bg-surface hover:bg-surface-alt transition-colors"
+                  className="flex items-center justify-center gap-1.5 sm:gap-2 border border-base py-2 sm:py-2.5 rounded-lg bg-surface hover:bg-surface-alt transition-colors text-sm"
                   suppressHydrationWarning={true}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 533.5 544.3"
-                    className="w-5 h-5"
+                    className="w-4 h-4 sm:w-5 sm:h-5"
                   >
                     <path
                       fill="#4285f4"
@@ -193,11 +191,11 @@ const LoginPage = () => {
                 <button
                   type="button"
                   aria-label="Masuk dengan Twitter"
-                  className="flex items-center justify-center gap-2 border border-base py-2 rounded-lg bg-surface hover:bg-surface-alt transition-colors"
+                  className="flex items-center justify-center gap-1.5 sm:gap-2 border border-base py-2 sm:py-2.5 rounded-lg bg-surface hover:bg-surface-alt transition-colors text-sm"
                   suppressHydrationWarning={true}
                 >
                   <svg
-                    className="w-5 h-5"
+                    className="w-4 h-4 sm:w-5 sm:h-5"
                     viewBox="0 0 24 24"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -211,23 +209,23 @@ const LoginPage = () => {
                 </button>
               </div>
 
-              <p className="text-center text-card-yellow-secondary text-sm mt-4">
+              <p className="text-center text-card-yellow-secondary text-xs sm:text-sm mt-3 sm:mt-4">
                 Belum punya akun?
                 <Link
                   href="/register"
-                  className="ml-2 inline-block accent-text font-semibold px-3 py-1 border border-accent/30 rounded-full hover:bg-accent/10 focus:outline-none focus:ring-2 focus:ring-accent/40"
+                  className="ml-1.5 sm:ml-2 inline-block accent-text font-semibold px-2 sm:px-3 py-0.5 sm:py-1 text-xs sm:text-sm border border-accent/30 rounded-full hover:bg-accent/10 focus:outline-none focus:ring-2 focus:ring-accent/40"
                 >
                   Daftar
                 </Link>
               </p>
 
-              <div className="mt-6 pt-6 border-t border-yellow-200 dark:border-yellow-700/30">
-                <p className="text-center text-card-yellow-secondary text-sm mb-3">
+              <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-yellow-200 dark:border-yellow-700/30">
+                <p className="text-center text-card-yellow-secondary text-xs sm:text-sm mb-2 sm:mb-3">
                   Masuk sebagai Reseller?
                 </p>
                 <Link
                   href="/reseller/login"
-                  className="w-full block text-center btn-secondary font-semibold py-2 px-4 rounded-lg"
+                  className="w-full block text-center btn-secondary font-semibold py-2 px-4 text-sm rounded-lg"
                 >
                   Masuk Sebagai Reseller
                 </Link>

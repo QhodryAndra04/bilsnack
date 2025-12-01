@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useAuth } from "../contexts/AuthContext";
+import { showSuccess, showError, showWarning } from "../utils/swal";
 
 // Helper format currency internal
 const formatPrice = (amount) => {
@@ -160,7 +161,7 @@ const ResellerProductFormPage = () => {
               : [];
             setImagePreviewUrls(previews);
           } else if (res.status === 404) {
-            alert("Produk tidak ditemukan.");
+            showError("Error", "Produk tidak ditemukan.");
             router.push("/reseller/products");
           } else {
             console.error(
@@ -168,7 +169,7 @@ const ResellerProductFormPage = () => {
               res.status,
               res.statusText
             );
-            alert("Gagal memuat produk. Silakan coba lagi.");
+            showError("Error", "Gagal memuat produk. Silakan coba lagi.");
           }
         } catch (error) {
           console.error("Error loading product:", error);
@@ -229,15 +230,15 @@ const ResellerProductFormPage = () => {
       !Number.isNaN(Number(product.price));
 
     if (!product.name) {
-      alert("Nama produk harus diisi!");
+      showWarning("Validasi", "Nama produk harus diisi!");
       return;
     }
     if (!product.category) {
-      alert("Kategori harus dipilih!");
+      showWarning("Validasi", "Kategori harus dipilih!");
       return;
     }
     if (!priceValid) {
-      alert("Harga produk tidak valid!");
+      showWarning("Validasi", "Harga produk tidak valid!");
       return;
     }
 
@@ -266,7 +267,7 @@ const ResellerProductFormPage = () => {
             throw new Error("Upload failed on submit");
           }
         } catch (upErr) {
-          alert(`Gagal mengunggah gambar: ${upErr.message}`);
+          showError("Gagal Upload", `Gagal mengunggah gambar: ${upErr.message}`);
           return;
         }
         if (uploaded && uploaded.length > 0) {
@@ -303,7 +304,7 @@ const ResellerProductFormPage = () => {
       };
 
       if (!token) {
-        alert("Token tidak ditemukan. Silakan login kembali.");
+        showError("Error", "Token tidak ditemukan. Silakan login kembali.");
         return;
       }
 
@@ -328,34 +329,36 @@ const ResellerProductFormPage = () => {
       }
 
       if (res.ok) {
-        alert(
+        showSuccess(
+          "Berhasil",
           isEditing
             ? "Produk berhasil diperbarui!"
             : "Produk berhasil ditambahkan!"
-        );
-        router.push("/reseller/products");
+        ).then(() => {
+          router.push("/reseller/products");
+        });
       } else {
         const errorData = await res.json();
-        alert(`Gagal menyimpan produk: ${errorData.error || "Unknown error"}`);
+        showError("Gagal", `Gagal menyimpan produk: ${errorData.error || "Unknown error"}`);
       }
     } catch (error) {
       console.error("Error:", error);
-      alert("Terjadi kesalahan. Silakan coba lagi.");
+      showError("Error", "Terjadi kesalahan. Silakan coba lagi.");
     }
   };
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-6 text-gray-900">
+      <h1 className="text-xl sm:text-3xl font-bold mb-4 sm:mb-6 text-gray-900">
         {isEditing ? "Edit Produk" : "Tambah Produk Baru"}
       </h1>
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-8 rounded-lg shadow-md space-y-6 border border-gray-100"
+        className="bg-white p-4 sm:p-8 rounded-lg shadow-md space-y-4 sm:space-y-6 border border-gray-100"
       >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-xs sm:text-sm font-medium text-gray-700">
               Nama Produk
             </label>
             <textarea
@@ -364,13 +367,13 @@ const ResellerProductFormPage = () => {
               onChange={handleChange}
               required
               rows={2}
-              className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black text-gray-900"
+              className="mt-1 block w-full px-2 sm:px-3 py-1.5 sm:py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black text-sm sm:text-base text-gray-900"
               placeholder="Masukkan nama produk"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-xs sm:text-sm font-medium text-gray-700">
               Kategori
             </label>
             <select
@@ -378,7 +381,7 @@ const ResellerProductFormPage = () => {
               value={product.category}
               onChange={handleChange}
               required
-              className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black text-gray-900"
+              className="mt-1 block w-full px-2 sm:px-3 py-1.5 sm:py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black text-sm sm:text-base text-gray-900"
             >
               <option value="">Pilih kategori...</option>
               <option value="Chips & Crisps">Chips & Crisps</option>
@@ -389,7 +392,7 @@ const ResellerProductFormPage = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-xs sm:text-sm font-medium text-gray-700">
               Harga
             </label>
             <input
@@ -401,17 +404,17 @@ const ResellerProductFormPage = () => {
                   : formatPrice(product.price)
               }
               onChange={handlePriceChange}
-              className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black text-gray-900"
+              className="mt-1 block w-full px-2 sm:px-3 py-1.5 sm:py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black text-sm sm:text-base text-gray-900"
               placeholder="Masukkan harga produk"
               required
             />
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-[10px] sm:text-xs text-gray-500 mt-1">
               Masukkan nominal tanpa simbol. Tampilan akan diformat ke Rupiah.
             </p>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-xs sm:text-sm font-medium text-gray-700">
               Stok
             </label>
             <input
@@ -419,13 +422,13 @@ const ResellerProductFormPage = () => {
               name="stock"
               value={product.stock}
               onChange={handleChange}
-              className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black text-gray-900"
+              className="mt-1 block w-full px-2 sm:px-3 py-1.5 sm:py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black text-sm sm:text-base text-gray-900"
               placeholder="Masukkan stok"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-xs sm:text-sm font-medium text-gray-700">
               Nama Toko
             </label>
             <input
@@ -433,14 +436,14 @@ const ResellerProductFormPage = () => {
               name="sellerName"
               value={product.sellerName}
               onChange={handleChange}
-              className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black text-gray-900"
+              className="mt-1 block w-full px-2 sm:px-3 py-1.5 sm:py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black text-sm sm:text-base text-gray-900"
               placeholder="Nama toko/penjual"
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700">
+          <label className="block text-xs sm:text-sm font-medium text-gray-700">
             Deskripsi
           </label>
           <textarea
@@ -448,12 +451,12 @@ const ResellerProductFormPage = () => {
             value={product.description}
             onChange={handleChange}
             rows={4}
-            className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black text-gray-900"
+            className="mt-1 block w-full px-2 sm:px-3 py-1.5 sm:py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black text-sm sm:text-base text-gray-900"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
             Gambar Produk
           </label>
           <input
@@ -461,35 +464,35 @@ const ResellerProductFormPage = () => {
             multiple
             accept="image/*"
             onChange={handleImageChange}
-            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+            className="block w-full text-xs sm:text-sm text-gray-500 file:mr-2 sm:file:mr-4 file:py-1.5 sm:file:py-2 file:px-3 sm:file:px-4 file:rounded-full file:border-0 file:text-xs sm:file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
             disabled={!token}
           />
           {uploading && (
-            <p className="text-sm text-gray-500 mt-2">
+            <p className="text-xs sm:text-sm text-gray-500 mt-1 sm:mt-2">
               {uploadMessage || "Mengunggah..."}
             </p>
           )}
           {!uploading && uploadMessage && (
-            <p className="text-sm text-gray-500 mt-2">{uploadMessage}</p>
+            <p className="text-xs sm:text-sm text-gray-500 mt-1 sm:mt-2">{uploadMessage}</p>
           )}
 
-          <p className="text-sm text-gray-500 mt-2">
+          <p className="text-xs sm:text-sm text-gray-500 mt-1 sm:mt-2">
             Atau ketik/paste URL gambar (satu per baris atau pisah koma):
           </p>
           <textarea
             value={imagesText}
             onChange={handleImagesTextChange}
             placeholder="https://.../img1.jpg&#10;https://.../img2.jpg"
-            className="mt-2 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black text-sm text-gray-900"
+            className="mt-1 sm:mt-2 block w-full px-2 sm:px-3 py-1.5 sm:py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black text-xs sm:text-sm text-gray-900"
             rows={3}
           />
 
           {imagePreviewUrls.length > 0 && (
-            <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="mt-3 sm:mt-4 grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4">
               {imagePreviewUrls.map((url, index) => (
                 <div key={index} className="relative group">
                   <div className="w-full aspect-[1.08/1] bg-gray-100 rounded-lg border overflow-hidden flex items-center justify-center">
-                    <div className="w-full h-full flex items-center justify-center p-4">
+                    <div className="w-full h-full flex items-center justify-center p-2 sm:p-4">
                       <img
                         src={url}
                         alt={`Pratinjau ${index + 1}`}
@@ -510,17 +513,17 @@ const ResellerProductFormPage = () => {
           )}
         </div>
 
-        <div className="flex items-center space-x-4 pt-4">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:space-x-4 pt-3 sm:pt-4">
           <button
             type="submit"
-            className="bg-green-500 text-white px-6 py-3 rounded-md font-semibold hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300 transition-colors shadow-sm"
+            className="bg-green-500 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-md text-sm sm:text-base font-semibold hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300 transition-colors shadow-sm"
           >
             {isEditing ? "Perbarui Produk" : "Simpan Produk"}
           </button>
           <button
             type="button"
             onClick={() => router.push("/reseller/products")}
-            className="bg-gray-200 text-gray-800 px-6 py-3 rounded-md font-semibold hover:bg-gray-300 transition-colors"
+            className="bg-gray-200 text-gray-800 px-4 sm:px-6 py-2 sm:py-3 rounded-md text-sm sm:text-base font-semibold hover:bg-gray-300 transition-colors"
           >
             Batal
           </button>
