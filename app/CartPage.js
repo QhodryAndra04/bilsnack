@@ -100,8 +100,59 @@ const CartItemRow = ({ item }) => {
 };
 
 const CartPage = () => {
-  const { cartItems, getCartItemsBySeller } = useCart();
+  const { cartItems, getCartItemsBySeller, canUseCart } = useCart();
   const router = useRouter();
+
+  // Redirect to login if user is not logged in
+  if (!canUseCart) {
+    return (
+      <div className="bg-surface min-h-screen">
+        <div className="px-3 sm:px-8 lg:px-16 py-6 sm:py-12">
+          <nav className="flex items-center text-xs sm:text-sm text-[rgb(var(--text-muted))] mb-4 sm:mb-8">
+            <Link href="/" className="hover:text-[rgb(var(--accent))]">
+              Beranda
+            </Link>{" "}
+            <ChevronRightIcon />
+            <span className="font-medium text-[rgb(var(--accent))]">
+              Keranjang
+            </span>
+          </nav>
+
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-[rgb(var(--surface))] p-6 sm:p-12 rounded-xl sm:rounded-2xl shadow-[var(--shadow-card)] text-center">
+              <div className="mb-4 sm:mb-6">
+                <svg
+                  className="w-16 h-16 sm:w-24 sm:h-24 mx-auto text-[rgb(var(--accent))] opacity-70"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.5}
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                  />
+                </svg>
+              </div>
+              <h2 className="text-xl sm:text-3xl font-bold mb-3 sm:mb-4 text-gradient">
+                Login Diperlukan
+              </h2>
+              <p className="text-[rgb(var(--text-muted))] mb-6 sm:mb-8 text-sm sm:text-base">
+                Silakan login terlebih dahulu untuk menggunakan keranjang belanja.
+              </p>
+              <Link
+                href="/login"
+                className="inline-block btn-primary px-6 sm:px-8 py-2.5 sm:py-3 rounded-full font-bold shadow-[var(--shadow-button)] hover:shadow-[var(--shadow-button-hover)] transform hover:scale-105 transition-all duration-300"
+              >
+                Login Sekarang
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const cartsBySeller = getCartItemsBySeller();
 
@@ -129,7 +180,7 @@ const CartPage = () => {
             Beranda
           </Link>{" "}
           <ChevronRightIcon />
-          <span className="font-medium text-yellow-600 dark:text-yellow-400">
+          <span className="font-medium text-[rgb(var(--accent))]">
             Keranjang
           </span>
         </nav>
@@ -139,7 +190,7 @@ const CartPage = () => {
         {cartItems.length === 0 ? (
           <div className="max-w-4xl mx-auto">
             {/* Empty Cart Illustration */}
-            <div className="bg-surface-alt p-6 sm:p-12 rounded-xl sm:rounded-2xl shadow-lg text-center border border-base mb-6 sm:mb-8">
+            <div className="bg-[rgb(var(--surface))] p-6 sm:p-12 rounded-xl sm:rounded-2xl shadow-[var(--shadow-card)] text-center mb-6 sm:mb-8 hover:shadow-[var(--shadow-card-hover)] transition-shadow duration-300">
               <div className="mb-4 sm:mb-6">
                 <svg
                   className="w-16 h-16 sm:w-24 sm:h-24 mx-auto text-[rgb(var(--text-muted))] opacity-50"
@@ -190,7 +241,7 @@ const CartPage = () => {
               return (
                 <div
                   key={sellerCart.sellerId}
-                  className="bg-surface rounded-lg p-4 sm:p-6 shadow-lg border border-base"
+                  className="bg-[rgb(var(--surface))] rounded-xl p-4 sm:p-6 shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-all duration-300"
                 >
                   {/* Seller Header */}
                   <div className="flex items-center justify-between border-b border-base pb-3 sm:pb-4 mb-3 sm:mb-4">
@@ -259,7 +310,7 @@ const CartPage = () => {
 
             {/* Total Summary Card */}
             {cartsBySeller.length > 1 && (
-              <div className="bg-surface-alt border border-base rounded-lg p-4 sm:p-6 mt-4 sm:mt-8">
+              <div className="bg-[rgb(var(--surface-alt))] border border-[rgb(var(--border))] rounded-xl p-4 sm:p-6 mt-4 sm:mt-8 shadow-[var(--shadow-md)]">
                 <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 text-gradient">
                   Ringkasan Total Belanja
                 </h3>

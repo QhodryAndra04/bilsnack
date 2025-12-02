@@ -54,7 +54,7 @@ export async function POST(request) {
     if (!customer || typeof customer !== 'object') {
       return Response.json({ error: 'Customer information is required' }, { status: 400 });
     }
-    if (!customer.name || !customer.email || !customer.phone || !customer.address || !customer.city || !customer.province || !customer.postalCode) {
+    if (!customer.name || !customer.email || !customer.phone || !customer.address || !customer.city || !customer.postalCode) {
       return Response.json({ error: 'Complete customer information is required' }, { status: 400 });
     }
     if (!Array.isArray(items) || items.length === 0) {

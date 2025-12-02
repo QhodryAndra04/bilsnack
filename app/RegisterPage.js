@@ -74,7 +74,7 @@ const RegisterPage = () => {
         <div className="flex items-center justify-center">
           <form
             onSubmit={handleSubmit}
-            className="w-full max-w-lg bg-surface-alt border border-base p-4 sm:p-8 rounded-xl sm:rounded-2xl shadow-xl"
+            className="w-full max-w-lg bg-[rgb(var(--surface))] border border-[rgb(var(--border))] p-4 sm:p-8 rounded-xl sm:rounded-2xl shadow-[var(--shadow-xl)] hover:shadow-[var(--shadow-2xl)] transition-shadow duration-300"
             suppressHydrationWarning={true}
           >
             <div className="mb-4 sm:mb-6">
@@ -325,7 +325,7 @@ const RegisterPage = () => {
         </div>
 
         <div className="hidden md:flex flex-col items-start justify-center px-6">
-          <div className="p-6 rounded-3xl bg-surface-alt border border-base shadow-md">
+          <div className="p-6 rounded-3xl bg-[rgb(var(--surface))] border border-[rgb(var(--border))] shadow-[var(--shadow-lg)]">
             <h3 className="text-xl font-bold accent-text">
               Nikmati kemudahan belanja
             </h3>
@@ -334,7 +334,7 @@ const RegisterPage = () => {
               eksklusif.
             </p>
           </div>
-          <div className="mt-6 w-full rounded-xl overflow-hidden shadow-md">
+          <div className="mt-6 w-full rounded-xl overflow-hidden shadow-[var(--shadow-lg)]">
             <img
               src="/register-illustration.jpg"
               alt="register"

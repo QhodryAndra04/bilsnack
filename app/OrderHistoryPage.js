@@ -20,7 +20,7 @@ const TrackingTimeline = ({ history = [] }) => {
   return (
     <div className="mt-3">
       <div className="text-sm font-medium mb-2">Perjalanan Paket</div>
-      <ol className="border-l border-gray-200 ml-3">
+      <ol className="border-l border-[rgb(var(--border))] ml-3">
         {history.map((h, idx) => (
           <li key={idx} className="mb-4 ml-6">
             <span className="absolute -left-3 mt-1 w-3 h-3 rounded-full bg-[rgb(var(--accent))]"></span>
@@ -148,7 +148,7 @@ const OrderHistoryPage = () => {
           {orders.map((order) => (
             <div
               key={order.id}
-              className="border border-base rounded-lg p-3 sm:p-4 bg-surface-alt shadow-sm"
+              className="border border-base rounded-xl p-3 sm:p-4 bg-surface-alt shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-shadow duration-300"
             >
               <div className="flex flex-col sm:flex-row justify-between items-start gap-3 sm:gap-0">
                 <div>
@@ -163,14 +163,14 @@ const OrderHistoryPage = () => {
                     <span
                       className={`ml-1 sm:ml-2 px-2 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-medium ${
                         order.status === "completed" || order.status === "Selesai"
-                          ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400"
+                          ? "bg-[rgb(var(--status-success-bg))] text-[rgb(var(--status-success-text))]"
                           : order.status === "processing" || order.status === "Diproses" || order.status === "Menunggu" || order.status === "Dalam Pengiriman"
-                          ? "bg-[rgb(var(--accent))]/10 text-[rgb(var(--accent))] dark:bg-[rgb(var(--accent))]/20 dark:text-[rgb(var(--accent))]/80"
+                          ? "bg-[rgb(var(--accent))]/10 text-[rgb(var(--accent))]"
                           : order.status === "shipped" || order.status === "Dikirim"
-                          ? "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400"
+                          ? "bg-[rgb(var(--status-info-bg))] text-[rgb(var(--status-info-text))]"
                           : order.status === "cancelled" || order.status === "Dibatalkan"
-                          ? "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400"
-                          : "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400"
+                          ? "bg-[rgb(var(--status-danger-bg))] text-[rgb(var(--status-danger-text))]"
+                          : "bg-[rgb(var(--status-neutral-bg))] text-[rgb(var(--status-neutral-text))]"
                       }`}
                     >
                       {order.status === "completed" || order.status === "Selesai"
@@ -211,7 +211,7 @@ const OrderHistoryPage = () => {
                         // Navigate to order detail (if exists) or show modal
                         showInfo("Detail Pesanan", `Detail pesanan #${order.id}`);
                       }}
-                      className="text-xs bg-blue-500 hover:bg-blue-600 text-white px-2 sm:px-3 py-1 rounded transition-colors"
+                      className="text-xs bg-[rgb(var(--status-info-bg))] text-[rgb(var(--status-info-text))] hover:opacity-80 px-2 sm:px-3 py-1 rounded transition-colors"
                     >
                       Detail
                     </button>
@@ -221,7 +221,7 @@ const OrderHistoryPage = () => {
                           // Reorder functionality
                           showInfo("Info", "Fitur reorder akan segera hadir!");
                         }}
-                        className="text-xs bg-green-500 hover:bg-green-600 text-white px-2 sm:px-3 py-1 rounded transition-colors"
+                        className="text-xs bg-[rgb(var(--status-success-bg))] text-[rgb(var(--status-success-text))] hover:opacity-80 px-2 sm:px-3 py-1 rounded transition-colors"
                       >
                         Pesan Lagi
                       </button>

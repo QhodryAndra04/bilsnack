@@ -316,7 +316,7 @@ const OrderConfirmationPage = () => {
               <p className="text-sm font-medium text-blue-800 mb-2">
                 Scan QRIS Code:
               </p>
-              <div className="w-64 h-64 bg-surface rounded-lg p-3 shadow-md border border-base">
+              <div className="w-64 h-64 bg-surface rounded-lg p-3 shadow-[var(--shadow-md)] border border-base">
                 <img
                   src="/qrisbillsnack.jpg"
                   alt="QRIS BillSnack"
@@ -476,7 +476,7 @@ const OrderConfirmationPage = () => {
       }}
     >
       <div className="px-8 sm:px-12 lg:px-16 py-20">
-        <div className="card p-12 max-w-4xl mx-auto shadow-2xl">
+          <div className="card p-12 max-w-4xl mx-auto shadow-[var(--shadow-2xl)]">
           {/* Success Animation */}
           <div className="text-center mb-8">
             <div className="relative inline-block">
@@ -615,7 +615,7 @@ const OrderConfirmationPage = () => {
           {/* Next Steps Info */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div
-              className="p-6 rounded-xl text-center shadow-lg"
+              className="p-6 rounded-xl text-center shadow-[var(--shadow-lg)]"
               style={{
                 backgroundColor: "rgb(var(--order-step-card-bg))",
                 border: "1px solid rgb(var(--order-step-card-border))",
@@ -654,7 +654,7 @@ const OrderConfirmationPage = () => {
               </p>
             </div>
             <div
-              className="p-6 rounded-xl text-center shadow-lg"
+              className="p-6 rounded-xl text-center shadow-[var(--shadow-lg)]"
               style={{
                 backgroundColor: "rgb(var(--order-step-card-bg))",
                 border: "1px solid rgb(var(--order-step-card-border))",
@@ -693,7 +693,7 @@ const OrderConfirmationPage = () => {
               </p>
             </div>
             <div
-              className="p-6 rounded-xl text-center shadow-lg"
+              className="p-6 rounded-xl text-center shadow-[var(--shadow-lg)]"
               style={{
                 backgroundColor: "rgb(var(--order-step-card-bg))",
                 border: "1px solid rgb(var(--order-step-card-border))",
@@ -740,7 +740,7 @@ const OrderConfirmationPage = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
             <Link
               href="/orders"
-              className="inline-flex items-center justify-center px-6 py-3 font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
+              className="inline-flex items-center justify-center px-6 py-3 font-semibold rounded-lg shadow-[var(--shadow-md)] hover:shadow-[var(--shadow-lg)] transition-all duration-300"
               style={{
                 backgroundColor: "rgb(var(--order-btn-blue))",
                 color: "white",
@@ -770,7 +770,7 @@ const OrderConfirmationPage = () => {
             </Link>
             <Link
               href="/shop"
-              className="inline-flex items-center justify-center px-6 py-3 font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
+              className="inline-flex items-center justify-center px-6 py-3 font-semibold rounded-lg shadow-[var(--shadow-md)] hover:shadow-[var(--shadow-lg)] transition-all duration-300"
               style={{
                 backgroundColor: "rgb(var(--order-btn-gray))",
                 color: "white",
@@ -805,7 +805,7 @@ const OrderConfirmationPage = () => {
                 {orderData.items.map((it) => (
                   <div
                     key={it.id}
-                    className="flex items-center justify-between p-3 border rounded card"
+                    className="flex items-center justify-between p-3 rounded card"
                   >
                     <div className="flex items-center space-x-3">
                       {it.image ? (

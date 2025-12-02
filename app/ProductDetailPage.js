@@ -38,7 +38,7 @@ const ProductDetailPage = () => {
   const params = useParams();
   const id = params?.id;
   const { getProductById, products } = useProducts();
-  const { addToCart } = useCart();
+  const { addToCart, canUseCart } = useCart();
   const { user, token } = useAuth();
 
   const product = getProductById(Number(id));
@@ -70,6 +70,15 @@ const ProductDetailPage = () => {
   }, [product]);
 
   const handleAddToCart = () => {
+    // Check if user is logged in
+    if (!canUseCart) {
+      showWarning(
+        "Login Diperlukan",
+        "Silakan login terlebih dahulu untuk menambahkan produk ke keranjang."
+      );
+      return;
+    }
+    
     if (quantity > product.stock) {
       showError(
         "Stok Tidak Cukup",
@@ -77,11 +86,13 @@ const ProductDetailPage = () => {
       );
       return;
     }
-    addToCart(product, quantity);
-    showSuccess(
-      "Berhasil",
-      `${quantity} x ${product.name} ditambahkan ke keranjang!`
-    );
+    const success = addToCart(product, quantity);
+    if (success) {
+      showSuccess(
+        "Berhasil",
+        `${quantity} x ${product.name} ditambahkan ke keranjang!`
+      );
+    }
   };
 
   const [reviews, setReviews] = useState([]);
@@ -299,7 +310,7 @@ const ProductDetailPage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8 lg:gap-12">
           {/* Product Images */}
           <div>
-            <div className="bg-surface-alt dark:bg-[rgb(var(--surface-alt))] rounded-lg sm:rounded-xl shadow-lg overflow-hidden mb-3 sm:mb-4 flex items-center justify-center border border-base hover:shadow-xl transition-shadow duration-300">
+            <div className="bg-surface-alt dark:bg-[rgb(var(--surface-alt))] rounded-lg sm:rounded-xl shadow-[var(--shadow-card)] overflow-hidden mb-3 sm:mb-4 flex items-center justify-center hover:shadow-[var(--shadow-card-hover)] transition-shadow duration-300">
               <div className="w-full max-w-[829px] aspect-[1.08/1] bg-surface-alt dark:bg-[rgb(var(--surface))] flex items-center justify-center overflow-hidden">
                 <div className="w-full h-full flex items-center justify-center p-4 sm:p-8">
                   <img
@@ -364,10 +375,10 @@ const ProductDetailPage = () => {
                   return (
                     <div
                       key={index}
-                      className={`w-12 h-12 sm:w-16 sm:h-16 rounded-lg overflow-hidden cursor-pointer border-2 transition-all duration-300 hover:shadow-md shrink-0 ${
+                      className={`w-12 h-12 sm:w-16 sm:h-16 rounded-lg overflow-hidden cursor-pointer border-2 transition-all duration-300 hover:shadow-[var(--shadow-md)] shrink-0 ${
                         selectedImage === url
-                          ? "border-[rgb(var(--accent))] shadow-lg scale-110"
-                          : "border-base hover:border-gray-300"
+                          ? "border-[rgb(var(--accent))] shadow-[var(--shadow-card)] scale-110"
+                          : "border-transparent hover:border-gray-300"
                       } bg-surface-alt dark:bg-[rgb(var(--surface-alt))]`}
                       onClick={() => setSelectedImage(url)}
                     >
@@ -385,7 +396,7 @@ const ProductDetailPage = () => {
           </div>
 
           {/* Product Details Card */}
-          <div className="bg-linear-to-br from-surface via-surface-alt to-surface dark:from-[rgb(var(--surface))] dark:via-[rgb(var(--surface-alt))] dark:to-[rgb(var(--surface))] rounded-lg sm:rounded-xl border border-base p-4 sm:p-6 lg:p-8 shadow-lg hover:shadow-xl transition-shadow duration-300">
+          <div className="bg-linear-to-br from-surface via-surface-alt to-surface dark:from-[rgb(var(--surface))] dark:via-[rgb(var(--surface-alt))] dark:to-[rgb(var(--surface))] rounded-lg sm:rounded-xl p-4 sm:p-6 lg:p-8 shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-shadow duration-300">
             {/* Title - Menggunakan text-[rgb(var(--text))] agar warna teks selalu kontras dengan background */}
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[rgb(var(--text))] mb-2">
               {product.name}
@@ -434,7 +445,7 @@ const ProductDetailPage = () => {
                 </p>
               )}
               {discountPct && (
-                <span className="inline-flex items-center px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs sm:text-sm font-semibold bg-linear-to-r from-red-500 to-orange-500 text-white shadow-md animate-pulse">
+                <span className="inline-flex items-center px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs sm:text-sm font-semibold bg-linear-to-r from-red-500 to-orange-500 text-white shadow-[var(--shadow-md)] animate-pulse">
                   -{discountPct}%
                 </span>
               )}
@@ -515,7 +526,7 @@ const ProductDetailPage = () => {
                 onMouseEnter={() => setBtnHover(true)}
                 onMouseLeave={() => setBtnHover(false)}
                 disabled={outOfStock}
-                className={`flex-1 sm:grow bg-linear-to-r from-[rgb(var(--accent))] to-[rgb(var(--accent-hover))] hover:from-[rgb(var(--accent-hover))] hover:to-[rgb(var(--accent))] text-white py-3 sm:py-4 px-4 sm:px-8 rounded-full text-base sm:text-lg font-semibold focus:outline-none transition-all duration-300 transform hover:scale-105 hover:shadow-lg shadow-md ${
+                className={`flex-1 sm:grow bg-linear-to-r from-[rgb(var(--accent))] to-[rgb(var(--accent-hover))] hover:from-[rgb(var(--accent-hover))] hover:to-[rgb(var(--accent))] text-white py-3 sm:py-4 px-4 sm:px-8 rounded-full text-base sm:text-lg font-semibold focus:outline-none transition-all duration-300 transform hover:scale-105 hover:shadow-[var(--shadow-lg)] shadow-[var(--shadow-md)] ${
                   outOfStock ? "opacity-50 cursor-not-allowed bg-gray-400" : ""
                 }`}
                 aria-label="Tambah ke Keranjang"
@@ -526,7 +537,7 @@ const ProductDetailPage = () => {
             </div>
 
             <button
-              className="w-full border-2 border-[rgb(var(--accent))] text-[rgb(var(--accent))] font-semibold py-2.5 sm:py-3 px-4 sm:px-8 rounded-full text-base sm:text-lg hover:bg-[rgb(var(--accent))] hover:text-white transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+              className="w-full border-2 border-[rgb(var(--accent))] text-[rgb(var(--accent))] font-semibold py-2.5 sm:py-3 px-4 sm:px-8 rounded-full text-base sm:text-lg hover:bg-[rgb(var(--accent))] hover:text-white transition-all duration-300 transform hover:scale-105 hover:shadow-[var(--shadow-lg)]"
               suppressHydrationWarning={true}
             >
               Tambah ke Wishlist ♡
@@ -576,14 +587,14 @@ const ProductDetailPage = () => {
             </div>
             <div className="mt-4 sm:mt-6">
               {activeTab === "description" && (
-                <div className="prose prose-gray dark:prose-invert max-w-none bg-surface-alt dark:bg-[rgb(var(--surface-alt))] p-4 sm:p-6 rounded-lg border border-base shadow-sm">
+                <div className="prose prose-gray dark:prose-invert max-w-none bg-surface-alt dark:bg-[rgb(var(--surface-alt))] p-4 sm:p-6 rounded-lg shadow-[var(--shadow-card)]">
                   <p className="text-sm sm:text-base text-[rgb(var(--text-muted))] leading-relaxed">
                     {product.description}
                   </p>
                 </div>
               )}
               {activeTab === "specifications" && (
-                <div className="bg-surface-alt dark:bg-[rgb(var(--surface-alt))] p-4 sm:p-6 rounded-lg border border-base shadow-sm">
+                <div className="bg-surface-alt dark:bg-[rgb(var(--surface-alt))] p-4 sm:p-6 rounded-lg shadow-[var(--shadow-card)]">
                   <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 text-[rgb(var(--text))]">
                     Spesifikasi Produk
                   </h3>
@@ -627,7 +638,7 @@ const ProductDetailPage = () => {
                         <span className="text-[rgb(var(--text-muted))]">
                           Kondisi
                         </span>
-                        <span className="font-medium text-green-700 dark:text-green-400">
+                        <span className="font-medium text-[rgb(var(--status-success-text))]">
                           Baru
                         </span>
                       </div>
@@ -662,11 +673,11 @@ const ProductDetailPage = () => {
               {activeTab === "reviews" && (
                 <>
                   {loadingReviews ? (
-                    <div className="text-center py-12 bg-surface-alt dark:bg-[rgb(var(--surface-alt))] rounded-lg border border-base">
+                    <div className="text-center py-12 bg-surface-alt dark:bg-[rgb(var(--surface-alt))] rounded-lg shadow-[var(--shadow-card)]">
                       <InlineLoading text="Memuat ulasan..." variant="dots" size="md" />
                     </div>
                   ) : reviewsError ? (
-                    <div className="text-center py-12 bg-surface-alt dark:bg-[rgb(var(--surface-alt))] rounded-lg border border-base">
+                    <div className="text-center py-12 bg-surface-alt dark:bg-[rgb(var(--surface-alt))] rounded-lg shadow-[var(--shadow-card)]">
                       <svg
                         className="w-16 h-16 mx-auto text-red-400 mb-4"
                         fill="none"
@@ -702,7 +713,7 @@ const ProductDetailPage = () => {
                       </button>
                     </div>
                   ) : reviews.length === 0 ? (
-                    <div className="text-center py-12 bg-surface-alt dark:bg-[rgb(var(--surface-alt))] rounded-lg border border-base">
+                    <div className="text-center py-12 bg-surface-alt dark:bg-[rgb(var(--surface-alt))] rounded-lg shadow-[var(--shadow-card)]">
                       <svg
                         className="w-16 h-16 mx-auto text-gray-400 mb-4"
                         fill="none"
@@ -728,7 +739,7 @@ const ProductDetailPage = () => {
                       {reviews.map((r) => (
                         <div
                           key={r.id || `${r.userId}-${r.created_at}`}
-                          className="p-6 border border-base rounded-xl bg-linear-to-r from-surface-alt to-surface dark:from-[rgb(var(--surface-alt))] dark:to-[rgb(var(--surface))] shadow-md hover:shadow-lg transition-shadow duration-300"
+                          className="p-6 rounded-xl bg-linear-to-r from-surface-alt to-surface dark:from-[rgb(var(--surface-alt))] dark:to-[rgb(var(--surface))] shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-shadow duration-300"
                         >
                           <div className="flex items-center justify-between mb-3">
                             <div className="flex items-center space-x-3">
@@ -756,7 +767,7 @@ const ProductDetailPage = () => {
                   {canReview ? (
                     <form
                       onSubmit={handleSubmitReview}
-                      className="mt-8 space-y-4 bg-linear-to-r from-surface-alt to-surface dark:from-[rgb(var(--surface-alt))] dark:to-[rgb(var(--surface))] p-6 rounded-xl border border-base shadow-md"
+                      className="mt-8 space-y-4 bg-linear-to-r from-surface-alt to-surface dark:from-[rgb(var(--surface-alt))] dark:to-[rgb(var(--surface))] p-6 rounded-xl shadow-[var(--shadow-card)]"
                     >
                       <h3 className="text-lg font-semibold text-[rgb(var(--text))] mb-4">
                         Tulis Ulasan Anda
@@ -768,7 +779,7 @@ const ProductDetailPage = () => {
                         <select
                           value={newRating}
                           onChange={(e) => setNewRating(Number(e.target.value))}
-                          className="mt-1 rounded-lg border border-base bg-white dark:bg-[rgb(var(--surface))] px-4 py-2 focus:ring-2 focus:ring-[rgb(var(--accent))] focus:border-transparent transition-all duration-300 text-black"
+                          className="mt-1 rounded-lg border border-base bg-[rgb(var(--surface-alt))] px-4 py-2 focus:ring-2 focus:ring-[rgb(var(--accent))] focus:border-transparent transition-all duration-300 text-[rgb(var(--text))]"
                         >
                           {[5, 4, 3, 2, 1].map((v) => (
                             <option key={v} value={v}>
@@ -784,7 +795,7 @@ const ProductDetailPage = () => {
                         <textarea
                           value={newComment}
                           onChange={(e) => setNewComment(e.target.value)}
-                          className="mt-1 w-full rounded-lg border border-base bg-white dark:bg-[rgb(var(--surface))] px-4 py-2 focus:ring-2 focus:ring-[rgb(var(--accent))] focus:border-transparent transition-all duration-300 text-black"
+                          className="mt-1 w-full rounded-lg border border-base bg-[rgb(var(--surface-alt))] px-4 py-2 focus:ring-2 focus:ring-[rgb(var(--accent))] focus:border-transparent transition-all duration-300 text-[rgb(var(--text))]"
                           rows={4}
                           placeholder="Tulis pengalaman Anda menggunakan produk ini..."
                         />
@@ -793,7 +804,7 @@ const ProductDetailPage = () => {
                         <button
                           type="submit"
                           disabled={submittingReview}
-                          className="inline-flex items-center px-6 py-3 btn-primary rounded-lg font-semibold disabled:opacity-50 transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                          className="inline-flex items-center px-6 py-3 btn-primary rounded-lg font-semibold disabled:opacity-50 transition-all duration-300 hover:scale-105 hover:shadow-[var(--shadow-lg)]"
                           suppressHydrationWarning={true}
                         >
                           {submittingReview ? "Mengirim..." : "Kirim Ulasan"}
@@ -801,7 +812,7 @@ const ProductDetailPage = () => {
                       </div>
                     </form>
                   ) : (
-                    <div className="text-center py-8 bg-surface-alt dark:bg-[rgb(var(--surface-alt))] rounded-lg border border-base mt-6">
+                    <div className="text-center py-8 bg-surface-alt dark:bg-[rgb(var(--surface-alt))] rounded-lg shadow-[var(--shadow-card)] mt-6">
                       <p className="text-sm text-[rgb(var(--text-muted))]">
                         {user
                           ? "Anda belum dapat mengulas produk ini (mungkin belum membeli atau sudah mengulas)."
@@ -817,7 +828,7 @@ const ProductDetailPage = () => {
 
         {/* Related Products */}
         {relatedProducts.length > 0 && (
-          <div className="bg-linear-to-br from-surface-alt via-surface to-surface-alt dark:from-[rgb(var(--surface-alt))] dark:via-[rgb(var(--surface))] dark:to-[rgb(var(--surface-alt))] py-8 sm:py-16 mt-6 sm:mt-12 rounded-lg sm:rounded-xl border border-base shadow-lg">
+          <div className="bg-linear-to-br from-surface-alt via-surface to-surface-alt dark:from-[rgb(var(--surface-alt))] dark:via-[rgb(var(--surface))] dark:to-[rgb(var(--surface-alt))] py-8 sm:py-16 mt-6 sm:mt-12 rounded-lg sm:rounded-xl shadow-[var(--shadow-card)]">
             <div className="px-3 sm:px-8 lg:px-16">
               <h2 className="text-2xl sm:text-4xl font-bold text-center mb-6 sm:mb-10 text-[rgb(var(--text))]">
                 Anda Mungkin Juga Suka
@@ -826,7 +837,7 @@ const ProductDetailPage = () => {
                 {relatedProducts.map((p, index) => (
                   <div
                     key={p.id}
-                    className="transform transition-all duration-300 hover:scale-105 hover:shadow-xl"
+                    className="transform transition-all duration-300 hover:scale-105 hover:shadow-[var(--shadow-xl)]"
                     style={{ animationDelay: `${index * 100}ms` }}
                   >
                     <ProductCard product={p} />

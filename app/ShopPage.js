@@ -124,7 +124,7 @@ const ShopPage = () => {
           <div
             className={`fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] transform transition-transform duration-300 ease-in-out lg:relative lg:z-10 lg:w-64 lg:transform-none lg:transition-none ${showFilters ? "translate-x-0" : "-translate-x-full lg:translate-x-0"} ${showFilters ? "" : "hidden lg:block"}`}
           >
-            <div className="bg-surface-alt border-base rounded-none lg:rounded-2xl shadow-lg lg:shadow-sm p-4 sm:p-6 h-full lg:h-auto lg:sticky lg:top-24 overflow-y-auto lg:max-h-[calc(100vh-120px)]">
+            <div className="bg-[rgb(var(--surface))] border border-[rgb(var(--border))] rounded-none lg:rounded-2xl shadow-[var(--shadow-xl)] lg:shadow-[var(--shadow-card)] p-4 sm:p-6 h-full lg:h-auto lg:sticky lg:top-24 overflow-y-auto lg:max-h-[calc(100vh-120px)]">
               {/* Close button for mobile */}
               <div className="flex items-center justify-between mb-4 lg:hidden">
                 <h3 className="text-lg font-semibold text-[rgb(var(--text))]">Filter</h3>
@@ -192,7 +192,7 @@ const ShopPage = () => {
                     onChange={(e) =>
                       setPriceRange([priceRange[0], Number(e.target.value)])
                     }
-                    className="w-full h-2 bg-gray-200 dark:bg-neutral-700 rounded-lg appearance-none cursor-pointer"
+                    className="w-full h-2 bg-[rgb(var(--border))] rounded-lg appearance-none cursor-pointer accent-[rgb(var(--accent))]"
                   />
                 </div>
               </div>
@@ -290,22 +290,22 @@ const ShopPage = () => {
 
             {/* Results Info */}
             {(category || search) && (
-              <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+              <div className="mb-6 p-4 bg-[rgb(var(--accent))]/10 rounded-lg border border-[rgb(var(--accent))]/30">
                 {category && (
-                  <div className="text-sm text-blue-800 dark:text-blue-200">
+                  <div className="text-sm text-[rgb(var(--text))]">
                     Menampilkan produk untuk kategori{" "}
                     <strong>{category}</strong>
                   </div>
                 )}
                 {search && (
-                  <div className="text-sm text-blue-800 dark:text-blue-200">
+                  <div className="text-sm text-[rgb(var(--text))]">
                     Menampilkan produk yang cocok dengan{" "}
                     <strong>"{search}"</strong>
                   </div>
                 )}
                 <Link
                   href="/shop"
-                  className="text-sm text-blue-600 dark:text-blue-400 hover:underline mt-1 inline-block"
+                  className="text-sm text-[rgb(var(--accent))] hover:underline mt-1 inline-block"
                 >
                   Hapus filter
                 </Link>
@@ -333,9 +333,9 @@ const ShopPage = () => {
               </Suspense>
             ) : (
               <div className="text-center py-10 sm:py-20">
-                <div className="w-16 h-16 sm:w-24 sm:h-24 mx-auto mb-3 sm:mb-4 bg-gray-100 dark:bg-neutral-800 rounded-full flex items-center justify-center">
+                <div className="w-16 h-16 sm:w-24 sm:h-24 mx-auto mb-3 sm:mb-4 bg-[rgb(var(--surface-alt))] rounded-full flex items-center justify-center">
                   <svg
-                    className="w-8 h-8 sm:w-12 sm:h-12 text-gray-400"
+                    className="w-8 h-8 sm:w-12 sm:h-12 text-[rgb(var(--text-muted))]"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -356,7 +356,7 @@ const ShopPage = () => {
                 </p>
                 <Link
                   href="/shop"
-                  className="inline-flex items-center px-4 sm:px-6 py-2.5 sm:py-3 text-sm sm:text-base bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors"
+                  className="inline-flex items-center px-4 sm:px-6 py-2.5 sm:py-3 text-sm sm:text-base btn-primary rounded-lg"
                 >
                   Lihat Semua Produk
                 </Link>

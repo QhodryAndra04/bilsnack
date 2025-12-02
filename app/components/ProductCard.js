@@ -2,13 +2,16 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useCart } from "../contexts/CartContext";
 import StarRating from "./StarRating";
 import { formatPrice } from "../utils/format";
+import { showWarning } from "../utils/swal";
 
 const ProductCard = ({ product }) => {
-  const { addToCart } = useCart();
+  const { addToCart, canUseCart } = useCart();
   const [isAdding, setIsAdding] = useState(false);
+  const router = useRouter();
 
   // product.images can be array of strings or array of objects { original, thumb }
   const firstImage = (product.images && product.images.length > 0) ? product.images[0] : null;
@@ -21,9 +24,29 @@ const ProductCard = ({ product }) => {
   const handleAddToCart = async (e) => {
     e.preventDefault();
     e.stopPropagation();
+    
+    // Check if user is logged in
+    if (!canUseCart) {
+      showWarning(
+        "Login Diperlukan",
+        "Silakan login terlebih dahulu untuk menambahkan produk ke keranjang."
+      ).then((result) => {
+        if (result.isConfirmed) {
+          router.push("/login");
+        }
+      });
+      return;
+    }
+    
     setIsAdding(true);
     try {
-      addToCart(product, 1);
+      const success = addToCart(product, 1);
+      if (!success) {
+        showWarning(
+          "Login Diperlukan",
+          "Silakan login terlebih dahulu untuk menambahkan produk ke keranjang."
+        );
+      }
       // Show success feedback
       setTimeout(() => setIsAdding(false), 1000);
     } catch (error) {
@@ -32,12 +55,12 @@ const ProductCard = ({ product }) => {
   };
 
   return (
-    <div className="group relative block overflow-hidden card shadow-sm sm:shadow-lg hover:shadow-md sm:hover:shadow-2xl transition-all duration-300 hover:-translate-y-0.5 sm:hover:-translate-y-1" suppressHydrationWarning>
+    <div className="group relative block overflow-hidden card hover:-translate-y-1 transition-all duration-300" suppressHydrationWarning>
       <Link href={`/products/${product.id}`} className="block" aria-label={`Lihat detail produk ${product.name}`}>
         {/* Image Container */}
         <div className="relative overflow-hidden aspect-square bg-gradient-to-br from-surface-alt to-surface flex items-center justify-center rounded-t-lg sm:rounded-t-2xl">
           {discountPct && (
-            <span className="absolute top-1 sm:top-3 left-1 sm:left-3 z-10 badge bg-gradient-to-r from-red-500 to-pink-500 text-white shadow-lg rounded-full px-1 sm:px-2 py-0.5 text-[8px] sm:text-xs font-bold animate-pulse">
+            <span className="absolute top-1 sm:top-3 left-1 sm:left-3 z-10 badge bg-gradient-to-r from-red-500 to-pink-500 text-white shadow-[var(--shadow-lg)] rounded-full px-1 sm:px-2 py-0.5 text-[8px] sm:text-xs font-bold animate-pulse">
               -{discountPct}%
             </span>
           )}
@@ -46,7 +69,7 @@ const ProductCard = ({ product }) => {
           <button
             onClick={handleAddToCart}
             disabled={isAdding}
-            className="absolute top-1 sm:top-3 right-1 sm:right-3 z-10 w-6 h-6 sm:w-10 sm:h-10 glass rounded-full flex items-center justify-center shadow-md sm:shadow-lg hover:shadow-xl transition-all duration-200 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 hover:scale-110 disabled:opacity-50"
+            className="absolute top-1 sm:top-3 right-1 sm:right-3 z-10 w-6 h-6 sm:w-10 sm:h-10 glass rounded-full flex items-center justify-center shadow-[var(--shadow-md)] sm:shadow-[var(--shadow-lg)] hover:shadow-[var(--shadow-xl)] transition-all duration-200 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 hover:scale-110 disabled:opacity-50"
             aria-label="Tambah ke keranjang"
             suppressHydrationWarning
           >
@@ -121,14 +144,14 @@ const ProductCard = ({ product }) => {
           {product.inStock !== undefined && (
             <div className="flex items-center text-[8px] sm:text-xs">
               {product.inStock ? (
-                <span className="text-green-600 dark:text-green-400 flex items-center">
+                <span className="text-[rgb(var(--status-success-text))] flex items-center">
                   <svg className="w-2 h-2 sm:w-3 sm:h-3 mr-0.5" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
                   Tersedia
                 </span>
               ) : (
-                <span className="text-red-500 dark:text-red-400 flex items-center">
+                <span className="text-[rgb(var(--status-danger-text))] flex items-center">
                   <svg className="w-2 h-2 sm:w-3 sm:h-3 mr-0.5" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
                   </svg>

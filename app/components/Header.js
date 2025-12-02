@@ -219,9 +219,8 @@ const Header = () => {
   const iconBtnClass = "icon-btn";
 
   return (
-    // Added border-b, border-base, shadow-sm to match JSX
     <header
-      className="fixed top-0 inset-x-0 z-50 glass border-b border-base shadow-sm transition-all duration-300"
+      className="fixed top-0 inset-x-0 z-50 glass shadow-sm transition-all duration-300"
       style={{
         background:
           "linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(251, 191, 36, 0.1) 50%, rgba(245, 158, 11, 0.15) 100%)",
@@ -232,7 +231,7 @@ const Header = () => {
           {/* Logo Section */}
           <div className="shrink-0 flex items-center">
             <Link href="/" className="flex items-center gap-1.5 sm:gap-2.5 group">
-              <div className="relative w-8 h-8 sm:w-10 sm:h-10 overflow-hidden rounded-lg sm:rounded-xl shadow-sm group-hover:shadow-md transition-shadow">
+              <div className="relative w-8 h-8 sm:w-10 sm:h-10 overflow-hidden rounded-lg sm:rounded-xl shadow-[var(--shadow-sm)] group-hover:shadow-[var(--shadow-md)] transition-shadow">
                 <img
                   src={logo}
                   alt="Bilsnack logo"
@@ -299,7 +298,7 @@ const Header = () => {
             >
               <CartIcon filled={itemCount > 0} />
               {itemCount > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 sm:top-0.5 sm:right-0.5 h-4 w-4 sm:h-5 sm:w-5 flex items-center justify-center text-[9px] sm:text-[10px] font-bold text-white bg-red-500 rounded-full shadow-sm ring-1 sm:ring-2 ring-white dark:ring-neutral-900 animate-in zoom-in duration-300">
+                <span className="absolute -top-0.5 -right-0.5 sm:top-0.5 sm:right-0.5 h-4 w-4 sm:h-5 sm:w-5 flex items-center justify-center text-[9px] sm:text-[10px] font-bold text-white bg-red-500 rounded-full shadow-sm ring-1 sm:ring-2 ring-[rgb(var(--surface))] animate-in zoom-in duration-300">
                   {itemCount}
                 </span>
               )}
@@ -311,7 +310,7 @@ const Header = () => {
                 <div ref={userMenuRef} className="relative">
                   <button
                     onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                    className="flex items-center gap-2 p-1 pl-2 pr-1 rounded-full border border-base hover:shadow-md transition-all duration-200 bg-surface"
+                    className="flex items-center gap-2 p-1 pl-2 pr-1 rounded-full shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-all duration-200 bg-surface"
                     suppressHydrationWarning
                   >
                     <span className="text-xs font-medium text-muted max-w-20 truncate hidden lg:block">
@@ -321,14 +320,14 @@ const Header = () => {
                   </button>
 
                   <div
-                    className={`absolute right-0 mt-3 w-60 origin-top-right bg-surface rounded-2xl shadow-xl focus:outline-none transition-all duration-200 ${
+                    className={`absolute right-0 mt-3 w-60 origin-top-right bg-[rgb(var(--surface))] rounded-2xl shadow-[var(--shadow-xl)] focus:outline-none transition-all duration-200 ${
                       isUserMenuOpen
                         ? "opacity-100 scale-100 visible"
                         : "opacity-0 scale-95 invisible"
                     }`}
                   >
                     {/* Added background and rounded-top to match JSX visual style */}
-                    <div className="px-5 py-4 bg-gray-50/50 dark:bg-white/5 rounded-t-2xl">
+                    <div className="px-5 py-4 bg-[rgb(var(--surface-alt))]/50 rounded-t-2xl">
                       <p className="text-sm text-muted">Halo,</p>
                       <p className="text-sm font-bold truncate">{user.name}</p>
                     </div>
@@ -354,7 +353,7 @@ const Header = () => {
                           setIsUserMenuOpen(false);
                           handleLogout();
                         }}
-                        className="w-full text-left px-5 py-2.5 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                        className="w-full text-left px-5 py-2.5 text-sm text-red-500 hover:bg-red-500/10 transition-colors"
                         suppressHydrationWarning
                       >
                         Keluar
@@ -365,7 +364,7 @@ const Header = () => {
               ) : (
                 <Link
                   href="/login"
-                  className="btn-primary py-2 px-6 rounded-full text-sm font-semibold shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all"
+                  className="btn-primary py-2 px-6 rounded-full text-sm font-semibold shadow-[var(--shadow-button)] hover:shadow-[var(--shadow-button-hover)] transform hover:-translate-y-0.5 transition-all"
                 >
                   Masuk
                 </Link>
@@ -410,11 +409,10 @@ const Header = () => {
       </div>
 
       {/* Mobile Navigation Menu */}
-      {/* Added border-t border-base to match JSX */}
       <div
-        className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out glass border-t border-base ${
+        className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out glass ${
           isMobileMenuOpen
-            ? "max-h-screen opacity-100 shadow-xl"
+            ? "max-h-screen opacity-100 shadow-[var(--shadow-xl)]"
             : "max-h-0 opacity-0"
         }`}
       >
@@ -481,7 +479,7 @@ const Header = () => {
                 <Link
                   href="/login"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="block w-full text-center btn-primary py-3 rounded-lg font-bold shadow-md touch-target"
+                  className="block w-full text-center btn-primary py-3 rounded-lg font-bold shadow-[var(--shadow-md)] touch-target"
                 >
                   Masuk Sekarang
                 </Link>
@@ -509,7 +507,7 @@ const Header = () => {
                     handleLogout();
                     setIsMobileMenuOpen(false);
                   }}
-                  className="block w-full text-left px-3 py-3 rounded-lg text-base font-medium text-red-600 hover:text-red-800 hover:bg-red-50 dark:hover:bg-red-900/20 active:bg-red-100 dark:active:bg-red-900/30 touch-target"
+                  className="block w-full text-left px-3 py-3 rounded-lg text-base font-medium text-red-500 hover:bg-red-500/10 active:bg-red-500/20 touch-target"
                   suppressHydrationWarning
                 >
                   Keluar

@@ -1,115 +1,94 @@
 "use client";
 
 /* eslint-disable react-refresh/only-export-components */
-import React, { createContext, useState, useContext, useEffect } from "react";
+import React, { createContext, useState, useContext, useEffect, useRef } from "react";
 import { useAuth } from "./AuthContext";
 
 const CartContext = createContext(undefined);
 
 export const CartProvider = ({ children }) => {
-  // cart is stored per authenticated user only. If not logged in, cart is kept in memory and not persisted.
+  // cart is stored per authenticated user only. Guest users cannot use cart.
   const { user, isLoaded } = useAuth();
+  const prevUserRef = useRef(null);
 
   // Build a cart key from available stable user identifiers. Prefer numeric id when present.
   const getCartKey = (u) => {
-    if (!u) return 'billsnack_cart_guest'; // Guest cart key
+    if (!u) return null; // No cart for guest users
     if (u.id) return `billsnack_cart_user_${u.id}`;
     if (u.user_id) return `billsnack_cart_user_${u.user_id}`;
     if (u.email) return `billsnack_cart_user_${u.email}`;
     if (u.username) return `billsnack_cart_user_${u.username}`;
-    return 'billsnack_cart_guest'; // Fallback to guest cart
+    return null; // Fallback - no cart for unidentified users
   };
 
   // Start with an empty cart and load the user's cart from storage once Auth is available.
   const [cartItems, setCartItems] = useState([]);
   const [isCartLoaded, setIsCartLoaded] = useState(false);
 
-  // Load initial cart (guest cart) on mount
+  // Handle user login/logout - load user cart or clear cart
   useEffect(() => {
+    if (!isLoaded) return;
+
     try {
-      if (typeof window === 'undefined') return;
-
-      // Always try to load guest cart first
-      const guestKey = 'billsnack_cart_guest';
-      const guestRaw = localStorage.getItem(guestKey);
-      if (guestRaw) {
-        const guestCart = JSON.parse(guestRaw);
-        if (guestCart && guestCart.length > 0) {
-          setCartItems(guestCart);
+      const prevUser = prevUserRef.current;
+      
+      if (user) {
+        // User logged in - load their cart from localStorage
+        const userKey = getCartKey(user);
+        if (userKey) {
+          const userRaw = localStorage.getItem(userKey);
+          const userCart = userRaw ? JSON.parse(userRaw) : [];
+          setCartItems(userCart);
+        } else {
+          setCartItems([]);
         }
+      } else if (prevUser && !user) {
+        // User just logged out - clear cart immediately
+        setCartItems([]);
+        // Also clear guest cart from localStorage
+        try {
+          localStorage.removeItem('billsnack_cart_guest');
+        } catch { /* ignore */ }
+      } else {
+        // No user and no previous user - just ensure empty cart
+        setCartItems([]);
       }
-
+      
+      // Update previous user reference
+      prevUserRef.current = user;
       setIsCartLoaded(true);
     } catch (error) {
+      setCartItems([]);
       setIsCartLoaded(true);
     }
-  }, []);
+  }, [user, isLoaded]);
 
-  // Handle user login/logout cart merging
+  // persist cart to localStorage whenever it changes - ONLY for logged in users
   useEffect(() => {
     if (!isCartLoaded || !isLoaded) return;
 
     try {
-      if (user) {
-        // User logged in - load user cart and merge with current cart
-        const userKey = getCartKey(user);
-        const userRaw = localStorage.getItem(userKey);
-        const userCart = userRaw ? JSON.parse(userRaw) : [];
-
-        setCartItems((currentCart) => {
-          if (userCart.length > 0) {
-            // Merge current cart (guest cart) with user cart
-            const map = new Map();
-            userCart.forEach((it) => map.set(String(it.id), { ...it }));
-            (currentCart || []).forEach((it) => {
-              const k = String(it.id);
-              if (map.has(k)) {
-                map.get(k).quantity = (map.get(k).quantity || 0) + (it.quantity || 0);
-              } else {
-                map.set(k, { ...it });
-              }
-            });
-            const merged = Array.from(map.values());
-            // Save merged cart for user
-            try { localStorage.setItem(userKey, JSON.stringify(merged)); } catch (e) { /* ignore */ }
-            return merged;
-          } else {
-            // No user cart, keep current cart and save it for user
-            try { localStorage.setItem(userKey, JSON.stringify(currentCart || [])); } catch (e) { /* ignore */ }
-            return currentCart || [];
-          }
-        });
-      } else {
-        // User logged out - cart stays as is (guest cart)
-        // Don't clear cart, just keep current state
-      }
-    } catch (error) {
-      // ignore
-    }
-  }, [user, isLoaded, isCartLoaded]);
-
-  // persist cart to localStorage whenever it changes - ALWAYS persist to guest cart first
-  useEffect(() => {
-    if (!isCartLoaded) return; // Wait for initial cart load
-
-    try {
       if (typeof window === 'undefined') return;
 
-      // Always save to guest cart as backup
-      const guestKey = 'billsnack_cart_guest';
-      localStorage.setItem(guestKey, JSON.stringify(cartItems));
-
-      // If auth is loaded and user exists, also save to user cart
-      if (isLoaded && user) {
+      // Only save cart if user is logged in
+      if (user) {
         const userKey = getCartKey(user);
-        localStorage.setItem(userKey, JSON.stringify(cartItems));
+        if (userKey) {
+          localStorage.setItem(userKey, JSON.stringify(cartItems));
+        }
       }
+      // Don't save anything for guest users
     } catch (error) {
       // ignore
     }
   }, [cartItems, user, isLoaded, isCartLoaded]);
 
   const addToCart = (product, quantity) => {
+    // Only allow adding to cart if user is logged in
+    if (!user) {
+      return false; // Return false to indicate failure
+    }
+
     setCartItems((prevItems) => {
       const existingItem = prevItems.find((item) => item.id === product.id);
       if (existingItem) {
@@ -139,6 +118,7 @@ export const CartProvider = ({ children }) => {
         },
       ];
     });
+    return true; // Return true to indicate success
   };
 
   const removeFromCart = (cartItemId) => {
@@ -164,17 +144,19 @@ export const CartProvider = ({ children }) => {
   const clearCart = () => {
     setCartItems([]);
     try {
-      const key = getCartKey(user);
-      localStorage.removeItem(key);
-      // Also remove guest cart if no user
-      if (!user) {
-        localStorage.removeItem('billsnack_cart_guest');
+      if (user) {
+        const key = getCartKey(user);
+        if (key) {
+          localStorage.removeItem(key);
+        }
       }
     } catch { /* ignore */ }
   };
 
   // Clear cart items from specific seller only
   const clearCartBySeller = (sellerId) => {
+    if (!user) return; // Only for logged in users
+    
     setCartItems((prevItems) => {
       // Convert 'admin' string to null for matching
       const targetSellerId = sellerId === 'admin' ? null : sellerId;
@@ -215,6 +197,9 @@ export const CartProvider = ({ children }) => {
     return Object.values(grouped);
   };
 
+  // Check if user can use cart
+  const canUseCart = !!user;
+
   return (
     <CartContext.Provider
       value={{
@@ -226,6 +211,7 @@ export const CartProvider = ({ children }) => {
         clearCartBySeller,
         itemCount,
         getCartItemsBySeller,
+        canUseCart,
       }}
     >
       {children}

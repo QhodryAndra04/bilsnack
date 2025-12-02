@@ -278,12 +278,12 @@ const CheckoutPage = () => {
     return (
       <div className="px-4 sm:px-8 lg:px-16 py-10 sm:py-20 text-center">
         <h1 className="text-2xl sm:text-3xl font-bold">Keranjang Anda Kosong</h1>
-        <p className="text-gray-600 mt-3 sm:mt-4 text-sm sm:text-base px-4">
+        <p className="text-[rgb(var(--text-muted))] mt-3 sm:mt-4 text-sm sm:text-base px-4">
           Anda perlu menambahkan item ke keranjang sebelum dapat checkout.
         </p>
         <Link
           href="/shop"
-          className="mt-4 sm:mt-6 inline-block bg-amber-500 text-white font-semibold py-2.5 sm:py-3 px-6 sm:px-8 rounded-full text-sm sm:text-lg hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-300 transition duration-300"
+          className="mt-4 sm:mt-6 inline-block btn-primary py-2.5 sm:py-3 px-6 sm:px-8 rounded-full text-sm sm:text-lg"
         >
           Kembali ke Toko
         </Link>
@@ -310,7 +310,7 @@ const CheckoutPage = () => {
           onSubmit={handlePlaceOrder}
           className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-8 lg:gap-12"
         >
-          <div className="lg:col-span-2 bg-surface p-4 sm:p-8 rounded-lg shadow space-y-6 sm:space-y-8 border border-base">
+          <div className="lg:col-span-2 bg-surface p-4 sm:p-8 rounded-xl shadow-[var(--shadow-card)] space-y-6 sm:space-y-8 border border-base">
             {/* Shipping Information */}
             <div>
               <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">Informasi Pengiriman</h2>
@@ -592,7 +592,7 @@ const CheckoutPage = () => {
           </div>
 
           {/* Order Summary */}
-          <div className="bg-surface-alt p-4 sm:p-8 rounded-lg shadow h-fit border border-base order-first lg:order-last">
+          <div className="bg-surface-alt p-4 sm:p-8 rounded-xl shadow-[var(--shadow-card)] h-fit border border-base order-first lg:order-last">
             <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 border-b pb-3 sm:pb-4">
               Ringkasan Pesanan
             </h2>
@@ -688,7 +688,7 @@ const CheckoutPage = () => {
                 </span>
               </div>
               {shippingError && (
-                <div className="bg-red-50 dark:bg-red-900/20 border border-red-300 dark:border-red-700 text-red-600 dark:text-red-400 p-2.5 sm:p-3 rounded text-xs sm:text-sm">
+                <div className="bg-[rgb(var(--status-danger-bg))] border border-[rgb(var(--status-danger-text))]/30 text-[rgb(var(--status-danger-text))] p-2.5 sm:p-3 rounded text-xs sm:text-sm">
                   {shippingError}
                 </div>
               )}

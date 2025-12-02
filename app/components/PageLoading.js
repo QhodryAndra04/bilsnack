@@ -221,19 +221,19 @@ export const ButtonSpinner = ({ className = "" }) => (
  */
 export const SkeletonLine = ({ width = "w-full", height = "h-4", className = "" }) => (
   <div
-    className={`${width} ${height} bg-gray-200 dark:bg-gray-700 rounded animate-pulse ${className}`}
+    className={`${width} ${height} bg-[rgb(var(--border))] rounded animate-pulse ${className}`}
   />
 );
 
 export const SkeletonCircle = ({ size = "w-12 h-12", className = "" }) => (
   <div
-    className={`${size} bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse ${className}`}
+    className={`${size} bg-[rgb(var(--border))] rounded-full animate-pulse ${className}`}
   />
 );
 
 export const SkeletonBox = ({ width = "w-full", height = "h-32", className = "" }) => (
   <div
-    className={`${width} ${height} bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse ${className}`}
+    className={`${width} ${height} bg-[rgb(var(--border))] rounded-lg animate-pulse ${className}`}
   />
 );
 

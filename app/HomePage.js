@@ -90,7 +90,7 @@ const HomePage = () => {
           <div className="flex items-center justify-center order-first md:order-last">
             <div className="relative w-56 h-56 sm:w-64 sm:h-64 md:w-72 md:h-72 lg:w-80 lg:h-80">
               <div className="absolute -inset-2 bg-[radial-gradient(circle_at_40%_35%,rgba(var(--accent)/0.25),transparent_70%)] rounded-3xl blur-xl" />
-              <div className="relative w-full h-full bg-surface rounded-2xl sm:rounded-3xl shadow-lg flex items-center justify-center overflow-hidden border border-base">
+              <div className="relative w-full h-full bg-surface rounded-2xl sm:rounded-3xl shadow-[var(--shadow-lg)] flex items-center justify-center overflow-hidden border border-base">
                 <img
                   src={logo}
                   alt="Billsnack"
@@ -111,11 +111,11 @@ const HomePage = () => {
             <div className="grid grid-cols-5 gap-2 sm:gap-4 lg:max-w-5xl w-full">
               {/* All */}
               <Link href="/shop" className="group">
-                <div className="bg-surface-alt rounded-lg sm:rounded-xl p-1.5 sm:p-6 h-20 sm:h-48 flex flex-col items-center justify-center hover:shadow-lg transition border border-base">
+                <div className="bg-[rgb(var(--surface))] rounded-lg sm:rounded-xl p-1.5 sm:p-6 h-20 sm:h-48 flex flex-col items-center justify-center shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-all duration-300 hover:-translate-y-0.5">
                   <div className="w-8 h-8 sm:w-20 sm:h-20 mb-1 sm:mb-3 flex items-center justify-center">
                     <span className="text-xl sm:text-4xl">🛍️</span>
                   </div>
-                  <h3 className="text-[9px] sm:text-lg font-bold text-center text-[rgb(var(--text))] group-hover:text-black transition-colors leading-tight">
+                  <h3 className="text-[9px] sm:text-lg font-bold text-center text-[rgb(var(--text))] group-hover:text-[rgb(var(--accent))] transition-colors leading-tight">
                     All
                   </h3>
                 </div>
@@ -126,11 +126,11 @@ const HomePage = () => {
                 href={`/shop?category=${encodeURIComponent("Chips & Crisps")}`}
                 className="group"
               >
-                <div className="bg-surface-alt rounded-lg sm:rounded-xl p-1.5 sm:p-6 h-20 sm:h-48 flex flex-col items-center justify-center hover:shadow-lg transition border border-base">
+                <div className="bg-[rgb(var(--surface))] rounded-lg sm:rounded-xl p-1.5 sm:p-6 h-20 sm:h-48 flex flex-col items-center justify-center shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-all duration-300 hover:-translate-y-0.5">
                   <div className="w-8 h-8 sm:w-20 sm:h-20 mb-1 sm:mb-3 flex items-center justify-center">
                     <span className="text-xl sm:text-4xl">🥨</span>
                   </div>
-                  <h3 className="text-[9px] sm:text-lg font-bold text-center text-[rgb(var(--text))] group-hover:text-black transition-colors leading-tight">
+                  <h3 className="text-[9px] sm:text-lg font-bold text-center text-[rgb(var(--text))] group-hover:text-[rgb(var(--accent))] transition-colors leading-tight">
                     Chips
                   </h3>
                 </div>
@@ -143,11 +143,11 @@ const HomePage = () => {
                 )}`}
                 className="group"
               >
-                <div className="bg-surface-alt rounded-lg sm:rounded-xl p-1.5 sm:p-6 h-20 sm:h-48 flex flex-col items-center justify-center hover:shadow-lg transition border border-base">
+                <div className="bg-[rgb(var(--surface))] rounded-lg sm:rounded-xl p-1.5 sm:p-6 h-20 sm:h-48 flex flex-col items-center justify-center shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-all duration-300 hover:-translate-y-0.5">
                   <div className="w-8 h-8 sm:w-20 sm:h-20 mb-1 sm:mb-3 flex items-center justify-center">
                     <span className="text-xl sm:text-4xl">🍬</span>
                   </div>
-                  <h3 className="text-[9px] sm:text-lg font-bold text-center text-[rgb(var(--text))] group-hover:text-black transition-colors leading-tight">
+                  <h3 className="text-[9px] sm:text-lg font-bold text-center text-[rgb(var(--text))] group-hover:text-[rgb(var(--accent))] transition-colors leading-tight">
                     Candies
                   </h3>
                 </div>
@@ -158,11 +158,11 @@ const HomePage = () => {
                 href={`/shop?category=${encodeURIComponent("Cookies")}`}
                 className="group"
               >
-                <div className="bg-surface-alt rounded-lg sm:rounded-xl p-1.5 sm:p-6 h-20 sm:h-48 flex flex-col items-center justify-center hover:shadow-lg transition border border-base">
+                <div className="bg-[rgb(var(--surface))] rounded-lg sm:rounded-xl p-1.5 sm:p-6 h-20 sm:h-48 flex flex-col items-center justify-center shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-all duration-300 hover:-translate-y-0.5">
                   <div className="w-8 h-8 sm:w-20 sm:h-20 mb-1 sm:mb-3 flex items-center justify-center">
                     <span className="text-xl sm:text-4xl">🍪</span>
                   </div>
-                  <h3 className="text-[9px] sm:text-lg font-bold text-center text-[rgb(var(--text))] group-hover:text-black transition-colors leading-tight">
+                  <h3 className="text-[9px] sm:text-lg font-bold text-center text-[rgb(var(--text))] group-hover:text-[rgb(var(--accent))] transition-colors leading-tight">
                     Cookies
                   </h3>
                 </div>
@@ -175,11 +175,11 @@ const HomePage = () => {
                 )}`}
                 className="group"
               >
-                <div className="bg-surface-alt rounded-lg sm:rounded-xl p-1.5 sm:p-6 h-20 sm:h-48 flex flex-col items-center justify-center hover:shadow-lg transition border border-base">
+                <div className="bg-[rgb(var(--surface))] rounded-lg sm:rounded-xl p-1.5 sm:p-6 h-20 sm:h-48 flex flex-col items-center justify-center shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-all duration-300 hover:-translate-y-0.5">
                   <div className="w-8 h-8 sm:w-20 sm:h-20 mb-1 sm:mb-3 flex items-center justify-center">
                     <span className="text-xl sm:text-4xl">🥜</span>
                   </div>
-                  <h3 className="text-[9px] sm:text-lg font-bold text-center text-[rgb(var(--text))] group-hover:text-black transition-colors leading-tight">
+                  <h3 className="text-[9px] sm:text-lg font-bold text-center text-[rgb(var(--text))] group-hover:text-[rgb(var(--accent))] transition-colors leading-tight">
                     Nuts
                   </h3>
                 </div>
@@ -238,7 +238,7 @@ const HomePage = () => {
             Apa Kata Pelanggan Kami
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 max-w-6xl mx-auto">
-            <div className="bg-surface p-4 sm:p-6 rounded-xl sm:rounded-2xl shadow-lg border border-base">
+            <div className="bg-surface p-4 sm:p-6 rounded-xl sm:rounded-2xl shadow-[var(--shadow-lg)]">
               <div className="flex items-center mb-3 sm:mb-4">
                 <div className="w-10 h-10 sm:w-12 sm:h-12 bg-linear-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-base sm:text-lg">
                   A
@@ -255,7 +255,7 @@ const HomePage = () => {
                 langganan di Billsnack."
               </p>
             </div>
-            <div className="bg-surface p-4 sm:p-6 rounded-xl sm:rounded-2xl shadow-lg border border-base">
+            <div className="bg-surface p-4 sm:p-6 rounded-xl sm:rounded-2xl shadow-[var(--shadow-lg)]">
               <div className="flex items-center mb-3 sm:mb-4">
                 <div className="w-10 h-10 sm:w-12 sm:h-12 bg-linear-to-r from-green-500 to-teal-500 rounded-full flex items-center justify-center text-white font-bold text-base sm:text-lg">
                   S
@@ -272,7 +272,7 @@ const HomePage = () => {
                 juga terjangkau."
               </p>
             </div>
-            <div className="bg-surface p-4 sm:p-6 rounded-xl sm:rounded-2xl shadow-lg border border-base sm:col-span-2 md:col-span-1">
+            <div className="bg-surface p-4 sm:p-6 rounded-xl sm:rounded-2xl shadow-[var(--shadow-lg)] sm:col-span-2 md:col-span-1">
               <div className="flex items-center mb-3 sm:mb-4">
                 <div className="w-10 h-10 sm:w-12 sm:h-12 bg-linear-to-r from-pink-500 to-rose-500 rounded-full flex items-center justify-center text-white font-bold text-base sm:text-lg">
                   R

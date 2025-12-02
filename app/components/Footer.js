@@ -81,7 +81,7 @@ const Footer = () => {
           {/* Brand Section */}
           <div className="col-span-2 sm:col-span-2 lg:col-span-1">
             <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-linear-to-br from-yellow-400 to-yellow-500 rounded-lg flex items-center justify-center shadow-lg">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-linear-to-br from-yellow-400 to-yellow-500 rounded-lg flex items-center justify-center shadow-[var(--shadow-lg)]">
                 <span className="text-white font-bold text-lg sm:text-xl">B</span>
               </div>
               <div>
@@ -219,7 +219,7 @@ const Footer = () => {
                 // Menggunakan variabel CSS untuk input agar sesuai dengan mode
                 className="flex-1 min-w-0 px-3 py-2.5 bg-[rgb(var(--surface))] border border-[rgb(var(--border))] rounded-md text-[rgb(var(--text))] placeholder-[rgb(var(--text-muted))] text-sm focus:outline-none focus:ring-2 focus:ring-[rgb(var(--accent))]/50 backdrop-blur-sm"
               />
-              <button className="px-3 sm:px-4 py-2.5 bg-linear-to-r from-[rgb(var(--accent))] to-[rgb(var(--accent-hover))] text-[rgb(var(--accent-fg))] rounded-md font-semibold hover:from-[rgb(var(--accent-hover))] hover:to-[rgb(var(--accent))] transition-all duration-300 text-sm shadow-lg hover:shadow-xl whitespace-nowrap">
+              <button className="px-3 sm:px-4 py-2.5 bg-linear-to-r from-[rgb(var(--accent))] to-[rgb(var(--accent-hover))] text-[rgb(var(--accent-fg))] rounded-md font-semibold hover:from-[rgb(var(--accent-hover))] hover:to-[rgb(var(--accent))] transition-all duration-300 text-sm shadow-[var(--shadow-lg)] hover:shadow-[var(--shadow-xl)] whitespace-nowrap">
                 Ikuti
               </button>
             </div>

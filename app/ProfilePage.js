@@ -95,11 +95,11 @@ const ProfilePage = () => {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 dark:from-neutral-900 dark:to-neutral-800 flex items-center justify-center px-6 py-12">
+      <div className="min-h-screen bg-gradient-to-br from-[rgb(var(--surface))] to-[rgb(var(--surface-alt))] flex items-center justify-center px-6 py-12">
         <div className="text-center">
-          <div className="w-24 h-24 bg-gray-100 dark:bg-neutral-800 rounded-full flex items-center justify-center mx-auto mb-6">
+          <div className="w-24 h-24 bg-[rgb(var(--surface-alt))] rounded-full flex items-center justify-center mx-auto mb-6">
             <svg
-              className="w-12 h-12 text-gray-400"
+              className="w-12 h-12 text-[rgb(var(--text-muted))]"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -153,7 +153,7 @@ const ProfilePage = () => {
             d="m9 18 6-6-6-6"
           />
         </svg>
-        <span className="text-gray-700 dark:text-neutral-200 font-medium">
+        <span className="text-[rgb(var(--text))] font-medium">
           Profil Saya
         </span>
       </nav>
@@ -162,7 +162,7 @@ const ProfilePage = () => {
         {/* Profile Summary Card */}
         <div className="lg:col-span-1">
           <div
-            className="glass rounded-2xl p-6 shadow-xl"
+            className="glass rounded-2xl p-6 shadow-[var(--shadow-xl)]"
             style={{
               background:
                 "linear-gradient(135deg, rgb(var(--accent) / 0.15) 0%, rgb(var(--accent) / 0.1) 50%, rgb(var(--accent) / 0.15) 100%)",
@@ -172,7 +172,7 @@ const ProfilePage = () => {
             <div className="text-center">
               <div className="relative inline-block">
                 <div
-                  className="w-32 h-32 rounded-full overflow-hidden border-4 border-white dark:border-gray-800 flex items-center justify-center shadow-lg mx-auto"
+                  className="w-32 h-32 rounded-full overflow-hidden border-4 border-[rgb(var(--surface))] flex items-center justify-center shadow-[var(--shadow-lg)] mx-auto"
                   style={{
                     background:
                       "linear-gradient(to bottom right, rgb(var(--avatar-yellow-from)), rgb(var(--avatar-yellow-to)))",
@@ -192,7 +192,7 @@ const ProfilePage = () => {
                     </div>
                   )}
                 </div>
-                <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-green-500 rounded-full border-4 border-white dark:border-gray-800 flex items-center justify-center">
+                <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-green-500 rounded-full border-4 border-[rgb(var(--surface))] flex items-center justify-center">
                   <svg
                     className="w-4 h-4 text-white"
                     fill="none"
@@ -254,7 +254,7 @@ const ProfilePage = () => {
         {/* Main Form */}
         <div className="lg:col-span-2">
           <div
-            className="glass rounded-2xl shadow-xl overflow-hidden"
+            className="glass rounded-2xl shadow-[var(--shadow-xl)] overflow-hidden"
             style={{
               background:
                 "linear-gradient(135deg, rgb(var(--accent) / 0.15) 0%, rgb(var(--accent) / 0.1) 50%, rgb(var(--accent) / 0.15) 100%)",
@@ -304,7 +304,7 @@ const ProfilePage = () => {
                 </h3>
                 <div className="flex items-start gap-6">
                   <div className="relative">
-                    <div className="w-20 h-20 rounded-full overflow-hidden bg-surface-alt border-2 border-base flex items-center justify-center shadow-md">
+                    <div className="w-20 h-20 rounded-full overflow-hidden bg-surface-alt border-2 border-base flex items-center justify-center shadow-[var(--shadow-md)]">
                       {avatarPreview ? (
                         <img
                           src={avatarPreview}
@@ -319,7 +319,7 @@ const ProfilePage = () => {
                         </div>
                       )}
                     </div>
-                    <label className="absolute -bottom-1 -right-1 bg-accent rounded-full p-2 shadow-lg border-2 border-white dark:border-neutral-800 cursor-pointer hover:bg-accent-hover transition-colors">
+                    <label className="absolute -bottom-1 -right-1 bg-accent rounded-full p-2 shadow-[var(--shadow-lg)] border-2 border-[rgb(var(--surface))] cursor-pointer hover:bg-accent-hover transition-colors">
                       <input
                         ref={fileInputRef}
                         type="file"
@@ -370,7 +370,7 @@ const ProfilePage = () => {
                         <button
                           type="button"
                           onClick={handleRemoveAvatar}
-                          className="inline-flex items-center gap-2 px-4 py-2 border border-red-300 text-red-600 hover:bg-red-50 rounded-lg font-medium transition-colors"
+                          className="inline-flex items-center gap-2 px-4 py-2 border border-red-400/50 text-red-500 hover:bg-red-500/10 rounded-lg font-medium transition-colors"
                         >
                           <svg
                             className="w-4 h-4"
@@ -744,7 +744,7 @@ const ProfilePage = () => {
                 </div>
                 <button
                   type="submit"
-                  className="btn-primary px-6 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5 text-center"
+                  className="btn-primary px-6 py-3 rounded-lg font-semibold shadow-[var(--shadow-lg)] hover:shadow-[var(--shadow-xl)] transition-all duration-200 transform hover:-translate-y-0.5 text-center"
                 >
                   Perbarui Profil
                 </button>
